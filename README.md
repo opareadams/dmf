@@ -1,4 +1,4 @@
-# Vue Material Admin
+# DMF PROJECT
 
 ### Introduction
 Vue Material Admin Template is a [Vue](https://vuejs.org/index.html/) Based Material Design Admin Template.
@@ -7,9 +7,6 @@ Vuetify is Awesome.
 
 ### Demo
 [http://vma.isocked.com/#/dashboard](http://vma.isocked.com/#/dashboard) 
-
-### Preview
-![Preivew](http://vma.isocked.com//static/preview/01_preview.png)
 
 ###
 ### Project Structure
@@ -73,15 +70,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * [ECharts](http://echarts.baidu.com/option.html)
 * [Stylus](http://stylus-lang.com/)
 
-### Donate
-If you find this project useful, you can buy author a glass of juice :tropical_drink:
-
-
-[Paypal Me](https://www.paypal.me/tookit)
-
-[Buy me a coffee](https://www.buymeacoffee.com/tookit)
-
-<a href="https://www.buymeacoffee.com/tookit" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
 ## License
 
