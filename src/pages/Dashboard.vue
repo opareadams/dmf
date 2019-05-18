@@ -6,8 +6,8 @@
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="fa fa-facebook"
-            title="100+"
-            sub-title="Likes"
+            title="150"
+            sub-title="Orders"
             color="indigo"      
           >
           </mini-statistic>  
@@ -15,8 +15,8 @@
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="fa fa-google"
-            title="150+"
-            sub-title="Connections"
+            title="15"
+            sub-title="Pending Orders"
             color="red"      
           >
           </mini-statistic>           
@@ -24,8 +24,8 @@
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="fa fa-twitter"
-            title="200+"
-            sub-title="Followers"
+            title="260"
+            sub-title="Orders Delivered"
             color="light-blue"      
           >
           </mini-statistic>            
@@ -33,8 +33,8 @@
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="fa fa-instagram"
-            title="50+"
-            sub-title="Shots"
+            title="GHS 50,000.00"
+            sub-title="Revenue"
             color="purple"      
           >
           </mini-statistic>             
