@@ -5,7 +5,6 @@
         <!-- mini statistic start -->
         <v-flex lg3 sm6 xs12>
           <mini-statistic
-            icon="fa fa-facebook"
             title="150"
             sub-title="Orders"
             color="indigo"      
@@ -14,7 +13,6 @@
         </v-flex>
         <v-flex lg3 sm6 xs12>
           <mini-statistic
-            icon="fa fa-google"
             title="15"
             sub-title="Pending Orders"
             color="red"      
@@ -23,7 +21,6 @@
         </v-flex>          
         <v-flex lg3 sm6 xs12>
           <mini-statistic
-            icon="fa fa-twitter"
             title="260"
             sub-title="Orders Delivered"
             color="light-blue"      
@@ -32,7 +29,6 @@
         </v-flex>        
         <v-flex lg3 sm6 xs12>
           <mini-statistic
-            icon="fa fa-instagram"
             title="GHS 50,000.00"
             sub-title="Revenue"
             color="purple"      
@@ -46,7 +42,6 @@
             :title="item.subheading"
             :sub-title="item.headline"
             :caption="item.caption"
-            :icon="item.icon.label"
             :color="item.linear.color"
             :value="item.linear.value"
           >
@@ -100,51 +95,7 @@ export default {
   },
   data: () => ({
     color: Material,
-    selectedTab: 'tab-1',
-    linearTrending: [
-      {
-        subheading: 'Sales',
-        headline: '2,55',
-        caption: 'increase',
-        percent: 15,
-        icon: {
-          label: 'trending_up',
-          color: 'success'
-        },
-        linear: {
-          value: 15,
-          color: 'success'
-        }
-      },
-      {
-        subheading: 'Revenue',
-        headline: '6,553',
-        caption: 'increase',
-        percent: 10,
-        icon: {
-          label: 'trending_down',
-          color: 'error'
-        },
-        linear: {
-          value: 15,
-          color: 'error'
-        }
-      },
-      {
-        subheading: 'Orders',
-        headline: '5,00',
-        caption: 'increase',
-        percent: 50,
-        icon: {
-          label: 'arrow_upward',
-          color: 'info'
-        },
-        linear: {
-          value: 50,
-          color: 'info'
-        }
-      }
-    ],    
+    selectedTab: 'tab-1',    
     trending: [
       {
         subheading: 'Orders',
@@ -185,7 +136,7 @@ export default {
         },
         linear: {
           value: 100,
-          color: 'error'
+          color: 'indigo'
         }
       },       
       {
@@ -199,7 +150,7 @@ export default {
         },
         linear: {
           value: 100,
-          color: 'error'
+          color: 'teal'
         }
       }, 
       {
@@ -213,7 +164,7 @@ export default {
         },
         linear: {
           value: 100,
-          color: 'error'
+          color: 'purple'
         }
       },
       {
@@ -227,7 +178,7 @@ export default {
         },
         linear: {
           value: 100,
-          color: 'error'
+          color: 'orange'
         }
       },       
     ]    

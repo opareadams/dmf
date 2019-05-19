@@ -15,15 +15,6 @@
         >
       </v-text-field>
       <v-spacer></v-spacer>
-      <v-btn href="mailto:wangqiangshen@gmail.com">
-        Hire Me
-      </v-btn>      
-      <v-btn icon href="https://github.com/tookit/vue-material-admin">
-        <v-icon>fa fa-github</v-icon>
-      </v-btn>
-      <v-btn icon @click="handleFullScreen()">
-        <v-icon>fullscreen</v-icon>
-      </v-btn>
       <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
         <v-btn icon flat slot="activator">
         <v-badge color="red" overlap>
