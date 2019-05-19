@@ -134,4 +134,7 @@ export default {
   .card--flex-toolbar {
     margin-top: -64px;
   }
+  #page-toolbars {
+    background-color: #ef6525 !important;
+  }
 </style>
