@@ -23,6 +23,7 @@ app.use(allowCrossDomain)
 app.use(router)
 
 router.get('/', function (req, res) {
+    //test route
     res.send(JSON.stringify({ Hello:'World'}));
 });
 
