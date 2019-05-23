@@ -22,7 +22,6 @@ const allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain)
 app.use(router)
 
-
 router.get('/', function (req, res) {
     res.send(JSON.stringify({ Hello:'World'}));
 });
@@ -58,7 +57,6 @@ router.get('/api/orders/:orderId', function(req, res) {
 router.get('/api/orders/limit/:limit', function(req, res) {
     //returns a limited number of orders
 }); 
-
 
 const port = process.env.PORT || 9090;
 
