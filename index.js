@@ -24,7 +24,7 @@ app.use(router)
 
 
 router.get('/', function (req, res) {
-    res.send('Hello World!')
+    res.send(JSON.stringify({ Hello:'World'}));
 });
 
 router.post('/api/webhook', function(req, res) {
@@ -60,7 +60,7 @@ router.get('/api/orders/limit/:limit', function(req, res) {
 }); 
 
 
-const port = 9090;
+const port = process.env.PORT || 9090;
 
 let server = app.listen(port, function() {
     console.log('Express server listening on port ' + port)
