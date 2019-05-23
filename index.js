@@ -27,7 +27,7 @@ router.get('/', function (req, res) {
     res.send(JSON.stringify({ Hello:'World'}));
 });
 
-router.post('/api/webhook', function(req, res) {
+router.post('/webhook', function(req, res) {
     //recieves webhook response
 });
 
