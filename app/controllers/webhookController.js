@@ -39,9 +39,6 @@ exports.parseWebhook = (req, res) => {
         refunds: req.body.refunds,
         deliveryDate: req.body.meta_data[3].value
       };
-
-    //console.log(webhookResponse.metaData[3].value);
-    //res.json({ message: 'hooray! Order Saved!' });   
       
     const newOrder = new Order(webhookResponse);
 
