@@ -3,8 +3,8 @@
 const Order = require('../models/order');
 
 exports.parseWebhook = (req, res) => {
-
-    const webhookResponse = {
+      
+    const newOrder = new Order({
         orderId: req.body.id,
         parentID: req.body.parent_id,
         number: req.body.number,
@@ -38,9 +38,7 @@ exports.parseWebhook = (req, res) => {
         couponLines: req.body.coupon_lines, 
         refunds: req.body.refunds,
         deliveryDate: req.body.meta_data[3].value
-      };
-      
-    const newOrder = new Order(webhookResponse);
+    });
 
     newOrder.save((err) => {
         if (err) {

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 // Order Schema
 // =============================================================================
-const OrderSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
     orderId: Number,
     parentID: Number,
     number: String,
@@ -46,9 +46,10 @@ const OrderSchema = new mongoose.Schema({
   });
 
 // Set new date for updatedAt on every update
-OrderSchema.method("update", (updates, callback) => {
-    Object.assign(this, updates, { updatedAt: new Date() });
-    this.parent().save(callback);
+orderSchema.method("update", function (updates, callback) {
+  const order = this;
+  Object.assign(order, updates, { updatedAt: new Date() });
+  order.parent().save(callback);
 });
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model('Order', orderSchema);

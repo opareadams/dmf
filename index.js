@@ -1,11 +1,8 @@
 "use strict";
 
 const express = require('express');
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
-const moment = require("moment");
 const apiRoutes = require("./routes/api");
 const webhookController = require('./app/controllers/webhookController');
 
@@ -60,7 +57,7 @@ router.get('/', (req, res) =>  {
  * MongoDB Connection
  */
 
-mongoose.connect("mongodb://192.64.116.204:27017/dmf", {useNewUrlParser: true});
+mongoose.connect("mongodb://192.64.116.204:27017/dmf", {useCreateIndex: true,useNewUrlParser: true});
 const db = mongoose.connection;
 
 db.on("error", (err) => {
@@ -75,14 +72,14 @@ db.once("open", () => {
 //Middleware to check invalid routes
 app.use((req, res, next) => {
     const err = new Error("Not found");
-    err.status = 404;
+    err.status = false;
     next(err);
 });
 
-//Middleware to check for server errors
+//Middleware for server errors
 app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.json({
+    res.status(err.status || 500)
+    .json({
     error: {
         status: err.status,
         message: err.message

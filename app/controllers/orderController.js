@@ -14,6 +14,9 @@ exports.index = (req, res) => {
             res.statusCode = 200;
             res.json({ 
                 status: true,
+                meta: {
+                    total_orders: data.length
+                },
                 message: 'orders retrieved successfully',
                 data
             });   
@@ -31,14 +34,17 @@ exports.index = (req, res) => {
 // List top 5 Orders for the day
 exports.indexTopOrders = (req, res) =>  {
     Order.find({
-        "deliveryDate": moment().format('DD-MM-YYYY')
+        "deliveryDate": moment().format('DD-MM-YYYY'),
+        "status": "processing"
     })
-    .limit(5)
     .then((data)=>{
         console.log(data);
         res.statusCode = 200;
         res.json({ 
             status: true,
+            meta: {
+                total_orders: data.length
+            },
             message: 'orders retrieved successfully',
             data
         });   
@@ -100,4 +106,33 @@ exports.indexOrdersWithLimit = (req, res) =>  {
             message: `Oops! An error occured. Error: ${err}`
         }); 
     })     
+};
+
+
+// Filter Orders by Satus
+exports.filterByStatus = (req, res) =>  {
+    console.log(req.params.status);
+    Order.find({
+        "status": req.params.status
+    })
+    .then((data)=>{
+        console.log(data);
+        res.statusCode = 200;
+        res.json({ 
+            status: true,
+            meta: {
+                total_orders: data.length
+            },
+            message: 'orders retrieved successfully',
+            data
+        });   
+    })
+    .catch((err)=>{
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })  
 };
