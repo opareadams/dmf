@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const mongoose = require("mongoose");
+const moment = require("moment");
 const apiRoutes = require("./routes/api");
 const webhookController = require('./app/controllers/webhookController');
 
@@ -22,7 +23,7 @@ router.use(bodyParser.json());
 app.use(router)
 
 // CORS middleware
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
       "Access-Control-Allow-Headers",
@@ -38,11 +39,18 @@ app.use(function(req, res, next) {
 
 // ROUTES FOR OUR API
 // =============================================================================
+
+// ANY /api/*
+// Route to api endpoints 
 app.use("/api", apiRoutes);
 
-router.get('/webhook', webhookController.parseWebhook);
+// POST /webhook
+// Route to recieve webhook data
+router.post('/webhook', webhookController.parseWebhook);
 
-router.get('/', function (req, res) {
+// GET /
+// Home route for tests
+router.get('/', (req, res) =>  {
     res.json({ message: 'hooray!' });   
 });
 
@@ -51,29 +59,28 @@ router.get('/', function (req, res) {
 /**
  * MongoDB Connection
  */
-/*
-mongoose.connect("mongodb://@192.64.116.204");
-     
+
+mongoose.connect("mongodb://192.64.116.204:27017/dmf", {useNewUrlParser: true});
 const db = mongoose.connection;
 
-db.on("error", function(err) {
+db.on("error", (err) => {
     console.error("connection error:", err);
 });
 
-db.once("open", function() {
+db.once("open", () => {
     console.log("db connection successful");
 });
-  */
+  
 
 //Middleware to check invalid routes
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     const err = new Error("Not found");
     err.status = 404;
     next(err);
 });
 
 //Middleware to check for server errors
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
     res.status(err.status || 500);
     res.json({
     error: {
@@ -86,6 +93,6 @@ app.use(function(err, req, res, next) {
 
 // START THE SERVER
 // =============================================================================
-let server = app.listen(port, function() {
+let server = app.listen(port, () => {
     console.log('Express server listening on port ' + port)
 });
