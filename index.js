@@ -52,12 +52,11 @@ router.get('/', (req, res) =>  {
 });
 
 
-
 /**
  * MongoDB Connection
  */
 
-mongoose.connect("mongodb://192.64.116.204:27017/dmf", {useCreateIndex: true,useNewUrlParser: true});
+mongoose.connect("mongodb://192.64.116.204:27017/dmf", {useCreateIndex: true, useFindAndModify:false, useNewUrlParser: true});
 const db = mongoose.connection;
 
 db.on("error", (err) => {

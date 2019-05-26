@@ -9,7 +9,7 @@ const moment = require("moment");
 // list all orders
 exports.index = (req, res) => {
     Order.find({})
-        .then((data)=>{
+        .then((data) => {
             console.log(data);
             res.statusCode = 200;
             res.json({ 
@@ -21,7 +21,7 @@ exports.index = (req, res) => {
                 data
             });   
         })
-        .catch((err)=>{
+        .catch((err) => { 
             console.log(err);
             res.statusCode = 500;
             res.json({ 
@@ -37,7 +37,7 @@ exports.indexTopOrders = (req, res) =>  {
         "deliveryDate": moment().format('DD-MM-YYYY'),
         "status": "processing"
     })
-    .then((data)=>{
+    .then((data) => {
         console.log(data);
         res.statusCode = 200;
         res.json({ 
@@ -46,10 +46,10 @@ exports.indexTopOrders = (req, res) =>  {
                 total_orders: data.length
             },
             message: 'orders retrieved successfully',
-            data
+            data    
         });   
     })
-    .catch((err)=>{
+    .catch((err) => {
         console.log(err);
         res.statusCode = 500;
         res.json({ 
@@ -65,16 +65,23 @@ exports.findOrder = (req, res) =>  {
         "orderId": req.params.orderId
     })
     .limit(1)
-    .then((data)=>{
-        console.log(data);
-        res.statusCode = 200;
-        res.json({ 
-            status: true,
-            message: 'order retrieved successfully',
-            data
-        });   
+    .then((data) => { 
+        if (data) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'order retrieved successfully',
+                data
+            }); 
+        } else {
+            res.statusCode = 404;
+            res.json({ 
+                status: false,
+                message: `no such order exist`
+            }); 
+        } 
     })
-    .catch((err)=>{
+    .catch((err) => {
         console.log(err);
         res.statusCode = 500;
         res.json({ 
@@ -89,7 +96,7 @@ exports.indexOrdersWithLimit = (req, res) =>  {
     const limit = Number(req.params.limit);
     Order.find({})
     .limit(limit)
-    .then((data)=>{
+    .then((data) => {
         console.log(data);
         res.statusCode = 200;
         res.json({ 
@@ -98,7 +105,7 @@ exports.indexOrdersWithLimit = (req, res) =>  {
             data
         });   
     })
-    .catch((err)=>{
+    .catch((err) => {
         console.log(err);
         res.statusCode = 500;
         res.json({ 
@@ -115,7 +122,7 @@ exports.filterByStatus = (req, res) =>  {
     Order.find({
         "status": req.params.status
     })
-    .then((data)=>{
+    .then((data) => {
         console.log(data);
         res.statusCode = 200;
         res.json({ 
@@ -127,7 +134,7 @@ exports.filterByStatus = (req, res) =>  {
             data
         });   
     })
-    .catch((err)=>{
+    .catch((err) => {
         console.log(err);
         res.statusCode = 500;
         res.json({ 
@@ -135,4 +142,40 @@ exports.filterByStatus = (req, res) =>  {
             message: `Oops! An error occured. Error: ${err}`
         }); 
     })  
+};
+
+
+// Update Order status  
+exports.updateOrderStatus = (req, res) =>  {
+    console.log(req.params.status);
+    Order.findOneAndUpdate(
+        {orderId: req.params.orderId}
+        ,{$set:{status:req.params.status}}
+        ,{new:true}
+    )
+    .then((data) => {
+        console.log(data);
+        if(data) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'Order Updated Successfully! ',
+                data
+            }); 
+        } else {
+            res.statusCode = 500;
+            res.json({ 
+                status: false,
+                message: `no such order exist`
+            }); 
+        }         
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })
 };

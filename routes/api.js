@@ -95,4 +95,8 @@ router.get('/orders/status/:status', protectedRoute, orderController.filterBySta
 // List a specific number of orders
 router.get('/orders/limit/:limit',protectedRoute, orderController.indexOrdersWithLimit); 
 
+// PUT /api/orders/:orderID/status/:status
+// Update order status
+router.put('/orders/:orderId/status/:status',protectedRoute, orderController.updateOrderStatus); 
+
 module.exports = router;
