@@ -24,7 +24,7 @@ exports.login = (req, res) =>  {
                 })
             }
             else{
-                res.status(400)
+                res.status(401)
                 .json({
                     status: false,
                     message:'Invalid Password/Username'
@@ -33,7 +33,7 @@ exports.login = (req, res) =>  {
         })
     })
     .catch((err)=>{
-        res.status(400).json({message:'Invalid Password/Username'});
+        res.status(401).json({message:'Invalid Password/Username'});
     })
 };
 
