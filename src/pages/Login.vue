@@ -7,11 +7,11 @@
             <v-card class="elevation-1 pa-3">
               <v-card-text>
                 <div class="layout column align-center">
-                  <img src="/static/m.png" alt="Vue Material Admin" width="120" height="120">
-                  <h1 class="flex my-4 primary--text">Material Admin Template</h1>
+                  <img v-bind:src="computeLogo" alt="Vue Material Admin" width="120" height="120">
+                  <h1 class="flex my-4 primary--text">Doughman Foods</h1>
                 </div>                
                 <v-form>
-                  <v-text-field append-icon="person" name="login" label="Login" type="text" v-model="model.username"></v-text-field>
+                  <v-text-field append-icon="person" name="login" label="Login" type="text" v-model="model.email"></v-text-field>
                   <v-text-field append-icon="lock" name="password" label="Password" id="password" type="password" v-model="model.password"></v-text-field>
                 </v-form>
               </v-card-text>
@@ -37,21 +37,51 @@
 </template>
 
 <script>
+import DMFWebService from '@/services/DMFWebService'
 export default {
   data: () => ({
     loading: false,
     model: {
-      username: 'admin@isockde.com',
+      email: 'admin@isockde.com',
       password: 'password'
     }
   }),
+  computed:{
+     computeLogo () {
+      return './static/m.png';
+    },
+
+  },
 
   methods: {
     login () {
-      this.loading = true;
-      setTimeout(() => {
-        this.$router.push('/dashboard');
-      }, 1000);
+       let credentials = {
+        email: this.model.email,
+        password: this.model.password
+      };
+      
+      localStorage.removeItem('TOKEN');
+
+//API CALL
+      DMFWebService.auth.login(credentials).then((response) => {
+
+        console.log(response.data);
+        localStorage.TOKEN = response.data.data.token;
+        localStorage.ROLE = response.data.data.role;
+
+         this.loading = true;
+                     setTimeout(() => {
+                       if( localStorage.ROLE === 'kitchen'){
+                          this.$router.push('/kitchen');
+                       }
+                       else if(localStorage.ROLE === 'admin')
+                          this.$router.push('/dashboard');
+                      
+                     }, 1000);
+
+      })
+
+
     }
   }
 

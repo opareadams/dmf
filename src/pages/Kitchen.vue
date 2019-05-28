@@ -201,6 +201,14 @@
         ],
       }
     },
+    beforeCreate(){
+     if (localStorage.ROLE_ID || localStorage.TOKEN) {
+     
+        }
+        else{
+          this.$router.replace({ path: '/login' });
+        }
+      },
 
     watch: {
       steps (val) {
