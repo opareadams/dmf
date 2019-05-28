@@ -35,7 +35,7 @@ exports.index = (req, res) => {
 exports.indexTopOrders = (req, res) =>  {
     Order.find({
         "deliveryDate": moment().format('DD-MM-YYYY'),
-        "status": "processing"
+        "packaged": false
     })
     .then((data) => {
         console.log(data);
