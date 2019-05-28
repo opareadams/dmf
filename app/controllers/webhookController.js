@@ -37,9 +37,9 @@ exports.parseWebhook = (req, res) => {
         feeLines: req.body.fee_lines,
         couponLines: req.body.coupon_lines, 
         refunds: req.body.refunds,
-        deliveryDate: req.body.meta_data[3].value
+        deliveryDate: req.body.meta_data[3].value || req.body.meta_data[0].value 
     });
-
+    console.log(newOrder);
     newOrder.save((err) => {
         if (err) {
             console.log(err);

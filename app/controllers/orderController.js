@@ -10,16 +10,23 @@ const moment = require("moment");
 exports.index = (req, res) => {
     Order.find({})
         .then((data) => {
-            console.log(data);
-            res.statusCode = 200;
-            res.json({ 
-                status: true,
-                meta: {
-                    total_orders: data.length
-                },
-                message: 'orders retrieved successfully',
-                data
-            });   
+            if (data.length) {
+                res.statusCode = 200;
+                res.json({ 
+                    status: true,
+                    meta: {
+                        total_orders: data.length
+                    },
+                    message: 'orders retrieved successfully',
+                    data
+                }); 
+            } else {
+                res.statusCode = 404;
+                res.json({ 
+                    status: false,
+                    message: `No orders available`
+                }); 
+            } 
         })
         .catch((err) => { 
             console.log(err);
@@ -35,19 +42,27 @@ exports.index = (req, res) => {
 exports.indexTopOrders = (req, res) =>  {
     Order.find({
         "deliveryDate": moment().format('DD-MM-YYYY'),
-        "packaged": false
+        "packaged": true
     })
     .then((data) => {
-        console.log(data);
-        res.statusCode = 200;
-        res.json({ 
-            status: true,
-            meta: {
-                total_orders: data.length
-            },
-            message: 'orders retrieved successfully',
-            data    
-        });   
+        if (data.length) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                meta: {
+                    total_orders: data.length
+                },
+                message: 'orders retrieved successfully',
+                data    
+            });   
+        } else {
+            res.statusCode = 404;
+            res.json({ 
+                status: false,
+                message: `No orders available for today`
+            }); 
+        }
+        
     })
     .catch((err) => {
         console.log(err);
@@ -66,7 +81,7 @@ exports.findOrder = (req, res) =>  {
     })
     .limit(1)
     .then((data) => { 
-        if (data) {
+        if (data.length) {
             res.statusCode = 200;
             res.json({ 
                 status: true,
@@ -77,7 +92,7 @@ exports.findOrder = (req, res) =>  {
             res.statusCode = 404;
             res.json({ 
                 status: false,
-                message: `no such order exist`
+                message: `No such order exist`
             }); 
         } 
     })
@@ -97,13 +112,22 @@ exports.indexOrdersWithLimit = (req, res) =>  {
     Order.find({})
     .limit(limit)
     .then((data) => {
-        console.log(data);
-        res.statusCode = 200;
-        res.json({ 
-            status: true,
-            message: 'orders retrieved successfully',
-            data
-        });   
+        if (data.length) {
+            console.log(data);
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'orders retrieved successfully',
+                data
+            });   
+        } else {
+            res.statusCode = 404;
+            res.json({ 
+                status: false,
+                message: `No orders available `
+            }); 
+        }
+       
     })
     .catch((err) => {
         console.log(err);
@@ -123,7 +147,6 @@ exports.filterByStatus = (req, res) =>  {
         "status": req.params.status
     })
     .then((data) => {
-        console.log(data);
         res.statusCode = 200;
         res.json({ 
             status: true,
@@ -154,7 +177,6 @@ exports.updateOrderStatus = (req, res) =>  {
         ,{new:true}
     )
     .then((data) => {
-        console.log(data);
         if(data) {
             res.statusCode = 200;
             res.json({ 
