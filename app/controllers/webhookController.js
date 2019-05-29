@@ -2,8 +2,19 @@
 
 const Order = require('../models/order');
 
+function getDeilveryDate (metaData) {
+    let date = null;
+    if (metaData.length > 2) {
+        date = metaData[3].value ;
+    } else {
+        date = metaData[0].value;
+    }
+    return date; 
+}
+
 exports.parseWebhook = (req, res) => {
-      
+    console.log(req.body);
+    
     const newOrder = new Order({
         orderId: req.body.id,
         parentID: req.body.parent_id,
@@ -37,7 +48,7 @@ exports.parseWebhook = (req, res) => {
         feeLines: req.body.fee_lines,
         couponLines: req.body.coupon_lines, 
         refunds: req.body.refunds,
-        deliveryDate: req.body.meta_data[3].value || req.body.meta_data[0].value 
+        deliveryDate: getDeilveryDate(req.body.meta_data) 
     });
     console.log(newOrder);
     newOrder.save((err) => {
