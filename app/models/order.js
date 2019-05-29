@@ -2,10 +2,10 @@
 
 const mongoose = require('mongoose');
 
-// Order Schema
+// Order Schema ,unique:true
 // =============================================================================
 const orderSchema = new mongoose.Schema({
-  orderId: Number,
+  orderId: { type: Number, required: true },
   parentID: Number,
   number: String,
   orderKey: String,
@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema({
   feeLines: Array,
   couponLines: Array,
   refunds: Array,
-  deliveryDate: String,
+  deliveryDate: { type: String, required: true },
   updatedAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now }
 });
