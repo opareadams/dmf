@@ -95,13 +95,12 @@ router.get('/orders/status/:status', protectedRoute, orderController.filterBySta
 // List a specific number of orders
 router.get('/orders/limit/:limit',protectedRoute, orderController.indexOrdersWithLimit); 
 
-// PUT /api/orders/:orderID/status/:status
+// POST /api/orders/:orderID/status/:status
 // Update order status
 router.post('/orders/:orderId',protectedRoute, orderController.updateOrderStatus); 
-//packagedOrderStatusUpdate
 
-// PUT /api/orders/:orderID/status/:status
-// Update order status
+// POST /api/orders/:orderID/packaged
+// Update order packaged flag to true
 router.post('/orders/:orderId/packaged',protectedRoute, orderController.packagedOrderStatusUpdate); 
 
 module.exports = router;
