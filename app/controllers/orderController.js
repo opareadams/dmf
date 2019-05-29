@@ -42,7 +42,7 @@ exports.index = (req, res) => {
 exports.indexTopOrders = (req, res) =>  {
     Order.find({
         "deliveryDate": moment().format('DD-MM-YYYY'),
-        "packaged": true
+        "packaged": false
     })
     .then((data) => {
         if (data.length) {
