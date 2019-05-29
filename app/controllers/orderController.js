@@ -142,7 +142,6 @@ exports.indexOrdersWithLimit = (req, res) =>  {
 
 // Filter Orders by Satus
 exports.filterByStatus = (req, res) =>  {
-    console.log(req.params.status);
     Order.find({
         "status": req.params.status
     })
@@ -170,10 +169,9 @@ exports.filterByStatus = (req, res) =>  {
 
 // Update Order status  
 exports.updateOrderStatus = (req, res) =>  {
-    console.log(req.params.status);
     Order.findOneAndUpdate(
         {orderId: req.params.orderId}
-        ,{$set:{status:req.params.status}}
+        ,{$set:{status:req.body.status}}
         ,{new:true}
     )
     .then((data) => {
@@ -182,6 +180,39 @@ exports.updateOrderStatus = (req, res) =>  {
             res.json({ 
                 status: true,
                 message: 'Order Updated Successfully! ',
+                data
+            }); 
+        } else {
+            res.statusCode = 500;
+            res.json({ 
+                status: false,
+                message: `no such order exist`
+            }); 
+        }         
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })
+};
+
+// Update Order status  
+exports.packagedOrderStatusUpdate = (req, res) =>  {
+    Order.findOneAndUpdate(
+        {orderId: req.params.orderId}
+        ,{$set:{packaged:true}}
+        ,{new:true}
+    )
+    .then((data) => {
+        if(data) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'Order Status Updated Successfully! ',
                 data
             }); 
         } else {

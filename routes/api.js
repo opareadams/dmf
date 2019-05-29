@@ -97,6 +97,11 @@ router.get('/orders/limit/:limit',protectedRoute, orderController.indexOrdersWit
 
 // PUT /api/orders/:orderID/status/:status
 // Update order status
-router.put('/orders/:orderId/status/:status',protectedRoute, orderController.updateOrderStatus); 
+router.post('/orders/:orderId',protectedRoute, orderController.updateOrderStatus); 
+//packagedOrderStatusUpdate
+
+// PUT /api/orders/:orderID/status/:status
+// Update order status
+router.post('/orders/:orderId/packaged',protectedRoute, orderController.packagedOrderStatusUpdate); 
 
 module.exports = router;
