@@ -79,6 +79,10 @@ router.post('/auth/logout', protectedRoute, authController.logout);
 // list all orders
 router.get('/orders', protectedRoute, orderController.index); 
 
+// POST /api/orders
+// Update Order
+router.post('/orders/update', orderController.updateOrder); 
+
 // GET /api/orders/top/5
 // List top 5 Orders for the day
 router.get('/orders/top/5', protectedRoute, orderController.indexTopOrders); 

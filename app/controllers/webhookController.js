@@ -12,9 +12,7 @@ function getDeilveryDate (metaData) {
     return date; 
 }
 
-exports.parseWebhook = (req, res) => {
-    console.log(req.body);
-    
+exports.parseWebhook = (req, res) => {    
     const newOrder = new Order({
         orderId: req.body.id,
         parentID: req.body.parent_id,
@@ -50,7 +48,7 @@ exports.parseWebhook = (req, res) => {
         refunds: req.body.refunds,
         deliveryDate: getDeilveryDate(req.body.meta_data) 
     });
-    console.log(newOrder);
+
     newOrder.save((err) => {
         if (err) {
             console.log(err);
