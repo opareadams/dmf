@@ -22,6 +22,17 @@ export default [
     }
   },
   {
+    name: 'APP_LOGIN_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Check Username or Password'
+      };
+      this.$router.replace({ path: '/login' });
+    }
+  },
+  {
     name: 'APP_AUTH_FAILED',
     callback: function (e) {
       this.$router.push('/login');

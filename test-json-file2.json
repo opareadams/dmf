@@ -1,0 +1,114 @@
+ {
+  "id": 3292,
+  "parent_id": 0,
+  "number": "3292",
+  "order_key": "wc_order_rC83apI1wM373",
+  "created_via": "admin",
+  "version": "3.6.3",
+  "status": "pending",
+  "currency": "GHS",
+  "date_created": "2019-05-18T01:15:22",
+  "date_created_gmt": "2019-05-18T01:15:22",
+  "date_modified": "2019-05-18T01:19:59",
+  "date_modified_gmt": "2019-05-18T01:19:59",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total": "160.00",
+  "total_tax": "0.00",
+  "prices_include_tax": false,
+  "customer_id": 0,
+  "customer_ip_address": "",
+  "customer_user_agent": "",
+  "customer_note": "",
+  "billing": {
+    "first_name": "Opare",
+    "last_name": "Adams",
+    "company": "",
+    "address_1": "East Legon, Opp melcom",
+    "address_2": "",
+    "city": "Accra",
+    "state": "",
+    "postcode": "",
+    "country": "GH",
+    "email": "opare.adams@gmail.com",
+    "phone": "263572239"
+  },
+  "shipping": {
+    "first_name": "Opare",
+    "last_name": "Adams",
+    "company": "",
+    "address_1": "East Legon, Opp melcom",
+    "address_2": "",
+    "city": "Accra",
+    "state": "",
+    "postcode": "",
+    "country": "GH"
+  },
+  "payment_method": "",
+  "payment_method_title": "",
+  "transaction_id": "",
+  "date_paid": null,
+  "date_paid_gmt": null,
+  "date_completed": null,
+  "date_completed_gmt": null,
+  "cart_hash": "",
+  "meta_data": [
+    {
+      "id": 10644,
+      "key": "Delivery date",
+      "value": "2019-05-18"
+    },
+    {
+      "id": 10672,
+      "key": "slide_template",
+      "value": "default"
+    },
+    {
+      "id": 10676,
+      "key": "dfiFeatured",
+      "value": [
+        ""
+      ]
+    }
+  ],
+  "line_items": [
+    {
+      "id": 8,
+      "name": "Pack of 12 Creamy Deluxe",
+      "product_id": 3157,
+      "variation_id": 0,
+      "quantity": 2,
+      "tax_class": "",
+      "subtotal": "160.00",
+      "subtotal_tax": "0.00",
+      "total": "160.00",
+      "total_tax": "0.00",
+      "taxes": [
+        
+      ],
+      "meta_data": [
+        
+      ],
+      "sku": "packdeluxe2",
+      "price": 80
+    }
+  ],
+  "tax_lines": [
+    
+  ],
+  "shipping_lines": [
+    
+  ],
+  "fee_lines": [
+    
+  ],
+  "coupon_lines": [
+    
+  ],
+  "refunds": [
+    
+  ]
+}
