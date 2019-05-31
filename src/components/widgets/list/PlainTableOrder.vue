@@ -36,15 +36,18 @@ export default {
     return {
       headers: [
         {
-          text: '#',
+          text: 'Order ID',
           align: 'left',
           sortable: false,
           value: 'id'
         },
-        { text: 'Product', value: 'deadline' },
-        { text: 'Price', value: 'progress' },
-        { text: 'Status', value: 'status' },
-
+        { text: 'Customer', value: 'progress' },
+        { text: 'Payment Method', value: 'progress' },
+        { text: 'Delivery Date', value: 'progress' },
+        { text: 'Packaged', value: 'progress' },
+        { text: 'Amount', value: 'progress' },
+        { text: 'Status', value: 'progress' },
+        { text: 'Date', value: 'status' }
       ],
       items: items,
       colors: {
