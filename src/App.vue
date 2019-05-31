@@ -12,13 +12,27 @@
           </div>   
            <!-- App Footer -->
           <v-footer height="auto" class="white pa-3 app--footer">
-            <span class="caption">isocked.com Design &copy; {{ new Date().getFullYear() }}</span>
+            <span class="caption">Doughman Foods &copy; {{ new Date().getFullYear() }}</span>
             <v-spacer></v-spacer>
-            <span class="caption mr-1"> Make With Love </span> <v-icon color="pink" small>favorite</v-icon>
+            <!-- <span class="caption mr-1"> Make With Love </span> <v-icon color="pink" small>favorite</v-icon> -->
           </v-footer>
         </v-content>
         <!-- Go to top -->
-        <app-fab></app-fab>       
+        <app-fab></app-fab>
+        <!-- theme setting -->
+        <!-- <v-btn small fab dark falt fixed top="top" right="right" class="setting-fab" color="red" @click="openThemeSettings">
+          <v-icon>settings</v-icon>
+        </v-btn> -->
+        <v-navigation-drawer
+          class="setting-drawer"
+          temporary
+          right
+          v-model="rightDrawer"
+          hide-overlay
+          fixed
+          >
+          <theme-settings></theme-settings>
+        </v-navigation-drawer>        
       </v-app>
     </template>
     <template v-else>
