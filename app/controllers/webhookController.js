@@ -70,15 +70,19 @@ exports.createOrder = (req, res) => {
 // Update Order    
 exports.updateOrder = (req, res) =>  {
     console.log(req.body);
-    Order.findOneAndUpdate(
+    Order.updateMany(
         {orderId: req.body.id}
         ,{$set:{status:'cancelled'}}
-        ,{new:true}
-    )
-    .then((data) => {   
-        console.log('----------------------------------');
-        console.log(data);
-        if (data) {
+        ,(err) => {   
+            if (err) {
+                console.log(err);
+                res.statusCode = 500;
+                res.json({ 
+                    status: false,
+                    message: `Oops! An error occured. Error: ${err}`
+                }); 
+            }
+            
             const newOrder = new Order({
                 orderId: req.body.id,
                 parentID: req.body.parent_id,
@@ -114,8 +118,7 @@ exports.updateOrder = (req, res) =>  {
                 refunds: req.body.refunds,
                 deliveryDate: getDeilveryDate(req.body.meta_data) 
             });
-            console.log('----------------------------------');
-        console.log(newOrder);
+              
             newOrder.save((err) => {
                 if (err) {
                     console.log(err);
@@ -129,15 +132,10 @@ exports.updateOrder = (req, res) =>  {
                 res.statusCode = 201;
                 console.log('Document is successfully saved.');
                 res.json({ message: 'Order Updated!' });   
-              });
-        } else {
-            res.statusCode = 404;
-            res.json({ 
-                status: false,
-                message: `No such order exist`
-            }); 
-        } 
-    })
+                });
+            
+        }
+    )
     .catch((err) => {
         console.log(err);
         res.statusCode = 500;
