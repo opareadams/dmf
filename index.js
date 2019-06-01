@@ -42,8 +42,12 @@ app.use((req, res, next) => {
 app.use("/api", apiRoutes);
 
 // POST /webhook
-// Route to recieve webhook data
-router.post('/webhook', webhookController.parseWebhook);
+// Recieve webhook data to create an order
+router.post('/webhook', webhookController.createOrder);
+
+// POST /webhook/update
+// Recieve webhook data to update an order
+router.post('/webhook/update', webhookController.updateOrder);
 
 // GET /
 // Home route for tests
@@ -70,7 +74,7 @@ db.once("open", () => {
 
 //Middleware to check invalid routes
 app.use((req, res, next) => {
-    const err = new Error("Not found");
+    const err = new Error("Route not found");
     err.status = false;
     next(err);
 });
