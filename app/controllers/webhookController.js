@@ -132,7 +132,7 @@ exports.updateOrder = (req, res) =>  {
                 res.statusCode = 201;
                 console.log('Document is successfully saved.');
                 res.json({ message: 'Order Updated!' });   
-                });
+            });
             
         }
     )

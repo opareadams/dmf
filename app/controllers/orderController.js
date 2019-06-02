@@ -8,25 +8,34 @@ const moment = require("moment");
 
 // list all orders
 exports.index = (req, res) => {
-    Order.find({})
-        .then((data) => {
-            if (data.length) {
-                res.statusCode = 200;
-                res.json({ 
-                    status: true,
-                    meta: {
-                        total_orders: data.length
-                    },
-                    message: 'orders retrieved successfully',
-                    data
-                }); 
-            } else {
-                res.statusCode = 404;
-                res.json({ 
-                    status: false,
-                    message: `No orders available`
-                }); 
-            } 
+    // aggregate Query
+    const options = {
+        page: req.query.page || 1,
+        limit: req.query.limit || 15,
+        sort: { createdAt: -1 },
+        customLabels: {
+            totalDocs: 'totalOrders',
+            docs: 'orders',
+            limit: 'ordersPerPage',
+            page: 'currentPageNumber',
+            nextPage: 'next',
+            prevPage: 'prev',
+            totalPages: 'totalPages',
+            hasPrevPage: 'hasPrev',
+            hasNextPage: 'hasNext',
+            pagingCounter: 'pageCounter'
+        }
+    };
+
+    Order.aggregatePaginate(Order.aggregate(), options)
+        .then(function(data) {
+            res.json({ 
+                status: true,
+                meta: {
+                },
+                message: 'orders retrieved successfully',
+                data    
+            }); 
         })
         .catch((err) => { 
             console.log(err);
@@ -35,7 +44,7 @@ exports.index = (req, res) => {
                 status: false,
                 message: `Oops! An error occured. Error: ${err}`
             }); 
-        })
+        });
 };
 
 // List top 5 Orders for the day
@@ -136,7 +145,7 @@ exports.indexOrdersWithLimit = (req, res) =>  {
             status: false,
             message: `Oops! An error occured. Error: ${err}`
         }); 
-    })     
+    })         
 };
 
 
@@ -232,5 +241,33 @@ exports.packagedOrderStatusUpdate = (req, res) =>  {
         }); 
     })
 };
+
+// Get Order Summaary  
+exports.orderSummary = (req, res) =>  {    
+    Order.aggregate([
+        {
+            $group:{
+            _id:{status:"$status"},
+            count:{$sum:1},
+            total_amount: { $sum: {"$toDouble": "$total"}}
+            }
+        }
+        ]).then(function (data) {
+            res.json({ 
+                status: true,
+                message: 'summary retrieved successfully',
+                data    
+            }); 
+        })
+        .catch((err) => { 
+            console.log(err);
+            res.statusCode = 500;
+            res.json({ 
+                status: false,
+                message: `Oops! An error occured. Error: ${err}`
+            }); 
+        });
+};
+
 
 

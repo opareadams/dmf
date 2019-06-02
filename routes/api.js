@@ -75,9 +75,13 @@ router.post('/auth/logout', protectedRoute, authController.logout);
 // Order Routes
 // =============================================================================
 
+// GET /api/orders/summary
+// List summary for entire Orders
+router.get('/orders/summary', protectedRoute, orderController.orderSummary); 
+
 // GET /api/orders
 // list all orders
-router.get('/orders', protectedRoute, orderController.index); 
+router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
 
 // GET /api/orders/top/5
 // List top 5 Orders for the day

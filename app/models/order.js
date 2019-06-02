@@ -1,6 +1,7 @@
 "use strict";
 
 const mongoose = require('mongoose');
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 // Order Schema ,unique:true
 // =============================================================================
@@ -52,4 +53,5 @@ orderSchema.method("update", function (updates, callback) {
   order.parent().save(callback);
 });
 
+orderSchema.plugin(aggregatePaginate);
 module.exports = mongoose.model('Order', orderSchema);
