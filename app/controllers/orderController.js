@@ -51,7 +51,8 @@ exports.index = (req, res) => {
 exports.indexTopOrders = (req, res) =>  {
     Order.find({
         "deliveryDate": moment().format('DD-MM-YYYY'),
-        "packaged": false
+        "packaged": false,
+        "status":{$ne:"cancelled"}
     })
     .then((data) => {
         if (data.length) {
