@@ -86,8 +86,8 @@ export default {
 //=============================================================================
   },
   orders:{
-    listAllOrders(){
-      return axios.get(`${DMF_API_BASE_URL}/orders`)
+    listAllOrders(page=1, limit=15){
+      return axios.get(`${DMF_API_BASE_URL}/orders?page=${page}&limit=${limit}`)
     },
     listOrdersForToday(){
       return axios.get(`${DMF_API_BASE_URL}/orders/top/5`)
@@ -100,6 +100,9 @@ export default {
     },
     updateOrderStatus(orderId,status){
       return axios.put(`${DMF_API_BASE_URL}/orders/${orderId}/status/${status}`)
+    },
+    getOrderSummary(){
+      return axios.get(`${DMF_API_BASE_URL}/orders/summary`)
     }
   },
 
