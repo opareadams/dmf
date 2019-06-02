@@ -35,7 +35,7 @@ exports.index = (req, res) => {
                 },
                 message: 'orders retrieved successfully',
                 data    
-            }); 
+            });     
         })
         .catch((err) => { 
             console.log(err);
