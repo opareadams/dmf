@@ -79,10 +79,6 @@ router.post('/auth/logout', protectedRoute, authController.logout);
 // List summary for entire Orders
 router.get('/orders/summary', protectedRoute, orderController.orderSummary); 
 
-// GET /api/orders
-// list all orders
-router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
-
 // GET /api/orders/top/5
 // List top 5 Orders for the day
 router.get('/orders/top/5', protectedRoute, orderController.indexTopOrders); 
@@ -106,5 +102,9 @@ router.post('/orders/:orderId',protectedRoute, orderController.updateOrderStatus
 // POST /api/orders/:orderID/packaged
 // Update order packaged flag to true
 router.post('/orders/:orderId/packaged',protectedRoute, orderController.packagedOrderStatusUpdate); 
+
+// GET /api/orders
+// list all orders
+router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
 
 module.exports = router;
