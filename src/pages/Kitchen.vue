@@ -6,7 +6,7 @@
 
         <v-layout row wrap>
                      <v-flex lg4 sm12>
-                          <v-card>
+                          <v-card >
                             <v-toolbar color="brown" dark>
                               <v-toolbar-title>Normal Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
@@ -14,61 +14,93 @@
                                 <v-icon>shopping_cart</v-icon>
                               </v-btn>
                             </v-toolbar>
-                            <v-list three-line subheader>
-                                <v-list three-line subheader>
 
-                                   <template xs12 v-for="(item) in orders ">                               
-                                      <!-- <v-layout row wrap > -->
-                                   
-                                          <v-list-tile avatar :key="item.orderId">
-                                            <v-list-tile-action>
-                                              <v-checkbox v-model="notifications"></v-checkbox>
-                                            </v-list-tile-action>
-                                            <v-list-tile-content > 
-                                               <v-list-tile-sub-title :key="item.orderId">Order #{{item.orderId}}</v-list-tile-sub-title>
-                                                <template v-for="(item2) in item.lineItems">
-                                                  <v-list-tile-sub-title :key="item2.name" >-{{item2.name}}(x{{item2.quantity}})  </v-list-tile-sub-title>
-                                                
-                                                </template>
-                                              <v-list-tile-sub-title :key="item.customerNote" >NB: {{item.customerNote}} </v-list-tile-sub-title>
+                            <template xs12 v-for="(item) in orders ">    
+                                <v-card :key="item.orderId"> 
+                                  <!-- <v-card-title  style="height: 40px;"> -->
+                                    <v-card-title style="padding-bottom: 0px;">
+                                    <div>
+                                    
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}}</Strong></span><br>
+                                      <!-- Order items -->
+                                     
+                                       <template v-for="(item2) in item.lineItems">
+                                        <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
+                                       </template>
 
-                                                <!-- <v-list-tile-sub-title :key="item.quantity">Location: </v-list-tile-sub-title> -->
-                                            </v-list-tile-content>
-
-                                             <!-- <v-list-tile-content>
-                                              <v-list-tile-sub-title>Pack of 15 Classic Assorted</v-list-tile-sub-title>
-                                              <v-list-tile-sub-title>x1</v-list-tile-sub-title>
-                                               <v-list-tile-sub-title>Pack of 15 Classic Assorted</v-list-tile-sub-title>
-                                              <v-list-tile-sub-title>x1</v-list-tile-sub-title>
-                                            </v-list-tile-content> -->
-                                            
-                                            <v-list-tile-action>
-                                              <v-btn icon ripple>
-                                                <v-icon color="grey lighten-1">delete</v-icon>
-                                              </v-btn>
-                                            </v-list-tile-action>
-                                          </v-list-tile>
-
-                                           <v-divider inset :key="item.orderId"></v-divider>
-                                      <!-- </v-layout> -->
-                                   </template>
-                              
-                                </v-list>
-                              
-                              <!-- <v-btn color="primary">Packaged</v-btn> -->
-                            </v-list>
+                                        <v-divider v-show="item.customerNote !== '' " ></v-divider>
+                                        
+                                        <span v-show="item.customerNote !== '' " >NB: {{item.customerNote}}</span><br>
+                                        <v-divider v-show="item.customerNote !== '' "  ></v-divider>
+                                        <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
+                                      
+                                    </div>
+                                                                
+                                  </v-card-title>
+                                  <v-card-actions style="
+                                          padding-top: 0px;
+                                          height: 20px;
+                                      ">
+                                    <v-checkbox :value="item.orderId" v-model="checkPackaged"  flat ></v-checkbox>
+                                      <v-btn icon ripple flat>
+                                        <v-icon color="grey lighten-1">delete</v-icon>
+                                      </v-btn>     
+                                  </v-card-actions>                              
+                                </v-card>
+                            </template>
                           </v-card>
                         </v-flex>
 
                          <v-flex lg4 sm12>
                           <v-card>
-                            <v-toolbar color="brown" dark>
+                            <v-toolbar color="purple" dark>
                               <v-toolbar-title>Customized Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
                                 <v-icon>shopping_cart</v-icon>
                               </v-btn>
                             </v-toolbar>
+
+                             <v-card>
+                              <v-card-title>
+                                <div>
+                                 
+                                  <span class="grey--text"><Strong>Number 10</Strong></span><br>
+                                  <span>Whitehaven Beach</span><br>
+                                  <span>Whitsunday Island, Whitsunday Islands</span>
+                                  <span>Whitsunday Island, Whitsunday Islands</span> 
+                                   
+                                </div>
+                              <!-- <v-card-actions> -->
+                                <v-checkbox v-model="notifications" flat></v-checkbox>
+                                  <v-btn icon ripple flat>
+                                    <v-icon color="grey lighten-1">delete</v-icon>
+                                  </v-btn>     
+                              <!-- </v-card-actions> -->                                
+                              </v-card-title>                            
+                            </v-card>
+
+
+
+                             <v-card>
+                              <v-card-title>
+                                <div>
+                                  <span class="grey--text">Number 10</span><br>
+                                  <span>Whitehaven Beach</span><br>
+                                  <span>Whitsunday Island, Whitsunday Islands</span>
+                                   <span>Whitsunday Island, Whitsunday Islands</span>
+                                    
+                                </div>
+                              </v-card-title>
+                              <v-card-actions>
+                                 
+                                <v-btn flat color="orange">Share</v-btn>
+                                <v-btn flat color="orange">Explore</v-btn>
+                              </v-card-actions>
+                            </v-card>
+
+                            
+
                             <v-list two-line subheader>
                                 <v-list two-line subheader>
                                   <v-list-tile href="javascript:;">
@@ -104,7 +136,7 @@
 
                          <v-flex lg4 sm12>
                           <v-card>
-                            <v-toolbar color="brown" dark>
+                            <v-toolbar color="red" dark>
                               <v-toolbar-title>Priority Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
@@ -186,14 +218,14 @@
    },
     data () {
       return {
-      //   step: 1,
-      //  e13: 1,
-      //   e1: 1,
-      //   steps: 2,
+       loading: false,
+       checkPackaged:{},
+        orders:[],
 
+        
          notifications: false,
         notifications2: false,
-        orders:[],
+        
 
       }
     },
@@ -210,18 +242,18 @@
       },
 
     watch: {
-      // steps (val) {
-      //   if (this.e1 > val) {
-      //     this.e1 = val
-      //   }
-      // }
+      
+      checkPackaged(val){
+       
+        this.packageOrder(val);
+      }
     },
 
     methods: {
       getOrders(){
               DMFWebService.orders.listOrdersForToday().then((response) => {
 
-                     // console.log(response.data.data);
+                     //console.log(response.data.data);
                        
 
                       for(var i =0 ; i < response.data.data.length; i++){
@@ -230,6 +262,17 @@
 
                   
                     })
+      },
+      packageOrder(val){
+          for(var i =0; i < this.orders.length; i++){
+            if(this.orders[i].orderId === val){
+              this.orders.splice(i,1);
+            }
+
+            
+
+          }
+
       }
     }
   }
