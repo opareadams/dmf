@@ -1,6 +1,9 @@
 <template>
   <v-toolbar
-    style="background-color: #fbbc34 !important"
+    color="primary"
+    fixed
+    dark
+    app
     >
     <v-toolbar-title class="ml-0 pl-3">
       <v-toolbar-side-icon @click.stop="handleDrawerToggle"></v-toolbar-side-icon>
@@ -11,7 +14,6 @@
         prepend-icon="search"
         label="Search"
         class="hidden-sm-and-down"
-        style="background-color: #fbbc34 !important"
         >
       </v-text-field> -->
       <v-spacer></v-spacer>
