@@ -98,7 +98,7 @@ export default {
       return true;
     },
     computeLogo () {
-      return '/static/logo.png';
+      return '/static/m.png';
     },
 
     sideToolbarColor () {
