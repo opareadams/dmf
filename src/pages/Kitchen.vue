@@ -11,11 +11,14 @@
                               <v-toolbar-title>Normal Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
-                                <v-icon>shopping_cart</v-icon>
+                                <v-icon>room_service</v-icon>
                               </v-btn>
+                             
                             </v-toolbar>
+                            <v-progress-linear v-show="loading" indeterminate value="15" color="primary"></v-progress-linear>
 
-                            <template xs12 v-for="(item) in orders ">    
+
+                            <template xs12 v-for="(item) in orders.slice(0, 5) ">    
                                 <v-card :key="item.orderId"> 
                                   <!-- <v-card-title  style="height: 40px;"> -->
                                     <v-card-title style="padding-bottom: 0px;">
@@ -28,10 +31,9 @@
                                         <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
                                        </template>
 
-                                        <v-divider v-show="item.customerNote !== '' " ></v-divider>
-                                        
-                                        <span v-show="item.customerNote !== '' " >NB: {{item.customerNote}}</span><br>
-                                        <v-divider v-show="item.customerNote !== '' "  ></v-divider>
+                                        <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
+                                          <v-icon left>label</v-icon>NB: {{item.customerNote}}
+                                        </v-chip>
                                         <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
                                       
                                     </div>
@@ -41,10 +43,28 @@
                                           padding-top: 0px;
                                           height: 20px;
                                       ">
-                                    <v-checkbox :value="item.orderId" v-model="checkPackaged"  flat ></v-checkbox>
-                                      <v-btn icon ripple flat>
+                                    <v-checkbox :value="item.orderId" v-model="checkPackaged" flat ></v-checkbox>
+
+                                      <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
                                         <v-icon color="grey lighten-1">delete</v-icon>
-                                      </v-btn>     
+                                      </v-btn>
+                                      <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
+                
+                                          <v-card>
+                                            <v-card-title>
+                                              <span class="headline">Confirmation</span>
+                                            </v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-card-text>
+                                              Are you sure you want to cancel this order?
+                                            </v-card-text>
+                                            <v-card-actions>
+                                              <v-spacer></v-spacer>
+                                              <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                              <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
+                                            </v-card-actions>
+                                          </v-card>
+                                        </v-dialog>     
                                   </v-card-actions>                              
                                 </v-card>
                             </template>
@@ -53,84 +73,65 @@
 
                          <v-flex lg4 sm12>
                           <v-card>
-                            <v-toolbar color="purple" dark>
+                            <v-toolbar color="green" dark>
                               <v-toolbar-title>Customized Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
-                                <v-icon>shopping_cart</v-icon>
+                                <v-icon>room_service</v-icon>
                               </v-btn>
                             </v-toolbar>
 
-                             <v-card>
-                              <v-card-title>
-                                <div>
-                                 
-                                  <span class="grey--text"><Strong>Number 10</Strong></span><br>
-                                  <span>Whitehaven Beach</span><br>
-                                  <span>Whitsunday Island, Whitsunday Islands</span>
-                                  <span>Whitsunday Island, Whitsunday Islands</span> 
-                                   
-                                </div>
-                              <!-- <v-card-actions> -->
-                                <v-checkbox v-model="notifications" flat></v-checkbox>
-                                  <v-btn icon ripple flat>
-                                    <v-icon color="grey lighten-1">delete</v-icon>
-                                  </v-btn>     
-                              <!-- </v-card-actions> -->                                
-                              </v-card-title>                            
-                            </v-card>
-
-
-
-                             <v-card>
-                              <v-card-title>
-                                <div>
-                                  <span class="grey--text">Number 10</span><br>
-                                  <span>Whitehaven Beach</span><br>
-                                  <span>Whitsunday Island, Whitsunday Islands</span>
-                                   <span>Whitsunday Island, Whitsunday Islands</span>
+                              <template xs12 v-for="(item) in customizedOrders.slice(0, 5) ">    
+                                <v-card :key="item.orderId"> 
+                                  <!-- <v-card-title  style="height: 40px;"> -->
+                                    <v-card-title style="padding-bottom: 0px;">
+                                    <div>
                                     
-                                </div>
-                              </v-card-title>
-                              <v-card-actions>
-                                 
-                                <v-btn flat color="orange">Share</v-btn>
-                                <v-btn flat color="orange">Explore</v-btn>
-                              </v-card-actions>
-                            </v-card>
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}}</Strong></span><br>
+                                      <!-- Order items -->
+                                     
+                                       <template v-for="(item2) in item.lineItems">
+                                        <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
+                                       </template>
+                                       
+                                        <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
+                                          <v-icon left>label</v-icon>NB: {{item.customerNote}}
+                                        </v-chip>
+                                        <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
+                                      
+                                    </div>
+                                                                
+                                  </v-card-title>
+                                  <v-card-actions style="
+                                          padding-top: 0px;
+                                          height: 20px;
+                                      ">
+                                    <v-checkbox :value="item.orderId" v-model="checkPackaged" flat ></v-checkbox>
 
-                            
-
-                            <v-list two-line subheader>
-                                <v-list two-line subheader>
-                                  <v-list-tile href="javascript:;">
-                                      <v-list-tile-action>
-                                        <v-checkbox
-                                          v-model="notifications"
-                                          readonly
-                                        ></v-checkbox>
-                                      </v-list-tile-action>
-                                      <v-list-tile-content @click="notifications = !notifications">
-                                        <v-list-tile-title>Pack of 15 Classic Assorted</v-list-tile-title>
-                                        <v-list-tile-sub-title>x1</v-list-tile-sub-title>
-                                      </v-list-tile-content>
-                                  </v-list-tile>
-                                  <v-list-tile href="javascript:;">
-                                      <v-list-tile-action>
-                                        <v-checkbox
-                                          v-model="notifications2"
-                                          readonly
-                                        ></v-checkbox>
-                                      </v-list-tile-action>
-                                      <v-list-tile-content @click="notifications2 = !notifications2">
-                                        <v-list-tile-title>Pack of 12 Creamy Deluxe</v-list-tile-title>
-                                        <v-list-tile-sub-title>x2</v-list-tile-sub-title>
-                                      </v-list-tile-content>
-                                  </v-list-tile>
-                                </v-list>
-                              <v-divider inset></v-divider>
-                              <!-- <v-btn color="primary">Packaged</v-btn> -->
-                            </v-list>
+                                      <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
+                                        <v-icon color="grey lighten-1">delete</v-icon>
+                                      </v-btn>
+                                      <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
+                
+                                          <v-card>
+                                            <v-card-title>
+                                              <span class="headline">Confirmation</span>
+                                            </v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-card-text>
+                                              Are you sure you want to cancel this order?
+                                            </v-card-text>
+                                            <v-card-actions>
+                                              <v-spacer></v-spacer>
+                                              <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                              <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
+                                            </v-card-actions>
+                                          </v-card>
+                                        </v-dialog>     
+                                  </v-card-actions>                              
+                                </v-card>
+                            </template>
+     
                           </v-card>
                         </v-flex>
 
@@ -140,68 +141,64 @@
                               <v-toolbar-title>Priority Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
-                                <v-icon>shopping_cart</v-icon>
+                                <v-icon>room_service</v-icon>
                               </v-btn>
                             </v-toolbar>
-                            <v-list two-line subheader>
-                                <v-list two-line subheader>
-                                  <v-list-tile href="javascript:;">
-                                      <v-list-tile-action>
-                                        <v-checkbox
-                                          v-model="notifications"
-                                          readonly
-                                        ></v-checkbox>
-                                      </v-list-tile-action>
-                                      <v-list-tile-content @click="notifications = !notifications">
-                                        <v-list-tile-title>Pack of 15 Classic Assorted</v-list-tile-title>
-                                        <v-list-tile-sub-title>x1</v-list-tile-sub-title>
-                                      </v-list-tile-content>
-                                  </v-list-tile>
-                                  <v-list-tile href="javascript:;">
-                                      <v-list-tile-action>
-                                        <v-checkbox
-                                          v-model="notifications2"
-                                          readonly
-                                        ></v-checkbox>
-                                      </v-list-tile-action>
-                                      <v-list-tile-content @click="notifications2 = !notifications2">
-                                        <v-list-tile-title>Pack of 12 Creamy Deluxe</v-list-tile-title>
-                                        <v-list-tile-sub-title>x2</v-list-tile-sub-title>
-                                      </v-list-tile-content>
-                                  </v-list-tile>
-                                </v-list>
-                              <v-divider inset></v-divider>
-                              <!-- <v-btn color="primary">Packaged</v-btn> -->
-                            </v-list>
+                            
+                            <template xs12 v-for="(item) in priorityOrders.slice(0, 5) ">    
+                                <v-card :key="item.orderId"> 
+                                  <!-- <v-card-title  style="height: 40px;"> -->
+                                    <v-card-title style="padding-bottom: 0px;">
+                                    <div>
+                                    
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}}</Strong></span><br>
+                                      <!-- Order items -->
+                                     
+                                       <template v-for="(item2) in item.lineItems">
+                                        <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
+                                       </template>
+                                       
+                                        <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
+                                          <v-icon left>label</v-icon>NB: {{item.customerNote}}
+                                        </v-chip>
+                                        <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
+                                      
+                                    </div>
+                                                                
+                                  </v-card-title>
+                                  <v-card-actions style="
+                                          padding-top: 0px;
+                                          height: 20px;
+                                      ">
+                                    <v-checkbox :value="item.orderId" v-model="checkPackaged" flat ></v-checkbox>
+
+                                      <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
+                                        <v-icon color="grey lighten-1">delete</v-icon>
+                                      </v-btn>
+                                      <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
+                
+                                          <v-card>
+                                            <v-card-title>
+                                              <span class="headline">Confirmation</span>
+                                            </v-card-title>
+                                            <v-divider></v-divider>
+                                            <v-card-text>
+                                              Are you sure you want to cancel this order?
+                                            </v-card-text>
+                                            <v-card-actions>
+                                              <v-spacer></v-spacer>
+                                              <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                              <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
+                                            </v-card-actions>
+                                          </v-card>
+                                        </v-dialog>     
+                                  </v-card-actions>                              
+                                </v-card>
+                            </template>
                           </v-card>
                         </v-flex>
                   </v-layout>
-<!----------------------------------Second stepper ----------------------------->
 
-
-    <!------------------>
-    <!-- <v-flex lg4 sm12>
-        <v-card>
-          <v-card-media src="/static/doughnuts/doughnuts.jpg" height="250">
-          </v-card-media>
-          <v-card-text>
-            <div>
-                <v-chip color="green" outline>Order # 3288</v-chip>
-                  <v-chip color="green" text-color="white">
-                  <v-avatar>
-                    <v-icon>shopping_cart</v-icon>
-                  </v-avatar>
-                  <strong><h4>Pack of 15 Classic Assorted</h4></strong>
-                </v-chip>
-            </div>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-btn color="warning" dark >Packaged</v-btn>
-          </v-card-actions>   
-        </v-card>
-      </v-flex> -->
-    <!------------------->
        
       </v-layout>
     </v-container>
@@ -218,16 +215,29 @@
    },
     data () {
       return {
-       loading: false,
-       checkPackaged:{},
+        loading: true,
+        checkPackaged:{},
+        cancelPackage:{},
         orders:[],
+        priorityOrders:[],
+        customizedOrders:[],
+        tempOrders:[],
+        countQueue:null,
+        timer: '',
 
-        
-         notifications: false,
-        notifications2: false,
         
 
       }
+    },
+    watch: {
+      
+      checkPackaged(val){
+        this.packageOrder(val);
+      },
+      orders(){
+        this.loading =false;
+      }
+     
     },
     beforeCreate(){
      if (localStorage.ROLE_ID || localStorage.TOKEN) {
@@ -239,40 +249,123 @@
       },
       created(){
           this.getOrders();
+          this.timer = setInterval(this.getOrders, 20000)
       },
 
-    watch: {
-      
-      checkPackaged(val){
-       
-        this.packageOrder(val);
-      }
-    },
+    
 
     methods: {
       getOrders(){
+              this.loading = true;
               DMFWebService.orders.listOrdersForToday().then((response) => {
+                     this.orders = response.data.data;
+                     this.priorityOrders = []; //reset priority order queue
+                     this.customizedOrders=[];
 
-                     //console.log(response.data.data);
-                       
+                     //--------process priority orders --------//
 
-                      for(var i =0 ; i < response.data.data.length; i++){
-                            this.orders.push(response.data.data[i])
-                      }
-
+                     for(var i =0; i < this.orders.length; i++){
+                       if(this.orders[i].total > 1000){//if true(i.e 1000 cedis plus), priority order found
+                           this.priorityOrders.push(this.orders[i]);
                   
+                      }
+                     }
+                    
+                      //-----------------------------------------//
+                      //--------process customized orders --------//
+
+                      for(var i=0; i <this.orders.length; i++){
+                        for(var j=0; j<this.orders[i].lineItems.length; j++){
+                          if(this.orders[i].lineItems[j].name === 'Custom Shaped Doughnut' || this.orders[i].lineItems[j].name === 'Letter Written on Doughnut' ){
+                            this.customizedOrders.push(this.orders[i])
+                          }
+                        }
+                      }
+                       //-----------------------------------------//
+
+
+                      this.countQueue = this.orders.length - 5; //-----to determine number of orders still in the queue
+                      if(this.countQueue <0){
+                        localStorage.QUEUED = 0;
+                      }else{
+                          localStorage.QUEUED = this.countQueue;
+                      }
+                      
+                      
                     })
       },
       packageOrder(val){
-          for(var i =0; i < this.orders.length; i++){
-            if(this.orders[i].orderId === val){
-              this.orders.splice(i,1);
+         
+         DMFWebService.orders.packageOrder(val).then((response) => {
+           
+            if(response.status === 200){
+              
+              //remove from main order queue
+              for(var i =0; i < this.orders.length; i++){
+                if(this.orders[i].orderId === val){
+                  this.orders.splice(i,1);
+                  window.getApp.$emit('ORDER_PACKAGED');
+                }
+             }
+
+             //remove from priority order queue if any
+              for(var i =0; i < this.priorityOrders.length; i++){
+                if(this.priorityOrders[i].orderId === val){
+                  this.priorityOrders.splice(i,1);
+                 // window.getApp.$emit('ORDER_PACKAGED');
+                }
+             }
+
+             //remove from customize order queue if any
+              for(var i =0; i < this.customizedOrders.length; i++){
+                if(this.customizedOrders[i].orderId === val){
+                  this.customizedOrders.splice(i,1);
+                //  window.getApp.$emit('ORDER_PACKAGED');
+                }
+             }
+
             }
 
-            
+         })          
+
+      },
+      cancelOrder(val){
+        DMFWebService.orders.cancelOrder(val).then((response) => {
+
+          if(response.status === 200){
+
+            for(var i =0; i < this.orders.length; i++){
+                if(this.orders[i].orderId === val){
+                  this.orders.splice(i,1);
+                  window.getApp.$emit('ORDER_CANCELLED');
+                }
+
+              }
+
+            //remove from priority order queue if any
+              for(var i =0; i < this.priorityOrders.length; i++){
+                if(this.priorityOrders[i].orderId === val){
+                  this.priorityOrders.splice(i,1);
+                 // window.getApp.$emit('ORDER_PACKAGED');
+                }
+             }
+
+             //remove from customize order queue if any
+              for(var i =0; i < this.customizedOrders.length; i++){
+                if(this.customizedOrders[i].orderId === val){
+                  this.customizedOrders.splice(i,1);
+                //  window.getApp.$emit('ORDER_PACKAGED');
+                }
+             }
 
           }
 
+
+
+        })
+
+
+        
       }
     }
   }

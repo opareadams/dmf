@@ -100,6 +100,12 @@ export default {
     },
     updateOrderStatus(orderId,status){
       return axios.put(`${DMF_API_BASE_URL}/orders/${orderId}/status/${status}`)
+    },
+    packageOrder(orderId){
+      return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}/packaged`)
+    },
+    cancelOrder(statusBody){
+      return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}`,statusBody)
     }
   },
 

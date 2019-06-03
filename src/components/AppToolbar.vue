@@ -29,11 +29,11 @@
       <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
         <v-btn icon flat slot="activator">
         <v-badge color="red" overlap>
-          <span slot="badge">3</span>
+          <span slot="badge">{{countQueue}}</span>
           <v-icon medium>notifications</v-icon>
         </v-badge>
         </v-btn>
-        <notification-list></notification-list>
+        <!-- <notification-list></notification-list> -->
       </v-menu>
       <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
         <v-btn icon large flat slot="activator">
@@ -66,6 +66,8 @@ export default {
     NotificationList
   },
   data: () => ({
+    countQueue:null,
+     timer: '',
     items: [
       {
         icon: 'account_circle',
@@ -93,12 +95,21 @@ export default {
       }
     ],
   }),
+  created(){
+      this.getQueueCount();
+      this.timer = setInterval(this.getQueueCount, 1000)
+     
+  },
   computed: {
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav;
     }
   },
   methods: {
+    getQueueCount(){
+      this.countQueue = localStorage.getItem('QUEUED');
+
+    },
     handleDrawerToggle () {
       window.getApp.$emit('APP_DRAWER_TOGGLED');
     },
