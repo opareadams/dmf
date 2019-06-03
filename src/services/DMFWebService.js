@@ -103,8 +103,14 @@ export default {
     },
     getOrderSummary(){
       return axios.get(`${DMF_API_BASE_URL}/orders/summary`)
+    },
+    packageOrder(orderId){
+      return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}/packaged`)
+    },
+    cancelOrder(statusBody){
+      return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}`,statusBody)
     }
-  },
+ 
 
 
   /*

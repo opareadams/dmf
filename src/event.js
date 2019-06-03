@@ -1,4 +1,30 @@
 export default [
+  
+  ////////Self Made events/////////
+  {
+    name: 'ORDER_PACKAGED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'Order has been marked as packaged'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'ORDER_CANCELLED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Order has been cancelled'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  
+  ///////////////////////////////
   {
     name: 'APP_LOGIN_SUCCESS',
     callback: function (e) {
