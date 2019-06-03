@@ -121,4 +121,5 @@ export default {
       return axios.delete(`${DMF_API_BASE_URL}/roles/${id}`)
     }
   }*/
+  }
 }

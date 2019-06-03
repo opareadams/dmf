@@ -10,7 +10,7 @@ const Menu =  [
   {
     title: 'Kitchen App',
     group: 'apps',
-    icon: 'dashboard',
+    icon: 'fastfood',
     name: 'Kitchen',
   },
   {

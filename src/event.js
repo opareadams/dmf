@@ -40,6 +40,7 @@ export default [
         text: 'Logout successfully.'
       };
       this.$router.replace({ path: '/login' });
+      window.localStorage.clear();
     }
   },
   {

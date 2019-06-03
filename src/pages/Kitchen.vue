@@ -7,11 +7,11 @@
         <v-layout row wrap>
                      <v-flex lg4 sm12>
                           <v-card >
-                            <v-toolbar color="brown" dark>
+                            <v-toolbar color="brown lighten-2" dark>
                               <v-toolbar-title>Normal Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
-                                <v-icon>room_service</v-icon>
+                                <v-icon>fastfood</v-icon>
                               </v-btn>
                              
                             </v-toolbar>
@@ -73,13 +73,15 @@
 
                          <v-flex lg4 sm12>
                           <v-card>
-                            <v-toolbar color="green" dark>
+                            <v-toolbar color="brown lighten-1" dark>
                               <v-toolbar-title>Customized Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
-                                <v-icon>room_service</v-icon>
+                                <v-icon>fastfood</v-icon>
                               </v-btn>
                             </v-toolbar>
+                          <v-progress-linear v-show="loading" indeterminate value="15" color="green"></v-progress-linear>
+
 
                               <template xs12 v-for="(item) in customizedOrders.slice(0, 5) ">    
                                 <v-card :key="item.orderId"> 
@@ -137,13 +139,16 @@
 
                          <v-flex lg4 sm12>
                           <v-card>
-                            <v-toolbar color="red" dark>
+                            <v-toolbar color="brown" dark>
                               <v-toolbar-title>Priority Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-btn icon>
-                                <v-icon>room_service</v-icon>
+                                <v-icon>fastfood</v-icon>
                               </v-btn>
                             </v-toolbar>
+                           <v-progress-linear v-show="loading" indeterminate value="15" color="red"></v-progress-linear>
+
+                            
                             
                             <template xs12 v-for="(item) in priorityOrders.slice(0, 5) ">    
                                 <v-card :key="item.orderId"> 
