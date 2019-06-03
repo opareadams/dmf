@@ -42,8 +42,8 @@ export default {
   data: () => ({
     loading: false,
     model: {
-      email: 'admin@isockde.com',
-      password: 'password'
+      email: '',
+      password: ''
     }
   }),
   computed:{
