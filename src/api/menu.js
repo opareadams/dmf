@@ -8,6 +8,13 @@ const Menu =  [
     name: 'Dashboard',
   },
   {
+    title: 'Orders',
+    group: 'apps',
+    icon: 'fastfood',
+    link: '/orders',
+    name: 'Orders',
+  },
+  {
     title: 'Kitchen App',
     group: 'apps',
     icon: 'fastfood',

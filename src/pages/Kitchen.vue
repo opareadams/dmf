@@ -229,9 +229,6 @@
         tempOrders:[],
         countQueue:null,
         timer: '',
-
-        
-
       }
     },
     watch: {
@@ -251,14 +248,11 @@
         else{
           this.$router.replace({ path: '/login' });
         }
-      },
-      created(){
-          this.getOrders();
-          this.timer = setInterval(this.getOrders, 20000)
-      },
-
-    
-
+    },
+    created(){
+        this.getOrders();
+        //this.timer = setInterval(this.getOrders, 20000)
+    },
     methods: {
       getOrders(){
               this.loading = true;
