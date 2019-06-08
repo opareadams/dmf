@@ -139,7 +139,7 @@
               hide-actions
               class="elevation-0 table-striped"
             >
-              <template v-slot:items="props">
+              <template slot="items" slot-scope="props">
                 <td>
                     <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white"> </v-chip>
                 </td>

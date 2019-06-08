@@ -30,7 +30,7 @@
                 select-all
                 v-model="complex.selected"
                 >
-                <template v-slot:items="props">
+                <template slot="items" slot-scope="props">
                     <td>
                       <v-checkbox
                         primary
