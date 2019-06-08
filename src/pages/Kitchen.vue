@@ -7,32 +7,50 @@
         <v-layout row wrap>
                      <v-flex lg4 sm12>
                           <v-card >
+                           
                             <v-toolbar color="brown lighten-2" dark>
                               <v-toolbar-title>Normal Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
-                              <v-btn icon>
-                                <v-icon>fastfood</v-icon>
+                              <v-text-field label="Search"
+                                v-model="searchText"
+                               v-show="searchBarVisible"
+                               
+
+                               ></v-text-field>
+
+                              <v-btn icon  @click="searchBarVisible = !searchBarVisible">
+                                <v-icon>search</v-icon>
                               </v-btn>
+                              
                              
                             </v-toolbar>
                             <v-progress-linear v-show="loading" indeterminate value="15" color="primary"></v-progress-linear>
 
 
-                            <template xs12 v-for="(item) in orders.slice(0, 5) ">    
+                            <template xs12 v-for="(item) in filteredOrders.slice(0, 5) ">    
                                 <v-card :key="item.orderId"> 
                                   <!-- <v-card-title  style="height: 40px;"> -->
                                     <v-card-title style="padding-bottom: 0px;">
                                     <div>
                                     
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}}</Strong></span><br>
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.billing[0].first_name}})</Strong></span><br>
                                       <!-- Order items -->
                                      
                                        <template v-for="(item2) in item.lineItems">
                                         <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
                                        </template>
 
+                                       <template v-for="(item3) in item.shipping">
+                                          <v-chip :key="item3.phone"  color="green" text-color="white">
+                                            <v-avatar >
+                                                <v-icon>location_on</v-icon>
+                                            </v-avatar>
+                                            {{item3.state}}
+                                          </v-chip>
+                                       </template>
+
                                         <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
-                                          <v-icon left>label</v-icon>NB: {{item.customerNote}}
+                                          <v-icon left>notes</v-icon>NB: {{item.customerNote}}
                                         </v-chip>
                                         <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
                                       
@@ -89,11 +107,19 @@
                                     <v-card-title style="padding-bottom: 0px;">
                                     <div>
                                     
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}}</Strong></span><br>
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.billing[0].first_name}})</Strong></span><br>
                                       <!-- Order items -->
                                      
                                        <template v-for="(item2) in item.lineItems">
                                         <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
+                                       </template>
+                                        <template v-for="(item3) in item.shipping">
+                                          <v-chip :key="item3.phone"  color="green" text-color="white">
+                                            <v-avatar >
+                                                <v-icon>location_on</v-icon>
+                                            </v-avatar>
+                                            {{item3.state}}
+                                          </v-chip>
                                        </template>
                                        
                                         <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
@@ -156,11 +182,19 @@
                                     <v-card-title style="padding-bottom: 0px;">
                                     <div>
                                     
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}}</Strong></span><br>
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.billing[0].first_name}})</Strong></span><br>
                                       <!-- Order items -->
                                      
                                        <template v-for="(item2) in item.lineItems">
                                         <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
+                                       </template>
+                                        <template v-for="(item3) in item.shipping">
+                                          <v-chip :key="item3.phone"  color="green" text-color="white">
+                                            <v-avatar >
+                                                <v-icon>location_on</v-icon>
+                                            </v-avatar>
+                                            {{item3.state}}
+                                          </v-chip>
                                        </template>
                                        
                                         <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
@@ -220,6 +254,8 @@
    },
     data () {
       return {
+        searchText:'',
+        searchBarVisible:false,
         loading: true,
         checkPackaged:{},
         cancelPackage:{},
@@ -232,6 +268,23 @@
 
         
 
+      }
+    },
+    computed:{
+      filteredOrders(){
+        return this.orders.filter(order =>{
+         
+          if(order.billing[0].first_name.toLowerCase().match(this.searchText.toLowerCase())){
+            return order.billing[0].first_name.toLowerCase().match(this.searchText.toLowerCase());
+           
+          }
+          if(order.number.toLowerCase().match(this.searchText.toLowerCase())){
+              return order.number.toLowerCase().match(this.searchText.toLowerCase());
+             
+          }
+          
+          //return order.number.match(this.searchText);
+        });
       }
     },
     watch: {
@@ -254,12 +307,13 @@
       },
       created(){
           this.getOrders();
-          this.timer = setInterval(this.getOrders, 20000)
+         // this.timer = setInterval(this.getOrders, 20000)
       },
 
     
 
     methods: {
+      
       getOrders(){
               this.loading = true;
               DMFWebService.orders.listOrdersForToday().then((response) => {
@@ -364,13 +418,10 @@
              }
 
           }
+        })     
+      },
+      overWriteState(){
 
-
-
-        })
-
-
-        
       }
     }
   }
