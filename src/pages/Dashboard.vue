@@ -7,7 +7,8 @@
           <mini-statistic
             :title="this.totalOrders"
             sub-title="Total Orders"
-            color="light-blue"      
+            color="light-blue"  
+            icon="fa-list-ul"    
           >
           </mini-statistic>  
         </v-flex>
@@ -15,7 +16,8 @@
           <mini-statistic
             :title="this.pendingOrders"
             sub-title="Pending Orders"
-            color="orange"      
+            color="orange"   
+            icon="fa fa-clock-o"   
           >
           </mini-statistic>           
         </v-flex>          
@@ -23,7 +25,8 @@
           <mini-statistic
             :title="this.deliveredOrders"
             sub-title="Orders Delivered"
-            color="green"      
+            color="green" 
+            icon="motorcycle"        
           >
           </mini-statistic>            
         </v-flex>        
@@ -31,7 +34,8 @@
           <mini-statistic
             :title="this.deliveredOrdersAmount"
             sub-title="Total Revenue (GHS)"
-            color="indigo"      
+            color="indigo" 
+            icon="attach_money"             
           >
           </mini-statistic>             
         </v-flex>   
@@ -53,7 +57,7 @@
                   :value="pendingOrdersPieChart"
                   color="orange"
                 >
-                  {{ pendingOrdersPieChart.toFixed(2) }}
+                  {{ pendingOrdersPieChart }}
                 </v-progress-circular>
               </div>
             </v-card-text>
@@ -80,7 +84,7 @@
                   :value="cancelledOrdersPieChart"
                   color="red"
                 >
-                  {{ cancelledOrdersPieChart.toFixed(2) }}
+                  {{ cancelledOrdersPieChart }}
                 </v-progress-circular>
               </div>
             </v-card-text>
@@ -107,7 +111,7 @@
                   :value="deliveredOrdersPieChart"
                   color="success"
                 >
-                  {{ deliveredOrdersPieChart.toFixed(2) }}
+                  {{ deliveredOrdersPieChart }}
                 </v-progress-circular>
               </div>
             </v-card-text>
@@ -135,41 +139,48 @@
               hide-actions
               class="elevation-0 table-striped"
             >
-              <template slot="items" slot-scope="props">
+              <template v-slot:items="props">
                 <td>
                     <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white"> </v-chip>
                 </td>
                 <td class="text-xs-right">
                   {{ props.item.orderId }}     
-
                 </td>
                 <td class="text-xs-left">
                   <template v-for="(item) in props.item.lineItems">
-                    <v-list-tile-sub-title :key="item.name" >- {{item.name}} (x{{item.quantity}})  </v-list-tile-sub-title>
-                  </template>                  
-                  <v-list-tile-sub-title v-show="props.item.customerNote" :key="props.item.customerNote" >                  
-                    <br>
-                    NB: {{props.item.customerNote}} 
-                  </v-list-tile-sub-title>
+                    <v-list-tile-sub-title :key="item.id" >- {{item.name}} (x{{item.quantity}})  </v-list-tile-sub-title>
+                  </template>  
+                  <v-chip label color="pink" text-color="white" v-show="props.item.customerNote !== '' ">
+                    <v-icon left>label</v-icon> NB: {{props.item.customerNote}} 
+                  </v-chip>                
                 </td>
                 <td class="text-xs-left">{{ props.item.billing[0].first_name + ' ' +props.item.billing[0].last_name }}</td>
                 <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
                 <td class="text-xs-left">
-                  <v-list-tile-sub-title v-show="props.item.shipping[0].address_1" :key="props.item.customerNote" >                  
+                  <div v-show="props.item.shipping[0].address_1" >                  
                     {{props.item.shipping[0].address_1}} 
-                  </v-list-tile-sub-title>
-                  <v-list-tile-sub-title v-show="props.item.shipping[0].address_2" :key="props.item.customerNote" >                  
+                  </div>
+                  <div v-show="props.item.shipping[0].address_2">                  
                      {{props.item.shipping[0].address_2}} 
-                  </v-list-tile-sub-title>
-                  <v-list-tile-sub-title v-show="props.item.shipping[0].city" :key="props.item.customerNote" >                  
+                  </div>
+                  <div v-show="props.item.shipping[0].city">                  
                     {{props.item.shipping[0].city}} 
-                  </v-list-tile-sub-title>
+                  </div>
                 <td class="text-xs-right">{{ props.item.deliveryDate }}</td>
                 <td class="text-xs-right">
                   <v-icon v-show="props.item.packaged" color="green">fa fa-archive </v-icon>
                   <v-icon v-show="!props.item.packaged" color="rgb(251, 188, 52)">fa fa-clock-o fa-sm</v-icon>
-                <td class="text-xs-right">{{ props.item.total }}</td>
+                <td class="text-xs-right">{{ props.item.total.replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
                 <td class="text-xs-right">{{ props.item.createdAt | moment }}</td>
+              </template>
+              <template v-slot:footer>
+                <td :colspan="headers.length">
+                    <v-chip label small color="red" text-color="white">cancelled</v-chip>
+                    <v-chip label small color="green" text-color="white">completed</v-chip>
+                    <v-chip label small color="rgb(251, 188, 52)" text-color="white">processing</v-chip>
+                    <v-chip label small color="rgb(251, 188, 52)" text-color="white">pending</v-chip>
+                    <v-chip label small color="indigo" text-color="white">on-hold</v-chip>
+                </td>
               </template>
             </v-data-table>
           </v-card>
@@ -224,7 +235,15 @@ export default {
   data: () => ({
     orders:[],
     summary:[],
-    totalOrders: null,
+    totalOrders: "0",
+    pendingOrders: "0",
+    deliveredOrders: "0",
+    deliveredOrdersAmount: "0",
+    pendingOrdersPieChart: "0",
+    pendingOrdersAmount: "0",
+    deliveredOrdersPieChart:"0",
+    cancelledOrdersAmount:"0",
+    cancelledOrdersPieChart:"0",
     color: Material,
     selectedTab: 'tab-1', 
     headers: [
@@ -261,27 +280,36 @@ export default {
       
     }else{
         this.$router.replace({ path: '/login' });
-      }
-    },
+    }
+  },
   created(){
     this.getRecentOrders();
     this.getSummary();
   },
   methods: {
+      getSummary(){
+        DMFWebService.orders.getOrderSummary().then((response) => {
+          console.log(response.data.data);
+         for(var i =0 ; i < response.data.data.length; i++){
+                this.summary.push(response.data.data[i])
+          }
+          this.pendingOrders = this.summary[1].count.toString();
+          this.deliveredOrders = this.summary[2].count.toString();
+          this.deliveredOrdersAmount = this.summary[2].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          this.pendingOrdersAmount = this.summary[1].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          this.cancelledOrdersAmount = this.summary[3].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        })
+      },
       getRecentOrders(){
-        DMFWebService.orders.listAllOrders().then((response) => {
+        DMFWebService.orders.listAllOrdersWithPagination().then((response) => {
           console.log(response.data.data);
           this.totalOrders = response.data.data.totalOrders.toString();
           for(var i =0 ; i < response.data.data.orders.length; i++){
                 this.orders.push(response.data.data.orders[i])
           }
-        })
-      },
-      getSummary(){
-        DMFWebService.orders.getOrderSummary().then((response) => {
-         for(var i =0 ; i < response.data.data.length; i++){
-                this.summary.push(response.data.data[i])
-          }
+          this.pendingOrdersPieChart = ((this.summary[1].count / this.totalOrders)*100).toFixed(2);
+          this.deliveredOrdersPieChart = ((this.summary[2].count / this.totalOrders)*100).toFixed(2);
+          this.cancelledOrdersPieChart = ((this.summary[3].count / this.totalOrders)*100).toFixed(2);
         })
       },
       getColorByStatus (status) {
@@ -295,33 +323,6 @@ export default {
     moment: function (date) {
       return moment(date).startOf('hour').fromNow();
     }
-  },
-  computed: {
-    pendingOrdersPieChart () {
-      return (this.summary[1].count / this.totalOrders)*100;
-    },
-    pendingOrders () {
-      return this.summary[1].count.toString();
-    },
-    pendingOrdersAmount () {
-      return this.summary[1].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    },
-    deliveredOrdersPieChart () {
-      return (this.summary[2].count / this.totalOrders)*100;
-    },
-    deliveredOrders () {
-      return this.summary[2].count.toString();
-    },
-    deliveredOrdersAmount () {
-      return this.summary[2].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    },
-    cancelledOrdersAmount () {
-      return this.summary[3].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    },
-    cancelledOrdersPieChart () {
-      return (this.summary[3].count / this.totalOrders)*100;
-    }
-  },
-
+  }
 };
 </script>

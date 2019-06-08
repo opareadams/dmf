@@ -76,6 +76,16 @@ export default [
     )
   },
   {
+    path: '/orders',
+    meta: { breadcrumb: true },
+    name: 'Orders',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/Orders.vue`
+    )
+  },
+  {
     path: '/kitchen',
     meta: { breadcrumb: true, title: 'Kitchen'},
     name: 'Kitchen',
