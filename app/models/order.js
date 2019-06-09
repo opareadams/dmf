@@ -41,6 +41,7 @@ const orderSchema = new mongoose.Schema({
   feeLines: Array,
   couponLines: Array,
   refunds: Array,
+  zone: String,
   deliveryDate: { type: String, required: true },
   updatedAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now }
