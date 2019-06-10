@@ -33,21 +33,20 @@
                                     <v-card-title style="padding-bottom: 0px;">
                                     <div>
                                     
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.billing[0].first_name}})</Strong></span><br>
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.shipping[0].first_name}})</Strong></span><br>
                                       <!-- Order items -->
                                      
                                        <template v-for="(item2) in item.lineItems">
                                         <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
                                        </template>
 
-                                       <template v-for="(item3) in item.shipping">
-                                          <v-chip :key="item3.phone"  color="green" text-color="white">
+                                          <v-chip   color="green" text-color="white">
                                             <v-avatar >
                                                 <v-icon>location_on</v-icon>
                                             </v-avatar>
-                                            {{item3.state}}
+                                            {{item.zone}}
                                           </v-chip>
-                                       </template>
+                                      
 
                                         <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
                                           <v-icon left>notes</v-icon>NB: {{item.customerNote}}
@@ -107,20 +106,20 @@
                                     <v-card-title style="padding-bottom: 0px;">
                                     <div>
                                     
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.billing[0].first_name}})</Strong></span><br>
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.shipping[0].first_name}})</Strong></span><br>
                                       <!-- Order items -->
                                      
                                        <template v-for="(item2) in item.lineItems">
                                         <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
                                        </template>
-                                        <template v-for="(item3) in item.shipping">
-                                          <v-chip :key="item3.phone"  color="green" text-color="white">
+                                        
+                                          <v-chip color="green" text-color="white">
                                             <v-avatar >
                                                 <v-icon>location_on</v-icon>
                                             </v-avatar>
-                                            {{item3.state}}
+                                            {{item.zone}}
                                           </v-chip>
-                                       </template>
+                                       
                                        
                                         <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
                                           <v-icon left>label</v-icon>NB: {{item.customerNote}}
@@ -182,20 +181,19 @@
                                     <v-card-title style="padding-bottom: 0px;">
                                     <div>
                                     
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.billing[0].first_name}})</Strong></span><br>
+                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.shipping[0].first_name}})</Strong></span><br>
                                       <!-- Order items -->
                                      
                                        <template v-for="(item2) in item.lineItems">
                                         <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
-                                       </template>
-                                        <template v-for="(item3) in item.shipping">
-                                          <v-chip :key="item3.phone"  color="green" text-color="white">
+                                       </template>                                        
+                                          <v-chip  color="green" text-color="white">
                                             <v-avatar >
                                                 <v-icon>location_on</v-icon>
                                             </v-avatar>
-                                            {{item3.state}}
+                                            {{item.zone}}
                                           </v-chip>
-                                       </template>
+                                       
                                        
                                         <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
                                           <v-icon left>label</v-icon>NB: {{item.customerNote}}
@@ -271,8 +269,8 @@
       filteredOrders(){
         return this.orders.filter(order =>{
          
-          if(order.billing[0].first_name.toLowerCase().match(this.searchText.toLowerCase())){
-            return order.billing[0].first_name.toLowerCase().match(this.searchText.toLowerCase());
+          if(order.shipping[0].first_name.toLowerCase().match(this.searchText.toLowerCase())){
+            return order.shipping[0].first_name.toLowerCase().match(this.searchText.toLowerCase());
            
           }
           if(order.number.toLowerCase().match(this.searchText.toLowerCase())){

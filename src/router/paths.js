@@ -95,6 +95,16 @@ export default [
       `@/pages/Kitchen.vue`
     )
   },
+  {
+    path: '/packagedOrders',
+    meta: { breadcrumb: true, title: 'Packaged Orders'},
+    name: 'PackagedOrders',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/PackagedOrders.vue`
+    )
+  },
 
   // {
   //   path: '/calendar',
