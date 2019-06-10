@@ -19,3 +19,4 @@ dist/
 *.njsproj
 *.sln
 src/pages/Kitchen1.vue
+src/api/menu.js
