@@ -213,7 +213,7 @@ exports.updateOrderStatus = (req, res) =>  {
 // Update Order packaged flag   
 exports.packagedOrderStatusUpdate = (req, res) =>  {
     Order.findOneAndUpdate(
-        {_id: req.params._id}
+        {orderId: req.params._id}
         ,{$set:{packaged:true,updatedAt:moment().format('YYYY-MM-DDTHH:mm:ss.SSS')}}
         ,{new:true}
     )
