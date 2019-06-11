@@ -35,7 +35,7 @@
             :title="this.deliveredOrdersAmount"
             sub-title="Total Revenue (GHS)"
             color="indigo" 
-            icon="attach_money"             
+            icon="fa-money"             
           >
           </mini-statistic>             
         </v-flex>   
@@ -136,6 +136,7 @@
             <v-data-table
               :headers="headers"
               :items="orders"
+              :loading="loading"
               hide-actions
               class="elevation-0 table-striped"
             >
@@ -154,7 +155,7 @@
                     <v-icon left>label</v-icon> NB: {{props.item.customerNote}} 
                   </v-chip>                
                 </td>
-                <td class="text-xs-left">{{ props.item.billing[0].first_name + ' ' +props.item.billing[0].last_name }}</td>
+                <td class="text-xs-left">{{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}</td>
                 <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
                 <td class="text-xs-left">
                   <div v-show="props.item.shipping[0].address_1" >                  
@@ -166,6 +167,12 @@
                   <div v-show="props.item.shipping[0].city">                  
                     {{props.item.shipping[0].city}} 
                   </div>
+                  <div>
+                    <v-chip color="green" text-color="white" v-show="props.item.zone != null ">
+                      <v-icon left>location_on</v-icon> {{props.item.zone}}
+                    </v-chip>
+                  </div>
+                </td>
                 <td class="text-xs-right">{{ props.item.deliveryDate }}</td>
                 <td class="text-xs-right">
                   <v-icon v-show="props.item.packaged" color="green">fa fa-archive </v-icon>
@@ -246,24 +253,26 @@ export default {
     cancelledOrdersPieChart:"0",
     color: Material,
     selectedTab: 'tab-1', 
+    loading: false,
     headers: [
        {
         text: '',
+        value: 'status'
        },
         {
           text: 'Order #',
           align: 'right',
           sortable: true,
-          value: 'id'
+          value: 'orderId'
         },
-        { text: 'Order Details' , value: 'order'},
-        { text: 'Customer', value: 'customer'},
-        { text: 'Payment Method' , value: 'method'},
-        { text: 'Delivery Address', value: 'delivery' , align: 'left'},
-        { text: 'Delivery Date', value: 'delivery' , align: 'right'},
+        { text: 'Order Details' , value: 'lineItems'},
+        { text: 'Customer', value: 'shipping'},
+        { text: 'Payment Method' , value: 'paymentMethodTitle'},
+        { text: 'Delivery Address', value: 'shipping' , align: 'left'},
+        { text: 'Delivery Date', value: 'deliveryDate' , align: 'right'},
         { text: 'Packaged', value: 'packaged', align: 'right'},
-        { text: 'Amount (GHS)', value: 'amount' , align: 'right'},
-        { text: 'Date/Time' , value: 'date' , align: 'right'}
+        { text: 'Amount (GHS)', value: 'total' , align: 'right'},
+        { text: 'Date/Time' , value: 'createdAt' , align: 'right'}
       ], 
     colors: {
         processing: 'rgb(251, 188, 52)',
@@ -283,16 +292,16 @@ export default {
     }
   },
   created(){
-    this.getRecentOrders();
     this.getSummary();
+    this.getRecentOrders();
   },
   methods: {
       getSummary(){
+        this.loading = true;
         DMFWebService.orders.getOrderSummary().then((response) => {
-          console.log(response.data.data);
-         for(var i =0 ; i < response.data.data.length; i++){
-                this.summary.push(response.data.data[i])
-          }
+          for(var i =0 ; i < response.data.data.length; i++){
+                  this.summary.push(response.data.data[i])
+            }
           this.pendingOrders = this.summary[1].count.toString();
           this.deliveredOrders = this.summary[2].count.toString();
           this.deliveredOrdersAmount = this.summary[2].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -302,7 +311,6 @@ export default {
       },
       getRecentOrders(){
         DMFWebService.orders.listAllOrdersWithPagination().then((response) => {
-          console.log(response.data.data);
           this.totalOrders = response.data.data.totalOrders.toString();
           for(var i =0 ; i < response.data.data.orders.length; i++){
                 this.orders.push(response.data.data.orders[i])
@@ -310,7 +318,9 @@ export default {
           this.pendingOrdersPieChart = ((this.summary[1].count / this.totalOrders)*100).toFixed(2);
           this.deliveredOrdersPieChart = ((this.summary[2].count / this.totalOrders)*100).toFixed(2);
           this.cancelledOrdersPieChart = ((this.summary[3].count / this.totalOrders)*100).toFixed(2);
+          this.loading = false;
         })
+
       },
       getColorByStatus (status) {
         return this.colors[status];

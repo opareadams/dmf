@@ -29,6 +29,7 @@
                 item-key="orderId"
                 select-all
                 v-model="complex.selected"
+                :loading="loading"
                 >
                 <template slot="items" slot-scope="props">
                     <td>
@@ -52,7 +53,7 @@
                         <v-icon left>label</v-icon> NB: {{props.item.customerNote}} 
                       </v-chip>  
                     </td>
-                    <td class="text-xs-left">{{ props.item.billing[0].first_name + ' ' +props.item.billing[0].last_name }}</td>
+                    <td class="text-xs-left">{{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}</td>
                     <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
                     <td class="text-xs-left">
                       <div v-show="props.item.shipping[0].address_1" >                  
@@ -63,6 +64,11 @@
                       </div>
                       <div v-show="props.item.shipping[0].city">                  
                         {{props.item.shipping[0].city}} 
+                      </div>
+                      <div>
+                        <v-chip color="green" text-color="white" v-show="props.item.zone != null ">
+                          <v-icon left>location_on</v-icon> {{props.item.zone}}
+                        </v-chip>
                       </div>
                     <td class="text-xs-right">{{ props.item.deliveryDate }}</td>
                     <td class="text-xs-right">
@@ -95,27 +101,29 @@ export default {
     return {
       search: '',
       complex: {
-        loading: true,
+        loading: false,
         selected: [],
         orders:[],
         headers: [
           {
             text: '',
+            value: 'status'
           },
           {
             text: 'Order #',
             align: 'right',
+            sortable: true,
             value: 'orderId'
           },
-          { text: 'Order Details' , value: 'order'},
-          { text: 'Customer', value: 'customer'},
-          { text: 'Payment Method' , value: 'method'},
-          { text: 'Delivery Address', value: 'delivery' , align: 'left'},
-          { text: 'Delivery Date', value: 'delivery' , align: 'right'},
+          { text: 'Order Details' , value: 'lineItems'},
+          { text: 'Customer', value: 'shipping'},
+          { text: 'Payment Method' , value: 'paymentMethodTitle'},
+          { text: 'Delivery Address', value: 'shipping' , align: 'left'},
+          { text: 'Delivery Date', value: 'deliveryDate' , align: 'right'},
           { text: 'Packaged', value: 'packaged', align: 'right'},
-          { text: 'Amount (GHS)', value: 'amount' , align: 'right'},
-          { text: 'Date/Time' , value: 'date' , align: 'right'}
-        ],
+          { text: 'Amount (GHS)', value: 'total' , align: 'right'},
+          { text: 'Date/Time' , value: 'createdAt' , align: 'right'}
+      ],
       },
       colors: {
         processing: 'rgb(251, 188, 52)',
@@ -140,14 +148,13 @@ export default {
   },
   methods: {
       getAllOrders(){
-        //this.loading = true;
-
+        this.loading = true;
         DMFWebService.orders.listAllOrders().then((response) => {
-          console.log(response.data.data);
           this.totalOrders = response.data.data.totalOrders.toString();
           for(var i =0 ; i < response.data.data.orders.length; i++){
             this.complex.orders.push(response.data.data.orders[i]);
           }
+          this.loading = false;
         })
       },
       moment: function () {
