@@ -66,7 +66,7 @@ exports.indexTopOrders = (req, res) =>  {
                 data    
             });   
         } else {
-            res.statusCode = 404;
+            res.statusCode = 200;
             res.json({ 
                 status: false,
                 message: `No orders available for today`
