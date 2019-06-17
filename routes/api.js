@@ -7,7 +7,7 @@ const User = require('../app/models/user');
 const orderController = require('../app/controllers/orderController');
 const authController = require('../app/controllers/authController');
 const registerController = require('../app/controllers/registerController');
-
+const riderController = require('../app/controllers/riderController');
 
 // Middlewares
 // =============================================================================
@@ -108,3 +108,19 @@ router.post('/orders/:orderId/packaged',protectedRoute, orderController.packaged
 router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
 
 module.exports = router;
+
+
+// Riders Routes
+// =============================================================================
+
+// POST /api/rider
+// Register a Rider
+router.post('/rider', protectedRoute, riderController.register);
+
+// POST /api/rider/delete
+// Delete a Rider
+router.post('/rider/delete', protectedRoute, riderController.delete);
+
+// GET /api/users
+//List all Riders
+router.get('/riders', protectedRoute, riderController.index);

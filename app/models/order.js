@@ -32,6 +32,7 @@ const orderSchema = new mongoose.Schema({
   transactionId: String,
   datePaid: Date,
   packaged: { type: Boolean, default: false },
+  delivered: { type: Boolean, default: false },
   cartHash: String,
   metaData: Array,
   lineItems: Array,
@@ -42,7 +43,10 @@ const orderSchema = new mongoose.Schema({
   couponLines: Array,
   refunds: Array,
   zone: String,
+  rider: Array,
+  cashCollectedFromRider: String,
   deliveryDate: { type: String, required: true },
+  assignedAt: Date,
   updatedAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now }
 });
