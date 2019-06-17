@@ -83,6 +83,10 @@ router.get('/orders/summary', protectedRoute, orderController.orderSummary);
 // List top 5 Orders for the day
 router.get('/orders/top/5', protectedRoute, orderController.indexTopOrders); 
 
+// POST /api/orders/:orderId
+// Assign a specific order to a rider
+router.post('/orders/assign/:orderId', protectedRoute, orderController.assignRider); 
+
 // GET /api/orders/:orderId
 // Get details of specific order
 router.get('/orders/:orderId', protectedRoute, orderController.findOrder); 
@@ -106,7 +110,6 @@ router.post('/orders/:orderId/packaged',protectedRoute, orderController.packaged
 // GET /api/orders
 // list all orders
 router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
-
 
 
 

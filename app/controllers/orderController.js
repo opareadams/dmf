@@ -271,4 +271,42 @@ exports.orderSummary = (req, res) =>  {
 };
 
 
+// Assign Rider to order  
+exports.assignRider = (req, res) =>  {
+    Order.findOneAndUpdate(
+        {orderId: req.params.orderId}
+        ,{$set:{rider:{
+            id: req.body.id,
+            name: req.body.name,
+            telephone: req.body.telephone,
+            },
+            assignedAt:moment().format('YYYY-MM-DDTHH:mm:ss.SSS')
+        }}
+        ,{new:true}
+    )
+    .then((data) => {
+        if(data) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'Order assigned Successfully! ',
+                data
+            }); 
+        } else {
+            res.statusCode = 500;
+            res.json({ 
+                status: false,
+                message: `no such order exist`
+            }); 
+        }         
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })
+};
 
