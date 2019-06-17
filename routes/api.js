@@ -107,7 +107,7 @@ router.post('/orders/:orderId/packaged',protectedRoute, orderController.packaged
 // list all orders
 router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
 
-module.exports = router;
+
 
 
 // Riders Routes
@@ -124,3 +124,6 @@ router.post('/rider/delete', protectedRoute, riderController.delete);
 // GET /api/users
 //List all Riders
 router.get('/riders', protectedRoute, riderController.index);
+
+module.exports = router;
+
