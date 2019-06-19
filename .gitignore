@@ -9,7 +9,7 @@ yarn-error.log*
 selenium-debug.log
 node_modules
 release
-dist/
+dist
 
 # Editor directories and files
 .idea
@@ -19,4 +19,5 @@ dist/
 *.njsproj
 *.sln
 src/pages/Kitchen1.vue
+src/pages/Kitchen2.vue
 src/api/menu.js
