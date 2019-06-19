@@ -1,15 +1,14 @@
 <template>
   <div id="kitchen-app">
-    <v-container grid-list-xl fluid>
+    <v-container grid-list-lg fluid>
       <v-layout row wrap>
        
 
         <v-layout row wrap>
                      <v-flex lg4 sm12>
-                          <v-card >
-                           
+                          <v-card   >
                             <v-toolbar color="brown lighten-2" dark>
-                              <v-toolbar-title>Normal Orders</v-toolbar-title>
+                              <v-toolbar-title >Normal Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-text-field label="Search"
                                 v-model="searchText"
@@ -20,76 +19,199 @@
 
                               <v-btn icon  @click="searchBarVisible = !searchBarVisible">
                                 <v-icon>search</v-icon>
-                              </v-btn>
-                              
-                             
+                              </v-btn>                            
                             </v-toolbar>
                             <v-progress-linear v-show="loading" indeterminate value="15" color="primary"></v-progress-linear>
+                            
+                            <template v-for="(item) in filteredOrders.slice(0, 5) ">    
+                              
+                               <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
+                                <v-card style="border: 1px solid grey;" color="" > 
+                                
+                                    <v-layout row wrap>
+                                      <!----------Customer details ----->
+                                      <v-flex xs12 style="padding-bottom: 0px">
+                                        <v-card style="border: 1px solid grey;">
+                                           <v-layout row wrap>
+                                                <v-flex xs6>
+                                                 
+                                                    <span><v-icon>person</v-icon>{{item.shipping[0].first_name}} {{item.shipping[0].last_name}}</span><br>
+                                                    <span><v-icon>phone</v-icon>{{item.billing[0].phone}}</span><br>
+                                                    <span> <v-icon>location_on</v-icon>{{item.zone}}</span>
+                                                 
+                                                </v-flex>
+                                                <v-flex xs6>
+                                                
+                                                  <span><v-icon>assignment</v-icon><strong> #{{item.orderId}}</strong></span><br>
+                                                  <span><v-icon>timelapse</v-icon> {{item.createdAt | moment}}</span>
+              
+                                                  
+                                                </v-flex>
+                                           </v-layout>
+                                        </v-card>
+                                      </v-flex>
 
+                                        <!----------Order details -------->
+                                        <template v-for="(item2) in item.lineItems">
+                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;" :key="item2.id">
+                                            <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                              
+                                                <v-flex xs8>
+                                               
+                                                  <span style="margin-left:10px">{{item2.name}} </span><br>
+                                                  <span style="margin-left:10px">x{{item2.quantity}}</span>
+                                                </v-flex>
+                                                <v-flex xs4>
+                                                    <span style="margin-left:0px">GHS{{item2.total}} </span><br>
+                                                </v-flex>
+                                                
+                                              </v-layout>
+                                            </v-card>
+                                          </v-flex>
+                                        </template>
 
-                            <template xs12 v-for="(item) in filteredOrders.slice(0, 5) ">    
-                                <v-card :key="item.orderId"> 
-                                  <!-- <v-card-title  style="height: 40px;"> -->
-                                    <v-card-title style="padding-bottom: 0px;">
-                                    <div>
-                                    
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.shipping[0].first_name}})</Strong></span><br>
-                                      <!-- Order items -->
-                                     
-                                       <template v-for="(item2) in item.lineItems">
-                                        <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
-                                       </template>
+                                         <!----------Order Note Heading -------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs8>
+                                                   <span style="margin-left:10px"><u>Order Note</u></span>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
 
-                                          <v-chip   color="green" text-color="white">
-                                            <v-avatar >
-                                                <v-icon>location_on</v-icon>
-                                            </v-avatar>
-                                            {{item.zone}}
-                                          </v-chip>
-                                      
+                                         <!----------Order Note Content-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;" color="grey lighten-1">
+                                              <v-layout row wrap>
+                                                 <v-flex xs8>
+                                                   <span style="margin-left:10px">{{item.customerNote}}</span>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
 
-                                        <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
-                                          <v-icon left>notes</v-icon>NB: {{item.customerNote}}
-                                        </v-chip>
-                                        <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
-                                      
-                                    </div>
-                                                                
-                                  </v-card-title>
-                                  <v-card-actions style="
-                                          padding-top: 0px;
-                                          height: 20px;
-                                      ">
-                                    <v-checkbox :value="item.orderId" v-model="checkPackaged" flat ></v-checkbox>
+                                         <!----------Price details-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs4 style="padding-right:0px">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Subtotal</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style="padding-right:0px; padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Discount</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style=" padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Total</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
 
-                                      <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
-                                        <v-icon color="grey lighten-1">delete</v-icon>
-                                      </v-btn>
-                                      <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
-                
-                                          <v-card>
-                                            <v-card-title>
-                                              <span class="headline">Confirmation</span>
-                                            </v-card-title>
-                                            <v-divider></v-divider>
-                                            <v-card-text>
-                                              Are you sure you want to cancel this order?
-                                            </v-card-text>
-                                            <v-card-actions>
-                                              <v-spacer></v-spacer>
-                                              <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
-                                              <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
-                                            </v-card-actions>
-                                          </v-card>
-                                        </v-dialog>     
-                                  </v-card-actions>                              
+                                          <!----------Price Values-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs4 style="padding-right:0px">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">GHS{{(parseFloat(item.total)+parseFloat(item.discountTotal)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style="padding-right:0px; padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px" v-if="item.couponLines.length !== 0">{{item.couponLines[0].code}}</p>
+                                                   <template v-else>
+                                                     <p style="text-align:center; margin-bottom:0px">No Discount</p>
+                                                    </template>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style=" padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">GHS{{parseFloat(item.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                         <!-----------Payment Mode ------------>
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                              <v-layout row wrap>
+                                                 <v-flex xs12>
+                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         <template v-if="item.paymentMethodTitle==='Cash on delivery'">
+                                           <v-card  style="border: 1px solid grey;" color="red darken-4" class="white--text">
+                                              <v-layout row wrap>
+                                                 <v-flex xs12>
+                                                   <p style="text-align:center; margin-bottom:0px">Not Paid({{item.paymentMethodTitle}})</p>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </template>
+                                         </v-flex>
+
+                                         <!--------Mark as Packaged button ------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                <v-flex xs2>
+                                                </v-flex>
+                                                <v-flex xs7>
+                                                   <v-spacer></v-spacer>
+                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="packageOrder(item.orderId)">Mark As Packaged</v-btn>
+                                                  
+                                                </v-flex>
+                                                <v-flex xs3>
+                                                  <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
+                                                    <v-icon color="grey lighten-1">delete</v-icon>
+                                                  </v-btn>
+                                                    <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
+                              
+                                                        <v-card>
+                                                          <v-card-title>
+                                                            <span class="headline">Confirmation</span>
+                                                          </v-card-title>
+                                                          <v-divider></v-divider>
+                                                          <v-card-text>
+                                                            Are you sure you want to cancel this order? {{item.orderId}}
+                                                          </v-card-text>
+                                                          <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                                            <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
+                                                          </v-card-actions>
+                                                        </v-card>
+                                                      </v-dialog>    
+                                                </v-flex>
+                                                
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+                                  </v-layout>                      
                                 </v-card>
+                               </v-flex>
                             </template>
                           </v-card>
                         </v-flex>
+<!-------------------------------------------------------------------------------------------------------------------------------------->
+<!-----------------------------------------------Customized Orders--------------------------------------------------------------------->
+
 
                          <v-flex lg4 sm12>
-                          <v-card>
+                          <v-card >
+                          <!-- <v-card style="border-radius:0px 30px;"> -->
                             <v-toolbar color="brown lighten-1" dark>
                               <v-toolbar-title>Customized Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
@@ -101,69 +223,194 @@
 
 
                               <template xs12 v-for="(item) in customizedOrders.slice(0, 5) ">    
-                                <v-card :key="item.orderId"> 
-                                  <!-- <v-card-title  style="height: 40px;"> -->
-                                    <v-card-title style="padding-bottom: 0px;">
-                                    <div>
-                                    
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.shipping[0].first_name}})</Strong></span><br>
-                                      <!-- Order items -->
-                                     
-                                       <template v-for="(item2) in item.lineItems">
-                                        <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
-                                       </template>
-                                        
-                                          <v-chip color="green" text-color="white">
-                                            <v-avatar >
-                                                <v-icon>location_on</v-icon>
-                                            </v-avatar>
-                                            {{item.zone}}
-                                          </v-chip>
-                                       
-                                       
-                                        <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
-                                          <v-icon left>label</v-icon>NB: {{item.customerNote}}
-                                        </v-chip>
-                                        <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
-                                      
-                                    </div>
-                                                                
-                                  </v-card-title>
-                                  <v-card-actions style="
-                                          padding-top: 0px;
-                                          height: 20px;
-                                      ">
-                                    <v-checkbox :value="item.orderId" v-model="checkPackaged" flat ></v-checkbox>
+                              <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
+                                <v-card style="border: 1px solid grey;" color="" > 
+                                
+                                    <v-layout row wrap>
+                                      <!----------Customer details ----->
+                                      <v-flex xs12 style="padding-bottom: 0px">
+                                        <v-card style="border: 1px solid grey;">
+                                           <v-layout row wrap>
+                                                <v-flex xs6>
+                                                 
+                                                    <span><v-icon>person</v-icon>{{item.shipping[0].first_name}} {{item.shipping[0].last_name}}</span><br>
+                                                    <span><v-icon>phone</v-icon>{{item.billing[0].phone}}</span><br>
+                                                    <span> <v-icon>location_on</v-icon>{{item.zone}}</span>
+                                                 
+                                                </v-flex>
+                                                <v-flex xs6>
+                                                
+                                                  <span><v-icon>assignment</v-icon><strong> #{{item.orderId}}</strong></span><br>
+                                                  <span><v-icon>timelapse</v-icon> {{item.createdAt | moment}}</span>
+              
+                                                  
+                                                </v-flex>
+                                           </v-layout>
+                                        </v-card>
+                                      </v-flex>
 
-                                      <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
-                                        <v-icon color="grey lighten-1">delete</v-icon>
-                                      </v-btn>
-                                      <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
-                
-                                          <v-card>
-                                            <v-card-title>
-                                              <span class="headline">Confirmation</span>
-                                            </v-card-title>
-                                            <v-divider></v-divider>
-                                            <v-card-text>
-                                              Are you sure you want to cancel this order?
-                                            </v-card-text>
-                                            <v-card-actions>
-                                              <v-spacer></v-spacer>
-                                              <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
-                                              <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
-                                            </v-card-actions>
-                                          </v-card>
-                                        </v-dialog>     
-                                  </v-card-actions>                              
+                                        <!----------Order details -------->
+                                        <template v-for="(item2) in item.lineItems">
+                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;" :key="item2.id">
+                                            <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                              
+                                                <v-flex xs8>
+                                               
+                                                  <span style="margin-left:10px">{{item2.name}} </span><br>
+                                                  <span style="margin-left:10px">x{{item2.quantity}}</span>
+                                                </v-flex>
+                                                <v-flex xs4>
+                                                    <span style="margin-left:0px">GHS{{item2.total}} </span><br>
+                                                </v-flex>
+                                                
+                                              </v-layout>
+                                            </v-card>
+                                          </v-flex>
+                                        </template>
+
+                                         <!----------Order Note Heading -------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs8>
+                                                   <span style="margin-left:10px"><u>Order Note</u></span>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                         <!----------Order Note Content-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;" color="grey lighten-1">
+                                              <v-layout row wrap>
+                                                 <v-flex xs8>
+                                                   <span style="margin-left:10px">{{item.customerNote}}</span>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                         <!----------Price details-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs4 style="padding-right:0px">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Subtotal</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style="padding-right:0px; padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Discount</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style=" padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Total</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                          <!----------Price Values-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs4 style="padding-right:0px">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">GHS{{(parseFloat(item.total)+parseFloat(item.discountTotal)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style="padding-right:0px; padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px" v-if="item.couponLines.length !== 0">{{item.couponLines[0].code}}</p>
+                                                   <template v-else>
+                                                     <p style="text-align:center; margin-bottom:0px">No Discount</p>
+                                                    </template>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style=" padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">GHS{{parseFloat(item.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                         <!-----------Payment Mode ------------>
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                              <v-layout row wrap>
+                                                 <v-flex xs12>
+                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         <template v-if="item.paymentMethodTitle==='Cash on delivery'">
+                                           <v-card  style="border: 1px solid grey;" color="red darken-4" class="white--text">
+                                              <v-layout row wrap>
+                                                 <v-flex xs12>
+                                                   <p style="text-align:center; margin-bottom:0px">Not Paid({{item.paymentMethodTitle}})</p>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </template>
+                                         </v-flex>
+
+                                         <!--------Mark as Packaged button ------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                <v-flex xs2>
+                                                </v-flex>
+                                                <v-flex xs7>
+                                                   <v-spacer></v-spacer>
+                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="packageOrder(item.orderId)">Mark As Packaged</v-btn>
+                                                  
+                                                </v-flex>
+                                                <v-flex xs3>
+                                                  <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
+                                                    <v-icon color="grey lighten-1">delete</v-icon>
+                                                  </v-btn>
+                                                    <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
+                              
+                                                        <v-card>
+                                                          <v-card-title>
+                                                            <span class="headline">Confirmation</span>
+                                                          </v-card-title>
+                                                          <v-divider></v-divider>
+                                                          <v-card-text>
+                                                            Are you sure you want to cancel this order? {{item.orderId}}
+                                                          </v-card-text>
+                                                          <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                                            <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
+                                                          </v-card-actions>
+                                                        </v-card>
+                                                      </v-dialog>    
+                                                </v-flex>
+                                                
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+                                  </v-layout>                      
                                 </v-card>
+                               </v-flex>
                             </template>
      
                           </v-card>
                         </v-flex>
+<!------------------------------------------------------------------------------------------------------------------------>
+<!-----------------------------------------------Priority Orders--------------------------------------------------------------------->
+
 
                          <v-flex lg4 sm12>
                           <v-card>
+                          <!-- <v-card style="border-radius:30px 30px 0px 0px;"> -->
                             <v-toolbar color="brown" dark>
                               <v-toolbar-title>Priority Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
@@ -171,66 +418,186 @@
                                 <v-icon>fastfood</v-icon>
                               </v-btn>
                             </v-toolbar>
-                           <v-progress-linear v-show="loading" indeterminate value="15" color="red"></v-progress-linear>
-
-                            
+                           <v-progress-linear v-show="loading" indeterminate value="15" color="red"></v-progress-linear>                    
                             
                             <template xs12 v-for="(item) in priorityOrders.slice(0, 5) ">    
-                                <v-card :key="item.orderId"> 
-                                  <!-- <v-card-title  style="height: 40px;"> -->
-                                    <v-card-title style="padding-bottom: 0px;">
-                                    <div>
-                                    
-                                      <span class="grey--text"><Strong>Order #{{item.orderId}} ({{item.shipping[0].first_name}})</Strong></span><br>
-                                      <!-- Order items -->
-                                     
-                                       <template v-for="(item2) in item.lineItems">
-                                        <span :key="item2.id">-{{item2.name}}(x{{item2.quantity}})</span><br :key="item2.id">
-                                       </template>                                        
-                                          <v-chip  color="green" text-color="white">
-                                            <v-avatar >
-                                                <v-icon>location_on</v-icon>
-                                            </v-avatar>
-                                            {{item.zone}}
-                                          </v-chip>
-                                       
-                                       
-                                        <v-chip label color="pink" text-color="white" v-show="item.customerNote !== '' ">
-                                          <v-icon left>label</v-icon>NB: {{item.customerNote}}
-                                        </v-chip>
-                                        <!-- <v-progress-circular indeterminate :size="50" color="primary"></v-progress-circular> -->
-                                      
-                                    </div>
-                                                                
-                                  </v-card-title>
-                                  <v-card-actions style="
-                                          padding-top: 0px;
-                                          height: 20px;
-                                      ">
-                                    <v-checkbox :value="item.orderId" v-model="checkPackaged" flat ></v-checkbox>
+                              <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
+                                <v-card style="border: 1px solid grey;" color="" > 
+                                
+                                    <v-layout row wrap>
+                                      <!----------Customer details ----->
+                                      <v-flex xs12 style="padding-bottom: 0px">
+                                        <v-card style="border: 1px solid grey;">
+                                           <v-layout row wrap>
+                                                <v-flex xs6>
+                                                 
+                                                    <span><v-icon>person</v-icon>{{item.shipping[0].first_name}} {{item.shipping[0].last_name}}</span><br>
+                                                    <span><v-icon>phone</v-icon>{{item.billing[0].phone}}</span><br>
+                                                    <span> <v-icon>location_on</v-icon>{{item.zone}}</span>
+                                                 
+                                                </v-flex>
+                                                <v-flex xs6>
+                                                
+                                                  <span><v-icon>assignment</v-icon><strong> #{{item.orderId}}</strong></span><br>
+                                                  <span><v-icon>timelapse</v-icon> {{item.createdAt | moment}}</span>
+              
+                                                  
+                                                </v-flex>
+                                           </v-layout>
+                                        </v-card>
+                                      </v-flex>
 
-                                      <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
-                                        <v-icon color="grey lighten-1">delete</v-icon>
-                                      </v-btn>
-                                      <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
-                
-                                          <v-card>
-                                            <v-card-title>
-                                              <span class="headline">Confirmation</span>
-                                            </v-card-title>
-                                            <v-divider></v-divider>
-                                            <v-card-text>
-                                              Are you sure you want to cancel this order?
-                                            </v-card-text>
-                                            <v-card-actions>
-                                              <v-spacer></v-spacer>
-                                              <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
-                                              <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
-                                            </v-card-actions>
-                                          </v-card>
-                                        </v-dialog>     
-                                  </v-card-actions>                              
+                                        <!----------Order details -------->
+                                        <template v-for="(item2) in item.lineItems">
+                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;" :key="item2.id">
+                                            <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                              
+                                                <v-flex xs8>
+                                               
+                                                  <span style="margin-left:10px">{{item2.name}} </span><br>
+                                                  <span style="margin-left:10px">x{{item2.quantity}}</span>
+                                                </v-flex>
+                                                <v-flex xs4>
+                                                    <span style="margin-left:0px">GHS{{item2.total}} </span><br>
+                                                </v-flex>
+                                                
+                                              </v-layout>
+                                            </v-card>
+                                          </v-flex>
+                                        </template>
+
+                                         <!----------Order Note Heading -------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs8>
+                                                   <span style="margin-left:10px"><u>Order Note</u></span>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                         <!----------Order Note Content-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;" color="grey lighten-1">
+                                              <v-layout row wrap>
+                                                 <v-flex xs8>
+                                                   <span style="margin-left:10px">{{item.customerNote}}</span>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                         <!----------Price details-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs4 style="padding-right:0px">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Subtotal</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style="padding-right:0px; padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Discount</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style=" padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">Total</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                          <!----------Price Values-------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                 <v-flex xs4 style="padding-right:0px">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">GHS{{(parseFloat(item.total)+parseFloat(item.discountTotal)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style="padding-right:0px; padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px" v-if="item.couponLines.length !== 0">{{item.couponLines[0].code}}</p>
+                                                   <template v-else>
+                                                     <p style="text-align:center; margin-bottom:0px">No Discount</p>
+                                                    </template>
+                                                   </v-card>
+                                                 </v-flex>
+                                                  <v-flex xs4 style=" padding-left:0px ">
+                                                   <v-card style="border: 1px solid grey;">
+                                                   <p style="text-align:center; margin-bottom:0px">GHS{{parseFloat(item.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                   </v-card>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+
+                                         <!-----------Payment Mode ------------>
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                              <v-layout row wrap>
+                                                 <v-flex xs12>
+                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         <template v-if="item.paymentMethodTitle==='Cash on delivery'">
+                                           <v-card  style="border: 1px solid grey;" color="red darken-4" class="white--text">
+                                              <v-layout row wrap>
+                                                 <v-flex xs12>
+                                                   <p style="text-align:center; margin-bottom:0px">Not Paid({{item.paymentMethodTitle}})</p>
+                                                 </v-flex>
+                                              </v-layout>
+                                         </v-card>
+                                         </template>
+                                         </v-flex>
+
+                                         <!--------Mark as Packaged button ------->
+                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card style="border: 1px solid grey;">
+                                              <v-layout row wrap>
+                                                <v-flex xs2>
+                                                </v-flex>
+                                                <v-flex xs7>
+                                                   <v-spacer></v-spacer>
+                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="packageOrder(item.orderId)">Mark As Packaged</v-btn>
+                                                  
+                                                </v-flex>
+                                                <v-flex xs3>
+                                                  <v-btn icon ripple @click="$set(cancelPackage, item.orderId, true)" flat>
+                                                    <v-icon color="grey lighten-1">delete</v-icon>
+                                                  </v-btn>
+                                                    <v-dialog v-model="cancelPackage[item.orderId]" persistent max-width="350px">
+                              
+                                                        <v-card>
+                                                          <v-card-title>
+                                                            <span class="headline">Confirmation</span>
+                                                          </v-card-title>
+                                                          <v-divider></v-divider>
+                                                          <v-card-text>
+                                                            Are you sure you want to cancel this order? {{item.orderId}}
+                                                          </v-card-text>
+                                                          <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                                            <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
+                                                          </v-card-actions>
+                                                        </v-card>
+                                                      </v-dialog>    
+                                                </v-flex>
+                                                
+                                              </v-layout>
+                                         </v-card>
+                                         </v-flex>
+                                  </v-layout>                      
                                 </v-card>
+                               </v-flex>
                             </template>
                           </v-card>
                         </v-flex>
@@ -245,6 +612,7 @@
 <script>
  import VWidget from '@/components/VWidget';
  import DMFWebService from '@/services/DMFWebService';
+ import moment from 'moment';
 
  export default {
    components: {
@@ -255,6 +623,7 @@
         searchText:'',
         searchBarVisible:false,
         loading: true,
+        loadingButton:false,
         checkPackaged:{},
         cancelPackage:{},
         orders:[],
@@ -263,6 +632,12 @@
         tempOrders:[],
         countQueue:null,
         timer: '',
+        items: [
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me 2' }
+      ]
       }
     },
     computed:{
@@ -303,7 +678,7 @@
     },
     created(){
         this.getOrders();
-        //this.timer = setInterval(this.getOrders, 20000)
+        this.timer = setInterval(this.getOrders, 20000)
     },
 
     
@@ -384,7 +759,11 @@
 
       },
       cancelOrder(val){
-        DMFWebService.orders.cancelOrder(val).then((response) => {
+        let body={
+          status:'cancelled'
+        };
+       
+        DMFWebService.orders.cancelOrder(body, val).then((response) => {
 
           if(response.status === 200){
 
@@ -415,9 +794,17 @@
           }
         })     
       },
+       moment() {
+        return moment();
+      },
       overWriteState(){
 
       }
+    },
+    filters: {
+    moment (date) {
+      return moment(date).startOf('hour').fromNow();
     }
+  }
   }
 </script>

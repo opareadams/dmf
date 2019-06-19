@@ -110,7 +110,7 @@ export default {
     packageOrder(orderId){
       return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}/packaged`)
     },
-    cancelOrder(statusBody){
+    cancelOrder(statusBody,orderId){
       return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}`,statusBody)
     }
  
