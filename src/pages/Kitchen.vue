@@ -1,12 +1,12 @@
 <template>
   <div id="kitchen-app">
     <v-container grid-list-lg fluid>
-      <v-layout row wrap>
+      <!-- <v-layout row wrap> -->
        
 
         <v-layout row wrap>
-                     <v-flex lg4 sm12>
-                          <v-card   >
+                     <v-flex lg4 sm12  >
+                          <v-card  >
                             <v-toolbar color="brown lighten-2" dark>
                               <v-toolbar-title >Normal Orders</v-toolbar-title>
                               <v-spacer></v-spacer>
@@ -22,13 +22,15 @@
                               </v-btn>                            
                             </v-toolbar>
                             <v-progress-linear v-show="loading" indeterminate value="15" color="primary"></v-progress-linear>
-                            
-                            <template v-for="(item) in filteredOrders.slice(0, 5) ">    
+
+                            <div style="height: 1000px;overflow: auto;">
+                            <template  v-for="(item) in filteredOrders.slice(0, 5) ">    
                               
                                <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
-                                <v-card style="border: 1px solid grey;" color="" > 
+                                <v-card style="border: 1px solid grey;" color=""  > 
                                 
-                                    <v-layout row wrap>
+                                    <v-layout row wrap  
+                                     >
                                       <!----------Customer details ----->
                                       <v-flex xs12 style="padding-bottom: 0px">
                                         <v-card style="border: 1px solid #F5F5F5;">
@@ -219,6 +221,7 @@
                                 </v-card>
                                </v-flex>
                             </template>
+                            </div>
                           </v-card>
                         </v-flex>
 <!-------------------------------------------------------------------------------------------------------------------------------------->
@@ -237,7 +240,7 @@
                             </v-toolbar>
                           <v-progress-linear v-show="loading" indeterminate value="15" color="green"></v-progress-linear>
 
-
+                             <div style="height: 1000px;overflow: auto;">
                               <template xs12 v-for="(item) in customizedOrders.slice(0, 5) ">    
                                <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
                                 <v-card style="border: 1px solid grey;" color="" > 
@@ -433,7 +436,7 @@
                                 </v-card>
                                </v-flex>
                             </template>
-     
+                          </div>
                           </v-card>
                         </v-flex>
 <!------------------------------------------------------------------------------------------------------------------------>
@@ -452,6 +455,7 @@
                             </v-toolbar>
                            <v-progress-linear v-show="loading" indeterminate value="15" color="red"></v-progress-linear>                    
                             
+                            <div style="height: 1000px;overflow: auto;  background-color: transparent;">
                             <template xs12 v-for="(item) in priorityOrders.slice(0, 5) ">    
                                <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
                                 <v-card style="border: 1px solid grey;" color="" > 
@@ -647,12 +651,13 @@
                                 </v-card>
                                </v-flex>
                             </template>
+                            </div>
                           </v-card>
                         </v-flex>
                   </v-layout>
 
        
-      </v-layout>
+      <!-- </v-layout> -->
     </v-container>
   </div>
 </template>
@@ -680,6 +685,7 @@
         tempOrders:[],
         countQueue:null,
         timer: '',
+        offsetTop: 0,
         moreMenuItems: [
         { title: 'Cancel Order' }
         // { title: 'Click Me' },
@@ -845,7 +851,9 @@
       //  moment() {
       //   return moment();
       // },
-      
+      onScroll (e) {
+        this.offsetTop = e.target.scrollTop
+      },
       overWriteState(){
 
       }
