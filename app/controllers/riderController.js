@@ -78,14 +78,8 @@ exports.delete = (req, res) => {
 
 // Get a report on Rider   
 exports.riderReport = (req, res) =>  {
-    /*
-    *1. how many orders a rider a rider delivered in a day, week, month)
-    *(2. How much cash was collected by a rider in a day,week, month)
-    */
-
-   const startDate = moment(req.body.start_date).toDate();
-   const endDate = moment(req.body.end_date).toDate();
-//.find({"createdAt": {"$gte": startDate, "$lt": endDate}})
+    const startDate = moment(req.body.start_date).toDate();
+    const endDate = moment(req.body.end_date).toDate();
     Order.aggregate([
         { "$match": {
                 createdAt: {
