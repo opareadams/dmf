@@ -1,4 +1,6 @@
 const Rider = require('../models/rider');
+const Order = require('../models/order');
+const moment = require("moment");
 
 //Register a new Rider
 exports.register = (req, res) =>  {
@@ -71,4 +73,62 @@ exports.delete = (req, res) => {
                 message: `Oops! An error occured. Error: ${err}`
             }); 
         })
+};
+
+
+// Get a report on Rider   
+exports.riderReport = (req, res) =>  {
+    /*
+    *1. how many orders a rider a rider delivered in a day, week, month)
+    *(2. How much cash was collected by a rider in a day,week, month)
+    */
+
+   const startDate = moment(req.body.start_date).toDate();
+   const endDate = moment(req.body.end_date).toDate();
+//.find({"createdAt": {"$gte": startDate, "$lt": endDate}})
+    Order.aggregate([
+        { "$match": {
+                createdAt: {
+                    "$gte": startDate, 
+                    "$lt": endDate
+                },
+                "rider.id": req.body.rider_id
+            }
+        },
+        {
+            $group:{
+                _id:"$rider",
+                count:{$sum:1},
+                total_amount: { 
+                    $sum: { 
+                        "$toDouble": "$total"
+                    }
+                }
+            }
+        }
+    ])
+    .then((data) => {
+        if(data) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'Rider report rertrieved Successfully! ',
+                data
+            }); 
+        } else {
+            res.statusCode = 500;
+            res.json({ 
+                status: false,
+                message: `no such rider exist`
+            }); 
+        }         
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;   
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })
 };

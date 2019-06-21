@@ -83,6 +83,10 @@ router.get('/orders/summary', protectedRoute, orderController.orderSummary);
 // List top 5 Orders for the day
 router.get('/orders/top/5', protectedRoute, orderController.indexTopOrders); 
 
+// GET /api/orders/packaged
+// List Packaged for the day
+router.get('/orders/packaged', protectedRoute, orderController.packagedOrders); 
+
 // POST /api/orders/:orderId
 // Assign a specific order to a rider
 router.post('/orders/assign/:orderId', protectedRoute, orderController.assignRider); 
@@ -127,6 +131,10 @@ router.post('/rider/delete', protectedRoute, riderController.delete);
 // GET /api/users
 //List all Riders
 router.get('/riders', protectedRoute, riderController.index);
+
+// POST /api/users
+// GET report on Rider
+router.post('/rider/report', protectedRoute, riderController.riderReport);
 
 module.exports = router;
 

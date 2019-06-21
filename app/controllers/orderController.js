@@ -310,3 +310,40 @@ exports.assignRider = (req, res) =>  {
     })
 };
 
+
+//Get Packaged Orders for the day
+exports.packagedOrders = (req, res) =>  {
+    Order.find({
+        "deliveryDate": moment().format('DD-MM-YYYY'),
+        "packaged": true,
+        "status":{$ne:"cancelled"}
+    })
+    .then((data) => {
+        if (data.length) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                meta: {
+                    total_orders: data.length
+                },
+                message: 'Packaged Orders retrieved successfully',
+                data    
+            });   
+        } else {
+            res.statusCode = 200;
+            res.json({ 
+                status: false,
+                message: `No packaged orders available for today`
+            }); 
+        }
+        
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })  
+};
