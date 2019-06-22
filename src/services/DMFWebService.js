@@ -112,6 +112,9 @@ export default {
     },
     cancelOrder(statusBody,orderId){
       return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}`,statusBody)
+    },
+    listPackagedOrders(){
+      return axios.get(`${DMF_API_BASE_URL}/orders/packaged`)
     }
  
 

@@ -11,8 +11,8 @@
                   <h1 class="flex my-4 primary--text">Doughman Foods</h1>
                 </div>                
                 <v-form>
-                  <v-text-field append-icon="person" name="login" label="Login" type="text" v-model="model.email"></v-text-field>
-                  <v-text-field append-icon="lock" name="password" label="Password" id="password" type="password" v-model="model.password"></v-text-field>
+                  <v-text-field prepend-icon="person" name="login" label="Login" type="text" v-model="model.email"></v-text-field>
+                  <v-text-field prepend-icon="lock" name="password" label="Password" id="password" type="password" v-model="model.password"></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -89,12 +89,15 @@ export default {
 </script>
 <style scoped lang="css">
   #login {
-    height: 50%;
+    height: 100%;
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
     content: "";
     z-index: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.3)) 0% 0% / cover, url(../../static/doughnuts/d6.jpg) no-repeat;
+    background-size: cover;
+   
   }
 </style>

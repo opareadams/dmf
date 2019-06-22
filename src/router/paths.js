@@ -105,6 +105,16 @@ export default [
       `@/pages/PackagedOrders.vue`
     )
   },
+  {
+    path: '/dispatchOrders',
+    meta: { breadcrumb: true, title: 'Dispatch Orders'},
+    name: 'DispatchOrders',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/DispatchOrders.vue`
+    )
+  },
 
   // {
   //   path: '/calendar',

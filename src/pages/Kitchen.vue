@@ -8,7 +8,7 @@
                      <v-flex lg4 sm12  >
                           <v-card  >
                             <v-toolbar color="brown lighten-2" dark>
-                              <v-toolbar-title >Normal Orders</v-toolbar-title>
+                              <v-toolbar-title >Normal ({{totalOrders}})</v-toolbar-title>
                               <v-spacer></v-spacer>
                               <v-text-field label="Search"
                                 v-model="searchText"
@@ -61,8 +61,8 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">{{item2.name}} </span><br>
-                                                  <span style="margin-left:10px">x{{item2.quantity}}</span>
+                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.name}} </span><br>
+                                                  
                                                 </v-flex>
                                                 <v-flex xs4>
                                                     <span style="margin-left:0px">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
@@ -172,7 +172,23 @@
                                                 </v-flex>
                                                 <v-flex xs7>
                                                    <v-spacer></v-spacer>
-                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="packageOrder(item.orderId)">Mark As Packaged</v-btn>
+                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="$set(checkPackaged, item.orderId, true)">Mark As Packaged</v-btn>
+                                                          <v-dialog v-model="checkPackaged[item.orderId]" persistent max-width="350px">
+                                                            <v-card>
+                                                              <v-card-title>
+                                                                <span class="headline">Confirmation</span>
+                                                              </v-card-title>
+                                                              <v-divider></v-divider>
+                                                              <v-card-text>
+                                                                Mark Order #{{item.orderId}} as Packaged? 
+                                                              </v-card-text>
+                                                              <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" flat @click="packageOrder(item.orderId)" :loading="loading2">Yes</v-btn>
+                                                                <v-btn color="blue darken-1" flat @click.native="$set(checkPackaged,item.orderId, false)">No</v-btn>        
+                                                              </v-card-actions>
+                                                            </v-card>
+                                                          </v-dialog>    
                                                   
                                                 </v-flex>
                                                 <v-flex xs3>
@@ -204,7 +220,7 @@
                                                               </v-card-text>
                                                               <v-card-actions>
                                                                 <v-spacer></v-spacer>
-                                                                <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                                                <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading2">Yes</v-btn>
                                                                 <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
                                                               </v-card-actions>
                                                             </v-card>
@@ -232,16 +248,23 @@
                           <v-card >
                           <!-- <v-card style="border-radius:0px 30px;"> -->
                             <v-toolbar color="brown lighten-1" dark>
-                              <v-toolbar-title>Customized Orders</v-toolbar-title>
+                              <v-toolbar-title>Customized ({{totalCustomizedOrders}})</v-toolbar-title>
                               <v-spacer></v-spacer>
-                              <v-btn icon>
-                                <v-icon>fastfood</v-icon>
-                              </v-btn>
+                              <v-text-field label="Search"
+                                v-model="searchText2"
+                               v-show="searchBarVisible2"
+                               
+
+                               ></v-text-field>
+
+                              <v-btn icon  @click="searchBarVisible2 = !searchBarVisible2">
+                                <v-icon>search</v-icon>
+                              </v-btn>    
                             </v-toolbar>
                           <v-progress-linear v-show="loading" indeterminate value="15" color="green"></v-progress-linear>
 
                              <div style="height: 1000px;overflow: auto;">
-                              <template xs12 v-for="(item) in customizedOrders.slice(0, 5) ">    
+                              <template xs12 v-for="(item) in filteredCustomizedOrders.slice(0, 5) ">    
                                <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
                                 <v-card style="border: 1px solid grey;" color="" > 
                                 
@@ -276,8 +299,8 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">{{item2.name}} </span><br>
-                                                  <span style="margin-left:10px">x{{item2.quantity}}</span>
+                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.name}} </span><br>
+                                                  
                                                 </v-flex>
                                                 <v-flex xs4>
                                                     <span style="margin-left:0px">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
@@ -387,7 +410,23 @@
                                                 </v-flex>
                                                 <v-flex xs7>
                                                    <v-spacer></v-spacer>
-                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="packageOrder(item.orderId)">Mark As Packaged</v-btn>
+                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="$set(checkPackaged, item.orderId, true)">Mark As Packaged</v-btn>
+                                                          <v-dialog v-model="checkPackaged[item.orderId]" persistent max-width="350px">
+                                                            <v-card>
+                                                              <v-card-title>
+                                                                <span class="headline">Confirmation</span>
+                                                              </v-card-title>
+                                                              <v-divider></v-divider>
+                                                              <v-card-text>
+                                                                Mark Order #{{item.orderId}} as Packaged? 
+                                                              </v-card-text>
+                                                              <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" flat @click="packageOrder(item.orderId)" :loading="loading3">Yes</v-btn>
+                                                                <v-btn color="blue darken-1" flat @click.native="$set(checkPackaged,item.orderId, false)">No</v-btn>        
+                                                              </v-card-actions>
+                                                            </v-card>
+                                                          </v-dialog>    
                                                   
                                                 </v-flex>
                                                 <v-flex xs3>
@@ -419,7 +458,7 @@
                                                               </v-card-text>
                                                               <v-card-actions>
                                                                 <v-spacer></v-spacer>
-                                                                <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                                                <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading3">Yes</v-btn>
                                                                 <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
                                                               </v-card-actions>
                                                             </v-card>
@@ -447,16 +486,23 @@
                           <v-card>
                           <!-- <v-card style="border-radius:30px 30px 0px 0px;"> -->
                             <v-toolbar color="brown" dark>
-                              <v-toolbar-title>Priority Orders</v-toolbar-title>
+                              <v-toolbar-title>Priority ({{totalPriorityOrders}})</v-toolbar-title>
                               <v-spacer></v-spacer>
-                              <v-btn icon>
-                                <v-icon>fastfood</v-icon>
-                              </v-btn>
+                               <v-text-field label="Search"
+                                v-model="searchText3"
+                               v-show="searchBarVisible3"
+                               
+
+                               ></v-text-field>
+
+                              <v-btn icon  @click="searchBarVisible3 = !searchBarVisible3">
+                                <v-icon>search</v-icon>
+                              </v-btn>    
                             </v-toolbar>
                            <v-progress-linear v-show="loading" indeterminate value="15" color="red"></v-progress-linear>                    
                             
                             <div style="height: 1000px;overflow: auto;  background-color: transparent;">
-                            <template xs12 v-for="(item) in priorityOrders.slice(0, 5) ">    
+                            <template xs12 v-for="(item) in filteredPriorityOrders.slice(0, 5) ">    
                                <v-flex :key="item._id" xs12 style="padding-bottom: 20px"> 
                                 <v-card style="border: 1px solid grey;" color="" > 
                                 
@@ -489,10 +535,10 @@
                                             <v-card style="border: 1px solid #F5F5F5;">
                                               <v-layout row wrap>
                                               
-                                                <v-flex xs8>
+                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">{{item2.name}} </span><br>
-                                                  <span style="margin-left:10px">x{{item2.quantity}}</span>
+                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.name}} </span><br>
+                                                  
                                                 </v-flex>
                                                 <v-flex xs4>
                                                     <span style="margin-left:0px">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
@@ -602,7 +648,23 @@
                                                 </v-flex>
                                                 <v-flex xs7>
                                                    <v-spacer></v-spacer>
-                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="packageOrder(item.orderId)">Mark As Packaged</v-btn>
+                                                   <v-btn  color="deep-orange darken-1" class="white--text" @click="$set(checkPackaged, item.orderId, true)">Mark As Packaged</v-btn>
+                                                          <v-dialog v-model="checkPackaged[item.orderId]" persistent max-width="350px">
+                                                            <v-card>
+                                                              <v-card-title>
+                                                                <span class="headline">Confirmation</span>
+                                                              </v-card-title>
+                                                              <v-divider></v-divider>
+                                                              <v-card-text>
+                                                                Mark Order #{{item.orderId}} as Packaged? 
+                                                              </v-card-text>
+                                                              <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn color="blue darken-1" flat @click="packageOrder(item.orderId)" :loading="loading4">Yes</v-btn>
+                                                                <v-btn color="blue darken-1" flat @click.native="$set(checkPackaged,item.orderId, false)">No</v-btn>        
+                                                              </v-card-actions>
+                                                            </v-card>
+                                                          </v-dialog>    
                                                   
                                                 </v-flex>
                                                 <v-flex xs3>
@@ -634,7 +696,7 @@
                                                               </v-card-text>
                                                               <v-card-actions>
                                                                 <v-spacer></v-spacer>
-                                                                <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading">Yes</v-btn>
+                                                                <v-btn color="blue darken-1" flat @click="cancelOrder(item.orderId)" :loading="loading4">Yes</v-btn>
                                                                 <v-btn color="blue darken-1" flat @click.native="$set(cancelPackage,item.orderId, false)">No</v-btn>        
                                                               </v-card-actions>
                                                             </v-card>
@@ -673,9 +735,16 @@
    },
     data () {
       return {
-        searchText:'',
+        searchText:'', //For normal orders search
         searchBarVisible:false,
+        searchText2:'', //For customized orders search
+        searchBarVisible2:false,
+        searchText3:'', //For priority orders search
+        searchBarVisible3:false,
         loading: true,
+        loading2: false,
+        loading3: false,
+        loading4: false,
         loadingButton:false,
         checkPackaged:{},
         cancelPackage:{},
@@ -690,8 +759,11 @@
         { title: 'Cancel Order' }
         // { title: 'Click Me' },
         // { title: 'Click Me' },
-        // { title: 'Click Me 2' }
-      ]
+        // { title: 'Click Me 2' } 
+      ],
+      totalOrders:'',
+      totalCustomizedOrders:'',
+      totalPriorityOrders:'',
       }
     },
     computed:{
@@ -702,20 +774,74 @@
             return order.shipping[0].first_name.toLowerCase().match(this.searchText.toLowerCase());
            
           }
+          if(order.shipping[0].last_name.toLowerCase().match(this.searchText.toLowerCase())){
+            return order.shipping[0].last_name.toLowerCase().match(this.searchText.toLowerCase());
+           
+          }
           if(order.number.toLowerCase().match(this.searchText.toLowerCase())){
               return order.number.toLowerCase().match(this.searchText.toLowerCase());
              
           }
+          if(order.zone.toLowerCase().match(this.searchText.toLowerCase())){
+              return order.zone.toLowerCase().match(this.searchText.toLowerCase());
+             
+          }
           
-          //return order.number.match(this.searchText);
+      
+        });
+      },
+      filteredCustomizedOrders(){
+        return this.customizedOrders.filter(order =>{
+         
+          if(order.shipping[0].first_name.toLowerCase().match(this.searchText2.toLowerCase())){
+            return order.shipping[0].first_name.toLowerCase().match(this.searchText2.toLowerCase());
+           
+          }
+         if(order.shipping[0].last_name.toLowerCase().match(this.searchText2.toLowerCase())){
+            return order.shipping[0].last_name.toLowerCase().match(this.searchText2.toLowerCase());
+           
+          }
+          if(order.number.toLowerCase().match(this.searchText2.toLowerCase())){
+              return order.number.toLowerCase().match(this.searchText2.toLowerCase());
+             
+          }
+          if(order.zone.toLowerCase().match(this.searchText2.toLowerCase())){
+              return order.zone.toLowerCase().match(this.searchText2.toLowerCase());
+             
+          }
+          
+   
+        });
+      },
+      filteredPriorityOrders(){
+        return this.priorityOrders.filter(order =>{
+         
+          if(order.shipping[0].first_name.toLowerCase().match(this.searchText3.toLowerCase())){
+            return order.shipping[0].first_name.toLowerCase().match(this.searchText3.toLowerCase());
+           
+          }
+          if(order.shipping[0].last_name.toLowerCase().match(this.searchText3.toLowerCase())){
+            return order.shipping[0].last_name.toLowerCase().match(this.searchText3.toLowerCase());
+           
+          }
+          if(order.number.toLowerCase().match(this.searchText3.toLowerCase())){
+              return order.number.toLowerCase().match(this.searchText3.toLowerCase());
+             
+          }
+          if(order.zone.toLowerCase().match(this.searchText3.toLowerCase())){
+              return order.zone.toLowerCase().match(this.searchText3.toLowerCase());
+             
+          }
+          
+   
         });
       }
     },
     watch: {
       
-      checkPackaged(val){
-        this.packageOrder(val);
-      },
+      // checkPackaged(val){
+      //   this.packageOrder(val);
+     // },
       orders(){
         this.loading =false;
       }
@@ -750,6 +876,9 @@
                      for(var i =0; i < this.orders.length; i++){
                        if(this.orders[i].total > 1000){//if true(i.e 1000 cedis plus), priority order found
                            this.priorityOrders.push(this.orders[i]);
+                          
+                          this.orders.splice(i,1);
+
                   
                       }
                      }
@@ -761,10 +890,16 @@
                         for(var j=0; j<this.orders[i].lineItems.length; j++){
                           if(this.orders[i].lineItems[j].name === 'Custom Shaped Doughnut' || this.orders[i].lineItems[j].name === 'Letter Written on Doughnut' ){
                             this.customizedOrders.push(this.orders[i])
+
+                            this.orders.splice(i,1);
                           }
                         }
                       }
                        //-----------------------------------------//
+
+                       this.totalOrders = this.orders.length;
+                       this.totalCustomizedOrders = this.customizedOrders.length;
+                       this.totalPriorityOrders = this.priorityOrders.length;
 
 
                       this.countQueue = this.orders.length - 5; //-----to determine number of orders still in the queue
