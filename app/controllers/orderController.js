@@ -318,7 +318,7 @@ exports.packagedOrders = (req, res) =>  {
         "packaged": true,
         "status":{$ne:"cancelled"}
     })
-   
+   .sort({updatedAt:-1})
     .then((data) => {
         if (data.length) {
             res.statusCode = 200;
