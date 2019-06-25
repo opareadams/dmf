@@ -117,8 +117,10 @@ exports.findOrder = (req, res) =>  {
 };
 
 // List a specific number of orders
-exports.indexOrdersWithoutLimit = (req, res) =>  {
+exports.indexOrdersWithLimit = (req, res) =>  {
+    const limit = Number(req.params.limit);
     Order.find({})
+    .limit(limit)
     .then((data) => {
         if (data.length) {
             console.log(data);
@@ -316,6 +318,7 @@ exports.packagedOrders = (req, res) =>  {
         "packaged": true,
         "status":{$ne:"cancelled"}
     })
+    .sort({ key: 1 })
     .then((data) => {
         if (data.length) {
             res.statusCode = 200;
