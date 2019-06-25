@@ -79,6 +79,10 @@ router.post('/auth/logout', protectedRoute, authController.logout);
 // List summary for entire Orders
 router.get('/orders/summary', protectedRoute, orderController.orderSummary); 
 
+// GET /api/orders/index
+// List all orders with no limit
+router.get('/orders/index',protectedRoute, orderController.indexOrdersWithoutLimit); 
+
 // GET /api/orders/top/5
 // List top 5 Orders for the day
 router.get('/orders/top/5', protectedRoute, orderController.indexTopOrders); 
@@ -99,10 +103,6 @@ router.get('/orders/:orderId', protectedRoute, orderController.findOrder);
 // Get lists of all order by status
 router.get('/orders/status/:status', protectedRoute, orderController.filterByStatus); 
 
-// GET /api/orders/limit/:limit
-// List a specific number of orders
-router.get('/orders/limit/:limit',protectedRoute, orderController.indexOrdersWithLimit); 
-
 // POST /api/orders/:orderID/status/:status
 // Update order status
 router.post('/orders/:orderId',protectedRoute, orderController.updateOrderStatus); 
@@ -114,6 +114,8 @@ router.post('/orders/:orderId/packaged',protectedRoute, orderController.packaged
 // GET /api/orders
 // list all orders
 router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
+
+
 
 
 

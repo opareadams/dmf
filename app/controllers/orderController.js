@@ -117,10 +117,8 @@ exports.findOrder = (req, res) =>  {
 };
 
 // List a specific number of orders
-exports.indexOrdersWithLimit = (req, res) =>  {
-    const limit = Number(req.params.limit);
+exports.indexOrdersWithoutLimit = (req, res) =>  {
     Order.find({})
-    .limit(limit)
     .then((data) => {
         if (data.length) {
             console.log(data);
