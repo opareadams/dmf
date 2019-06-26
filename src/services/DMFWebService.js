@@ -115,10 +115,10 @@ export default {
     },
     listPackagedOrders(){
       return axios.get(`${DMF_API_BASE_URL}/orders/packaged`)
+    },
+    assignRiderToOrder(riderBody,orderId){
+      return axios.post(`${DMF_API_BASE_URL}/orders/assign/${orderId}`,riderBody)
     }
- 
-
-
   /*
     update (id, role) {
       return axios.patch(`${DMF_API_BASE_URL}/roles/${id}`, role)
@@ -127,5 +127,12 @@ export default {
       return axios.delete(`${DMF_API_BASE_URL}/roles/${id}`)
     }
   }*/
+  },
+  riders:{
+      //Riders
+      //=============================================================================
+    listRiders(){
+      return axios.get(`${DMF_API_BASE_URL}/riders`)
+    }
   }
 }
