@@ -87,7 +87,7 @@ export default {
   },
   orders:{
     listAllOrders(){
-      return axios.get(`${DMF_API_BASE_URL}/orders?page=1&limit=1000`)
+      return axios.get(`${DMF_API_BASE_URL}/orders/index`)
     },
     listAllOrdersWithPagination(page=1, limit=10){
       return axios.get(`${DMF_API_BASE_URL}/orders?page=${page}&limit=${limit}`)

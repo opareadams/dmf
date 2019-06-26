@@ -116,7 +116,7 @@ export default {
             value: 'orderId'
           },
           { text: 'Order Details' , value: 'lineItems'},
-          { text: 'Customer', value: 'shipping'},
+          { text: 'Customer', value: 'shipping.first_name'},
           { text: 'Payment Method' , value: 'paymentMethodTitle'},
           { text: 'Delivery Address', value: 'shipping' , align: 'left'},
           { text: 'Delivery Date', value: 'deliveryDate' , align: 'right'},
@@ -152,10 +152,11 @@ export default {
       getAllOrders(){
         this.loading = true;
         DMFWebService.orders.listAllOrders().then((response) => {
-          this.totalOrders = response.data.data.totalOrders.toString();
-          for(var i =0 ; i < response.data.data.orders.length; i++){
-            this.complex.orders.push(response.data.data.orders[i]);
-          }
+          const apiOrders = response.data.data;
+          apiOrders.forEach((order, index) => {
+            this.complex.orders.push(order);
+          });
+
           this.loading = false;
         })
       },
