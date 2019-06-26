@@ -285,11 +285,13 @@ export default {
     }
   }),
   beforeCreate(){
-    if (localStorage.ROLE_ID  !=  '1' || localStorage.TOKEN) {
-      
-    }else{
-        this.$router.replace({ path: '/login' });
-    }
+   if (localStorage.ROLE_ID || localStorage.TOKEN) {
+     
+        }
+        else{
+          this.$router.replace({ path: '/login' });
+        }
+
   },
   created(){
     this.getSummary();
