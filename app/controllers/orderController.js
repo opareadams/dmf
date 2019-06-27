@@ -116,7 +116,7 @@ exports.findOrder = (req, res) =>  {
     })    
 };
 
-// List a specific number of orders
+// List all orders without limits
 exports.indexOrdersWithoutLimit = (req, res) =>  {
     Order.find({})
     .then((data) => {
@@ -242,8 +242,18 @@ exports.packagedOrderStatusUpdate = (req, res) =>  {
 };
 
 // Get Order Summaary  
-exports.orderSummary = (req, res) =>  {    
+exports.orderSummary = (req, res) =>  { 
+    const startDate = moment(req.body.start_date).toDate();
+    const endDate = moment(req.body.end_date).toDate();
+
     Order.aggregate([
+        { "$match": {
+                createdAt: {
+                    "$gte": startDate, 
+                    "$lt": endDate
+                }
+            }
+        },
         {
             $group:{
             _id:{status:"$status"},

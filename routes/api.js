@@ -77,7 +77,7 @@ router.post('/auth/logout', protectedRoute, authController.logout);
 
 // GET /api/orders/summary
 // List summary for entire Orders
-router.get('/orders/summary', protectedRoute, orderController.orderSummary); 
+router.post('/orders/summary', protectedRoute, orderController.orderSummary); 
 
 // GET /api/orders/index
 // List all orders with no limit
