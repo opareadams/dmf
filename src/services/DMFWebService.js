@@ -104,8 +104,8 @@ export default {
     updateOrderStatus(orderId,status){
       return axios.put(`${DMF_API_BASE_URL}/orders/${orderId}/status/${status}`)
     },
-    getOrderSummary(){
-      return axios.get(`${DMF_API_BASE_URL}/orders/summary`)
+    getOrderSummary(dateRange){
+      return axios.post(`${DMF_API_BASE_URL}/orders/summary`, dateRange)
     },
     packageOrder(orderId){
       return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}/packaged`)

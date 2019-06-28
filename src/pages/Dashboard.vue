@@ -1,6 +1,64 @@
 <template>
   <div id="pageDashboard">
+
     <v-container grid-list-xl fluid>
+      <v-layout row wrap>
+        <v-flex xs11 sm2>
+          <v-menu
+            ref="menu"
+            lazy
+            :close-on-content-click="false"
+            v-model="menu"
+            transition="scale-transition"
+            offset-y
+            full-width
+            :nudge-right="40"
+            min-width="290px"
+            :return-value.sync="date"
+          >
+            <v-text-field
+              slot="activator"
+              label="Start Date"
+              v-model="dateRange.start_date"
+              prepend-icon="event"
+              readonly
+            ></v-text-field>
+            <v-date-picker v-model="dateRange.start_dat" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+            </v-date-picker>
+          </v-menu>
+        </v-flex>
+        <v-flex xs11 sm2>
+          <v-menu
+            ref="menu"
+            lazy
+            :close-on-content-click="false"
+            v-model="menu"
+            transition="scale-transition"
+            offset-y
+            full-width
+            :nudge-right="40"
+            min-width="290px"
+            :return-value.sync="date"
+          >
+            <v-text-field
+              slot="activator"
+              label="End Date"
+              v-model="dateRange.end_date"
+              prepend-icon="event"
+              readonly
+            ></v-text-field>
+            <v-date-picker v-model="dateRange.end_date" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+            </v-date-picker>
+          </v-menu>
+        </v-flex>
+      </v-layout>
+
       <v-layout row wrap>
         <!-- mini statistic start -->
         <v-flex lg3 sm6 xs12>
@@ -242,6 +300,7 @@ export default {
   data: () => ({
     orders:[],
     summary:[],
+    dateRange: {},
     totalOrders: "0",
     pendingOrders: "0",
     deliveredOrders: "0",
@@ -298,7 +357,10 @@ export default {
   methods: {
       getSummary(){
         this.loading = true;
-        DMFWebService.orders.getOrderSummary().then((response) => {
+        this.dateRange.start_date = '2019-01-01';        
+        this.dateRange.end_date = '2019-12-01';
+
+        DMFWebService.orders.getOrderSummary(this.dateRange).then((response) => {
           for(var i =0 ; i < response.data.data.length; i++){
                   this.summary.push(response.data.data[i])
             }
