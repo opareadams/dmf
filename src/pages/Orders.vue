@@ -170,8 +170,7 @@ export default {
                 this.complex.orders.push(response.data.data.orders[i])
           }
 
-          this.complex.pagination.page = response.data.data.currentPageNumber;
-          this.complex.page = this.complex.pagination.page;
+          this.complex.page = response.data.data.currentPageNumber;
           this.complex.pagination.rowsPerPage = response.data.data.ordersPerPage;
           this.complex.pagination.totalItems = response.data.data.totalOrders;
           this.complex.pagination.totalPages = response.data.data.totalPages;
