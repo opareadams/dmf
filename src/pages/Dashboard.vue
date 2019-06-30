@@ -8,13 +8,13 @@
             ref="menu"
             lazy
             :close-on-content-click="false"
-            v-model="menu"
+            v-model="startDateMenu"
             transition="scale-transition"
             offset-y
             full-width
             :nudge-right="40"
             min-width="290px"
-            :return-value.sync="date"
+            :return-value.sync="dateRange.start_date"
           >
             <v-text-field
               slot="activator"
@@ -23,10 +23,10 @@
               prepend-icon="event"
               readonly
             ></v-text-field>
-            <v-date-picker v-model="dateRange.start_dat" no-title scrollable>
+            <v-date-picker v-model="dateRange.start_date" no-title scrollable>
               <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+              <v-btn flat color="primary" @click="startDateMenu = false">Cancel</v-btn>
+              <v-btn flat color="primary" @click="updateStartDate(dateRange.start_date)">OK</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
@@ -35,13 +35,13 @@
             ref="menu"
             lazy
             :close-on-content-click="false"
-            v-model="menu"
+            v-model="endDateMenu"
             transition="scale-transition"
             offset-y
             full-width
             :nudge-right="40"
             min-width="290px"
-            :return-value.sync="date"
+            :return-value.sync="dateRange.end_date"
           >
             <v-text-field
               slot="activator"
@@ -52,8 +52,8 @@
             ></v-text-field>
             <v-date-picker v-model="dateRange.end_date" no-title scrollable>
               <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+              <v-btn flat color="primary" @click="endDateMenu = false">Cancel</v-btn>
+              <v-btn flat color="primary" @click="regenerateSummaryReport(dateRange.end_date)">OK</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
@@ -313,6 +313,8 @@ export default {
     color: Material,
     selectedTab: 'tab-1', 
     loading: false,
+    startDateMenu:false,
+    endDateMenu: false,
     headers: [
        {
         text: '',
@@ -356,14 +358,28 @@ export default {
   },
   methods: {
       getSummary(){
-        this.loading = true;
-        this.dateRange.start_date = '2019-01-01';        
-        this.dateRange.end_date = '2019-12-01';
+        if (this.dateRange.start_date == null || this.dateRange.end_date == null) {
+          this.dateRange.start_date = '2019-01-01';        
+          this.dateRange.end_date = '2019-12-01';
+        }
+        
+        DMFWebService.orders.getOrderSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
+          if (response.data.data.length == 0) {
+              this.totalOrders = '0';
+              this.pendingOrders = '0';
+              this.deliveredOrders = '0';
+              this.deliveredOrdersAmount = '0';
+              this.pendingOrdersAmount = '0';
+              this.cancelledOrdersAmount = '0';
+              this.pendingOrdersPieChart = 0.00;
+              this.deliveredOrdersPieChart = 0.00;
+              this.cancelledOrdersPieChart = 0.00;
+              return;
+          } 
 
-        DMFWebService.orders.getOrderSummary(this.dateRange).then((response) => {
           for(var i =0 ; i < response.data.data.length; i++){
-                  this.summary.push(response.data.data[i])
-            }
+              this.summary.push(response.data.data[i])
+          }
           this.pendingOrders = this.summary[1].count.toString();
           this.deliveredOrders = this.summary[2].count.toString();
           this.deliveredOrdersAmount = this.summary[2].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -372,6 +388,7 @@ export default {
         })
       },
       getRecentOrders(){
+        this.loading = true;
         DMFWebService.orders.listAllOrdersWithPagination().then((response) => {
           this.totalOrders = response.data.data.totalOrders.toString();
           for(var i =0 ; i < response.data.data.orders.length; i++){
@@ -386,6 +403,15 @@ export default {
       },
       getColorByStatus (status) {
         return this.colors[status];
+      },
+      updateStartDate (newStartDate) {
+        this.dateRange.start_date = newStartDate; 
+        this.startDateMenu = false;       
+      },
+      regenerateSummaryReport (newEndDate) {
+        this.dateRange.end_date = newEndDate;
+        this.endDateMenu = false;  
+        this.getSummary();
       },
       moment: function () {
         return moment();
