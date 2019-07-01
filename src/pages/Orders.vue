@@ -30,6 +30,9 @@
                 select-all
                 v-model="complex.selected"
                 :loading="loading"
+                :pagination.sync="complex.pagination"
+                :total-items="complex.pagination.totalItems"
+                hide-actions
                 >
                 <template slot="items" slot-scope="props">
                     <td>
@@ -77,12 +80,21 @@
                     <td class="text-xs-right">{{ props.item.total.replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
                     <td class="text-xs-right">{{ props.item.createdAt | moment }}</td>
                 </template>
+                <template v-slot:footer>
+                </template>
                 <template v-slot:no-results>
                   <v-alert :value="true" color="error" icon="warning">
                     Your search for "{{ search }}" found no results.
                   </v-alert>
                 </template>  
               </v-data-table>
+               <div class="text-xs-center pt-2">
+                  <v-pagination 
+                    v-model="complex.page" 
+                    :length="complex.pagination.totalPages"
+                    @input="onPageChange"
+                    :total-visible="6"></v-pagination>
+                </div>
             </v-card-text>
           </v-card>
         </v-flex>
@@ -103,7 +115,9 @@ export default {
       complex: {
         loading: false,
         selected: [],
+        page: 1,
         orders:[],
+        pagination: {},
         headers: [
           {
             text: '',
@@ -149,13 +163,21 @@ export default {
     this.getAllOrders();
   },
   methods: {
-      getAllOrders(){
+      getAllOrders(pageNumber = 1){
         this.loading = true;
-        DMFWebService.orders.listAllOrders().then((response) => {
-          const apiOrders = response.data.data;
-          apiOrders.forEach((order, index) => {
-            this.complex.orders.push(order);
-          });
+        this.complex.orders = [];
+
+        DMFWebService.orders.listAllOrdersWithPagination(pageNumber).then((response) => {          
+          for(var i =0 ; i < response.data.data.orders.length; i++){
+                this.complex.orders.push(response.data.data.orders[i])
+          }
+
+          this.complex.page = response.data.data.currentPageNumber;
+          this.complex.pagination.rowsPerPage = response.data.data.ordersPerPage;
+          this.complex.pagination.totalItems = response.data.data.totalOrders;
+          this.complex.pagination.totalPages = response.data.data.totalPages;
+          this.complex.pagination.sortBy = 'deliveryDate';
+          this.complex.pagination.descending = true;
 
           this.loading = false;
         })
@@ -165,6 +187,9 @@ export default {
       },
       getColorByStatus (status) {
         return this.colors[status];
+      },
+      onPageChange (newPage) {
+        this.getAllOrders(newPage);
       }
   },
   filters: {
