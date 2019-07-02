@@ -14,7 +14,6 @@
             full-width
             :nudge-right="40"
             min-width="290px"
-            :return-value.sync="dateRange.start_date"
           >
             <v-text-field
               slot="activator"
@@ -41,7 +40,6 @@
             full-width
             :nudge-right="40"
             min-width="290px"
-            :return-value.sync="dateRange.end_date"
           >
             <v-text-field
               slot="activator"
@@ -90,7 +88,7 @@
         </v-flex>        
         <v-flex lg3 sm6 xs12>
           <mini-statistic
-            :title="this.deliveredOrdersAmount"
+            :title="this.revenue"
             sub-title="Total Revenue (GHS)"
             color="indigo" 
             icon="fa-money"             
@@ -300,10 +298,14 @@ export default {
   data: () => ({
     orders:[],
     summary:[],
-    dateRange: {},
-    totalOrders: "0",
+    dateRange: {
+      start_date: '2019-01-01',
+      end_date:'2019-12-01'
+    },
+    totalOrders: 0,
     pendingOrders: "0",
     deliveredOrders: "0",
+    revenue: "0",
     deliveredOrdersAmount: "0",
     pendingOrdersPieChart: "0",
     pendingOrdersAmount: "0",
@@ -360,11 +362,6 @@ export default {
   },
   methods: {
       getSummary(){
-        if (this.dateRange.start_date == null || this.dateRange.end_date == null) {
-          this.dateRange.start_date = '2019-01-01';        
-          this.dateRange.end_date = '2019-12-01';
-        }
-        
         DMFWebService.orders.getOrderSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
           if (response.data.data.length == 0) {
               this.totalOrders = '0';
@@ -373,32 +370,83 @@ export default {
               this.deliveredOrdersAmount = '0';
               this.pendingOrdersAmount = '0';
               this.cancelledOrdersAmount = '0';
+              this.revenue = '0';
               this.pendingOrdersPieChart = 0.00;
               this.deliveredOrdersPieChart = 0.00;
               this.cancelledOrdersPieChart = 0.00;
               return;
-          } 
+          }               
+          
+          this.totalOrders = 0;
+          this.summary = response.data.data;
 
-          for(var i =0 ; i < response.data.data.length; i++){
-              this.summary.push(response.data.data[i])
+          /**
+           * Get Pending Orders Summary
+           */
+          const pendingOrdersSummary = this.summary.find(function(element) {
+            return element._id.status == "pending";
+          });
+
+          if (pendingOrdersSummary != null) {
+            this.pendingOrders = pendingOrdersSummary.count.toString();
+            this.pendingOrdersAmount = pendingOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.totalOrders += pendingOrdersSummary.count;
           }
-          this.pendingOrders = this.summary[1].count.toString();
-          this.deliveredOrders = this.summary[2].count.toString();
-          this.deliveredOrdersAmount = this.summary[2].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-          this.pendingOrdersAmount = this.summary[1].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-          this.cancelledOrdersAmount = this.summary[3].total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+
+          /**
+           * Get Cancelled Orders Summary
+           */
+          const cancelledOrdersSummary = this.summary.find(function(element) {
+            return element._id.status == "cancelled";
+          });
+
+          if (cancelledOrdersSummary != null) {
+            this.cancelledOrdersAmount = cancelledOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.totalOrders += cancelledOrdersSummary.count;
+          }
+
+          /**
+           * Get Completed Orders Summary
+           */
+          const completedOrdersSummary = this.summary.find(function(element) {
+            return element._id.status == "completed";
+          });
+          
+          if (completedOrdersSummary != null) {
+            this.totalOrders += completedOrdersSummary.count;
+          }
+
+          /**
+           * Get Delivered Orders Summary
+           */
+          const deliveredOrdersSummary = this.summary.find(function(element) {
+            return element._id.status == "delivered";
+          });
+
+
+          if (deliveredOrdersSummary != null) {
+            this.deliveredOrders = deliveredOrdersSummary.count.toString();
+            this.deliveredOrdersAmount = deliveredOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.revenue = (deliveredOrdersSummary.total_amount + completedOrdersSummary.total_amount).toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.totalOrders += deliveredOrdersSummary.count;
+          } else {
+            this.deliveredOrders = 0;
+            this.revenue = completedOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+          }
+          
+          this.pendingOrdersPieChart = ((parseInt(this.pendingOrders)/ this.totalOrders)*100).toFixed(2);
+          this.deliveredOrdersPieChart = (( parseInt(this.deliveredOrders) / this.totalOrders)*100).toFixed(2);
+          this.cancelledOrdersPieChart = (( cancelledOrdersSummary.count / this.totalOrders)*100).toFixed(2);
+          this.totalOrders = this.totalOrders.toString();
         })
       },
       getRecentOrders(){
         this.loading = true;
         DMFWebService.orders.listAllOrdersWithPagination().then((response) => {
-          this.totalOrders = response.data.data.totalOrders.toString();
           for(var i =0 ; i < response.data.data.orders.length; i++){
                 this.orders.push(response.data.data.orders[i])
           }
-          this.pendingOrdersPieChart = ((this.summary[1].count / this.totalOrders)*100).toFixed(2);
-          this.deliveredOrdersPieChart = ((this.summary[2].count / this.totalOrders)*100).toFixed(2);
-          this.cancelledOrdersPieChart = ((this.summary[3].count / this.totalOrders)*100).toFixed(2);
           this.loading = false;
         })
 
