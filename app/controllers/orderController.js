@@ -326,7 +326,10 @@ exports.packagedOrders = (req, res) =>  {
     Order.find({
         "deliveryDate": moment().format('DD-MM-YYYY'),
         "packaged": true,
-        "status":{$ne:"cancelled"}
+        "status":{
+            $ne:"cancelled",
+            $ne:"delivered"
+        }
     })
    .sort({updatedAt:-1})
     .then((data) => {
