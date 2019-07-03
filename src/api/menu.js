@@ -1,10 +1,10 @@
 const Menu =  [
-  { header: 'Apps' },
+  { header: 'Administrative Portal' },
  
   {
     title: 'Dashboard',
     group: 'apps',
-    icon: 'dashboard',
+    icon: 'assessment',
     name: 'Dashboard',
   },
   {
@@ -14,6 +14,7 @@ const Menu =  [
     link: '/orders',
     name: 'Orders',
   },
+  { header: 'Kitchen Platform' },
   {
     title: 'Kitchen App',
     group: 'apps',
@@ -26,7 +27,14 @@ const Menu =  [
     icon: 'archive',
     name: 'PackagedOrders',
   },
+  { header: 'Dispatcher' },
   {
+    title: 'Dispatcher App',
+    group: 'apps',
+    icon: 'motorcycle',
+    name: 'DispatchOrders',
+  },
+  /*{
     title: 'Chat',
     group: 'apps',
     icon: 'chat_bubble',
@@ -142,7 +150,7 @@ const Menu =  [
       { name: '403', title: '403', component: 'AccessDenied' },
       { name: '500', title: '500', component: 'ServerError' },
     ]
-  },
+  },*/
 ];
 // reorder menu
 Menu.forEach((item) => {
