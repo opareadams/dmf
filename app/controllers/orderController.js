@@ -361,3 +361,38 @@ exports.packagedOrders = (req, res) =>  {
         }); 
     })  
 };
+
+//Search for an order
+exports.search = (req, res) =>  {
+    Order.find({orderId: req.params.query})
+   .sort({updatedAt:-1})
+    .then((data) => {
+        console.log(data);
+        if (data.length) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                meta: {
+                    total_orders: data.length
+                },
+                message: 'Packaged Orders retrieved successfully',
+                data    
+            });   
+        } else {
+            res.statusCode = 200;
+            res.json({ 
+                status: false,
+                message: `No Order found`
+            }); 
+        }
+        
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })  
+};

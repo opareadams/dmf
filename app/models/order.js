@@ -32,7 +32,6 @@ const orderSchema = new mongoose.Schema({
   transactionId: String,
   datePaid: Date,
   packaged: { type: Boolean, default: false },
-  delivered: { type: Boolean, default: false },
   cartHash: String,
   metaData: Array,
   lineItems: Array,
@@ -57,6 +56,8 @@ orderSchema.method("update", function (updates, callback) {
   Object.assign(order, updates, { updatedAt: new Date() });
   order.parent().save(callback);
 });
+
+orderSchema.index({orderId: 'text', 'billing.first_name': 'text', 'billing.last_name': 'text'});
 
 orderSchema.plugin(aggregatePaginate);
 module.exports = mongoose.model('Order', orderSchema);

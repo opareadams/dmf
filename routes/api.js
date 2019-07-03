@@ -95,13 +95,17 @@ router.get('/orders/packaged', protectedRoute, orderController.packagedOrders);
 // Assign a specific order to a rider
 router.post('/orders/assign/:orderId', protectedRoute, orderController.assignRider); 
 
-// GET /api/orders/:orderId
-// Get details of specific order
-router.get('/orders/:orderId', protectedRoute, orderController.findOrder); 
+// GET /api/orders/search/:query
+// Get lists of all order by status
+router.get('/orders/search/:query', protectedRoute, orderController.search);  
 
 // GET /api/orders/:status
 // Get lists of all order by status
 router.get('/orders/status/:status', protectedRoute, orderController.filterByStatus); 
+
+// GET /api/orders/:orderId
+// Get details of specific order
+router.get('/orders/:orderId', protectedRoute, orderController.findOrder);
 
 // POST /api/orders/:orderID/status/:status
 // Update order status
