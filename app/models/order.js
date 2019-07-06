@@ -21,6 +21,7 @@ const orderSchema = new mongoose.Schema({
   cartTax: String,
   total: String,
   totalTax: String,
+  totalDonuts: Number,
   pricesIncludeTax: { type: Boolean, default: false },
   customerId: Number,
   customerIpAdress: String,
