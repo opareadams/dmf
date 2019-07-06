@@ -147,6 +147,16 @@ function getTownName (townCode) {
     return towns.find(town => town.code == townCode).name;
   };
 
+
+const getTotalDonuts = items => {
+    return items
+        .map(item => {
+        let noOfDonuts = item.sku.match(/\d/g).join("");
+        return noOfDonuts * item.quantity;
+        })
+        .reduce((a, b) => a + b, 0);
+};
+
 // Create Order
 exports.createOrder = (req, res) => {   
 
@@ -166,6 +176,7 @@ exports.createOrder = (req, res) => {
         cartTax: req.body.cart_tax,
         total: req.body.total,
         totalTax: req.body.total_tax,
+        totalDonuts: getTotalDonuts(req.body.line_items),
         pricesIncludeTax: req.body.prices_include_tax,
         customerId: req.body.customer_id,
         customerIpAdress: req.body.customer_ip_address,
