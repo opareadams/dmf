@@ -13,6 +13,7 @@
               single-line
               hide-details
               class="hidden-sm-and-down"
+              v-on:keyup.enter="searchOrder(search)"
               ></v-text-field>     
               <v-btn icon>
                 <v-icon>filter_list</v-icon>
@@ -82,11 +83,7 @@
                 </template>
                 <template v-slot:footer>
                 </template>
-                <template v-slot:no-results>
-                  <v-alert :value="true" color="error" icon="warning">
-                    Your search for "{{ search }}" found no results.
-                  </v-alert>
-                </template>  
+                 
               </v-data-table>
                <div class="text-xs-center pt-2">
                   <v-pagination 
@@ -176,6 +173,20 @@ export default {
           this.complex.pagination.totalPages = response.data.data.totalPages;
           this.complex.pagination.sortBy = 'deliveryDate';
           this.complex.pagination.descending = true;
+
+          this.loading = false;
+        })
+      },
+      searchOrder (orderId) {
+        console.log(orderId);
+        this.loading = true;
+        this.complex.orders = [];
+
+        DMFWebService.orders.searchOrder(orderId).then((response) => {
+          console.log(response.data.data)          
+          for(var i =0 ; i < response.data.data.orders.length; i++){
+                this.complex.orders.push(response.data.data.orders[i])
+          }
 
           this.loading = false;
         })
