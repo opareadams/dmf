@@ -281,6 +281,44 @@ exports.orderSummary = (req, res) =>  {
 };
 
 
+// Get Donut Summaary  
+exports.dountSummary = (req, res) =>  { 
+    const startDate = moment(req.body.start_date).toDate();
+    const endDate = moment(req.body.end_date).toDate();
+
+    Order.aggregate([
+        { "$match": {
+                createdAt: {
+                    "$gte": startDate, 
+                    "$lt": endDate
+                },
+                "status":"completed"
+            }
+        },
+        {
+            $group:{
+            _id:{orderId:"orderId"},
+            count:{$sum:1},
+            total: { $sum: {"$toDouble": "$totalDonuts"}}
+            }
+        }
+        ]).then(function (data) {
+            res.json({ 
+                status: true,
+                message: 'Donut summary retrieved successfully',
+                data    
+            }); 
+        })
+        .catch((err) => { 
+            console.log(err);
+            res.statusCode = 500;
+            res.json({ 
+                status: false,
+                message: `Oops! An error occured. Error: ${err}`
+            }); 
+        });
+};
+
 // Assign Rider to order  
 exports.assignRider = (req, res) =>  {
     Order.findOneAndUpdate(

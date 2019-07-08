@@ -75,7 +75,11 @@ router.post('/auth/logout', protectedRoute, authController.logout);
 // Order Routes
 // =============================================================================
 
-// GET /api/orders/summary
+// POST /api/donut/summary
+// Get summary for donuts sold
+router.post('/donuts/summary', protectedRoute, orderController.dountSummary); 
+
+// POST /api/orders/summary
 // List summary for entire Orders
 router.post('/orders/summary', protectedRoute, orderController.orderSummary); 
 
