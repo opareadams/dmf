@@ -5,11 +5,24 @@ const Order = require('../models/order');
 function getDeilveryDate (metaData) {
     let date = null;
     if (metaData.length > 2) {
-        date = metaData[3].value ;
+        date = metaData[3].value ; //for orders created from website
     } else {
-        date = metaData[0].value;
+        date = metaData[0].value; //for orders created in wordpress backend
     }
     return date; 
+}
+
+function modifyStatus(status){
+    let newStatus = null;
+    if(status === 'processing' || status === 'completed'){
+        newStatus = 'completed';
+    }
+    else{
+        newStatus = status;
+    }
+
+    return newStatus;
+
 }
 
 function getTownName (townCode) {
@@ -170,7 +183,7 @@ exports.createOrder = (req, res) => {
         orderKey: req.body.order_key,
         createdVia: req.body.created_via,
         version: req.body.version,
-        status: req.body.status,
+        status: modifyStatus(req.body.status),
         currency: req.body.currency,
         discountTotal: req.body.discount_total,
         discountTax: req.body.discount_tax,
@@ -241,7 +254,7 @@ exports.updateOrder = (req, res) =>  {
                 orderKey: req.body.order_key,
                 createdVia: req.body.created_via,
                 version: req.body.version,
-                status: req.body.status,
+                status: modifyStatus(req.body.status),
                 currency: req.body.currency,
                 discountTotal: req.body.discount_total,
                 discountTax: req.body.discount_tax,
