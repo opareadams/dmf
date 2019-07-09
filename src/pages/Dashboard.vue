@@ -70,10 +70,10 @@
         </v-flex>
         <v-flex lg3 sm6 xs12>
           <mini-statistic
-            :title="this.pendingOrders"
-            sub-title="Pending Orders"
+            :title="this.totalDonuts"
+            sub-title="Donuts Sold"
             color="orange"   
-            icon="fa fa-clock-o"   
+            icon="fa-codiepie"   
           >
           </mini-statistic>           
         </v-flex>          
@@ -101,7 +101,8 @@
           <v-card>
             <v-card-title>
               <div class="layout row ma-0 justify-space-between pb-1">
-                <div class="subheading">Pending Orders</div>
+                <div class="subheading">Pending Orders </div>
+                <small style="color:red">(% out of Total Orders)</small>
               </div>
             </v-card-title>
             <v-card-text>
@@ -113,13 +114,13 @@
                   :value="pendingOrdersPieChart"
                   color="orange"
                 >
-                  {{ pendingOrdersPieChart }}
+                  {{ pendingOrders}}
                 </v-progress-circular>
               </div>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <div class="caption">Total Amount: GHS {{ pendingOrdersAmount }}</div>
+              <div class="caption">{{ pendingOrders }} Pending Orders of Total Amount: GHS {{ pendingOrdersAmount }}</div>
             </v-card-actions>
           </v-card>              
         </v-flex>  
@@ -129,6 +130,7 @@
             <v-card-title>
               <div class="layout row ma-0 justify-space-between pb-1">
                 <div class="subheading">Cancelled Orders</div>
+                <small style="color:red">(% out of Total Orders)</small>
               </div>
             </v-card-title>
             <v-card-text>
@@ -156,6 +158,7 @@
             <v-card-title>
               <div class="layout row ma-0 justify-space-between pb-1">
                 <div class="subheading">Delivered Orders</div>
+                <small style="color:red">(% out of Total Orders)</small>
               </div>
             </v-card-title>
             <v-card-text>
@@ -303,6 +306,7 @@ export default {
       end_date:'2019-12-01'
     },
     totalOrders: 0,
+    totalDonuts: 0,
     pendingOrders: "0",
     deliveredOrders: "0",
     revenue: "0",
@@ -360,7 +364,14 @@ export default {
   },
   methods: {
       getSummary(){
+        DMFWebService.orders.getDonutSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
+          this.totalDonuts = 0; 
+          if (response.data.total) {
+            this.totalDonuts = response.data.total;
+          }
+        });
         DMFWebService.orders.getOrderSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
+          console.log(response.data.data)
           if (response.data.data.length == 0) {
               this.totalOrders = '0';
               this.pendingOrders = '0';
