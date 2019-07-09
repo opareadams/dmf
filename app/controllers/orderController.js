@@ -282,7 +282,7 @@ exports.orderSummary = (req, res) =>  {
 
 
 // Get Donut Summaary  
-exports.dountSummary = (req, res) =>  { 
+exports.donutSummary = (req, res) =>  { 
     const startDate = moment(req.body.start_date).toDate();
     const endDate = moment(req.body.end_date).toDate();
 

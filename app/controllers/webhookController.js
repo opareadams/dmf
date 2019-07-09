@@ -247,6 +247,7 @@ exports.updateOrder = (req, res) =>  {
                 cartTax: req.body.cart_tax,
                 total: req.body.total,
                 totalTax: req.body.total_tax,
+                totalDonuts: getTotalDonuts(req.body.line_items),
                 pricesIncludeTax: req.body.prices_include_tax,
                 customerId: req.body.customer_id,
                 customerIpAdress: req.body.customer_ip_address,
@@ -264,7 +265,8 @@ exports.updateOrder = (req, res) =>  {
                 feeLines: req.body.fee_lines,
                 couponLines: req.body.coupon_lines, 
                 refunds: req.body.refunds,
-                deliveryDate: getDeilveryDate(req.body.meta_data) 
+                deliveryDate: getDeilveryDate(req.body.meta_data) ,
+                zone: getTownName(req.body.shipping.state)
             });
               
             newOrder.save((err) => {

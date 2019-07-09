@@ -77,7 +77,7 @@ router.post('/auth/logout', protectedRoute, authController.logout);
 
 // POST /api/donut/summary
 // Get summary for donuts sold
-router.post('/donuts/summary', protectedRoute, orderController.dountSummary); 
+router.post('/donuts/summary', protectedRoute, orderController.donutSummary); 
 
 // POST /api/orders/summary
 // List summary for entire Orders
