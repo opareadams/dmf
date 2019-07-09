@@ -110,6 +110,15 @@ export default {
         "end_date": endDate
       });
     },
+    getDonutSummary(startDate, endDate){
+      return axios.post(`${DMF_API_BASE_URL}/donuts/summary`, {
+        "start_date": startDate,
+        "end_date": endDate
+      });
+    },
+    searchOrder(orderId){
+      return axios.get(`${DMF_API_BASE_URL}/orders/search/${orderId}`)
+    },
     packageOrder(orderId){
       return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}/packaged`)
     },
