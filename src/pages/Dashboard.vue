@@ -129,7 +129,7 @@
           <v-card>
             <v-card-title>
               <div class="layout row ma-0 justify-space-between pb-1">
-                <div class="subheading">Cancelled Orders</div>
+                <div class="subheading">Failed Orders</div>
                 <small style="color:red">(% out of Total Orders)</small>
               </div>
             </v-card-title>
@@ -139,16 +139,16 @@
                   :size="150"
                   :width="15"
                   :rotate="-90"
-                  :value="cancelledOrdersPieChart"
+                  :value="failedOrdersPieChart"
                   color="red"
                 >
-                  {{ cancelledOrdersPieChart }}
+                  {{ failedOrdersPieChart }}
                 </v-progress-circular>
               </div>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-              <div class="caption">Total Amount: GHS {{ cancelledOrdersAmount }}</div>
+              <div class="caption">Total Amount: GHS {{ failedOrdersAmount }}</div>
             </v-card-actions>
           </v-card>              
         </v-flex>  
@@ -241,7 +241,7 @@
               </template>
               <template v-slot:footer>
                 <td :colspan="headers.length">
-                    <v-chip label small color="red" text-color="white">cancelled</v-chip>
+                    <v-chip label small color="red" text-color="white">Failed</v-chip>
                     <v-chip label small color="green" text-color="white">completed</v-chip>
                     <v-chip label small color="rgb(251, 188, 52)" text-color="white">processing</v-chip>
                     <v-chip label small color="rgb(251, 188, 52)" text-color="white">pending</v-chip>
@@ -314,8 +314,8 @@ export default {
     pendingOrdersPieChart: "0",
     pendingOrdersAmount: "0",
     deliveredOrdersPieChart:"0",
-    cancelledOrdersAmount:"0",
-    cancelledOrdersPieChart:"0",
+    failedOrdersAmount:"0",
+    failedOrdersPieChart:"0",
     color: Material,
     selectedTab: 'tab-1', 
     loading: false,
@@ -345,7 +345,7 @@ export default {
         processing: 'rgb(251, 188, 52)',
         pending: 'rgb(251, 188, 52)',
         'on-hold': 'indigo',
-        cancelled: 'red',
+        failed: 'red',
         completed: 'green',
         true: 'green',
         false: 'rgb(251, 188, 52)'
@@ -378,11 +378,11 @@ export default {
               this.deliveredOrders = '0';
               this.deliveredOrdersAmount = '0';
               this.pendingOrdersAmount = '0';
-              this.cancelledOrdersAmount = '0';
+              this.failedOrdersAmount = '0';
               this.revenue = '0';
               this.pendingOrdersPieChart = 0.00;
               this.deliveredOrdersPieChart = 0.00;
-              this.cancelledOrdersPieChart = 0.00;
+              this.failedOrdersPieChart = 0.00;
               return;
           }               
           
@@ -404,15 +404,15 @@ export default {
 
 
           /**
-           * Get Cancelled Orders Summary
+           * Get Failed Orders Summary
            */
-          const cancelledOrdersSummary = this.summary.find(function(element) {
-            return element._id.status == "cancelled";
+          const failedOrdersSummary = this.summary.find(function(element) {
+            return element._id.status == "failed";
           });
 
-          if (cancelledOrdersSummary != null) {
-            this.cancelledOrdersAmount = cancelledOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.totalOrders += cancelledOrdersSummary.count;
+          if (failedOrdersSummary != null) {
+            this.failedOrdersAmount = failedOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.totalOrders += failedOrdersSummary.count;
           }
 
           /**
@@ -446,7 +446,7 @@ export default {
           
           this.pendingOrdersPieChart = ((parseInt(this.pendingOrders)/ this.totalOrders)*100).toFixed(2);
           this.deliveredOrdersPieChart = (( parseInt(this.deliveredOrders) / this.totalOrders)*100).toFixed(2);
-          this.cancelledOrdersPieChart = (( cancelledOrdersSummary.count / this.totalOrders)*100).toFixed(2);
+          this.failedOrdersPieChart = (( failedOrdersSummary.count / this.totalOrders)*100).toFixed(2);
           this.totalOrders = this.totalOrders.toString();
         })
       },
