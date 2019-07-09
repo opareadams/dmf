@@ -151,8 +151,11 @@ function getTownName (townCode) {
 const getTotalDonuts = items => {
     return items
         .map(item => {
-        let noOfDonuts = item.sku.match(/\d/g).join("");
-        return noOfDonuts * item.quantity;
+            if (item.sku.match(/\d/g) == null) {
+                return 0;
+            }
+            let noOfDonuts = item.sku.match(/\d/g).join("");
+            return noOfDonuts * item.quantity;
         })
         .reduce((a, b) => a + b, 0);
 };
