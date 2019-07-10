@@ -370,6 +370,7 @@ exports.packagedOrders = (req, res) =>  {
         "packaged": true,
         "status":{
             $ne:"cancelled",
+            $ne:"cancelledByWoocomerce",
             $ne:"delivered"
         }
     })
