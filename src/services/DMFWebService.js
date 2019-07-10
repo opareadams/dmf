@@ -101,8 +101,8 @@ export default {
     listOrdersByLimit(limit){
       return axios.get(`${DMF_API_BASE_URL}/orders/limit/${limit}`)
     },
-    updateOrderStatus(orderId,status){
-      return axios.put(`${DMF_API_BASE_URL}/orders/${orderId}/status/${status}`)
+    updateOrderStatus(statusBody,orderId){
+      return axios.post(`${DMF_API_BASE_URL}/orders/${orderId}`,statusBody)
     },
     getOrderSummary(startDate, endDate){
       return axios.post(`${DMF_API_BASE_URL}/orders/summary`, {
@@ -127,8 +127,10 @@ export default {
     },
     listPackagedOrders(){
       return axios.get(`${DMF_API_BASE_URL}/orders/packaged`)
+    },
+    assignRiderToOrder(riderBody,orderId){
+      return axios.post(`${DMF_API_BASE_URL}/orders/assign/${orderId}`,riderBody)
     }
- 
 
   /*
     update (id, role) {
@@ -138,5 +140,12 @@ export default {
       return axios.delete(`${DMF_API_BASE_URL}/roles/${id}`)
     }
   }*/
+  },
+  riders:{
+      //Riders
+      //=============================================================================
+    listRiders(){
+      return axios.get(`${DMF_API_BASE_URL}/riders`)
+    }
   }
 }
