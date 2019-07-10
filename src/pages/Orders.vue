@@ -44,7 +44,7 @@
                       ></v-checkbox>
                     </td>
                     <td>
-                        <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white"> </v-chip>
+                      <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white">{{ props.item.status }} </v-chip>
                     </td>
                     <td class="text-xs-right">
                       {{ props.item.orderId }}     
@@ -81,9 +81,6 @@
                     <td class="text-xs-right">{{ props.item.total.replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
                     <td class="text-xs-right">{{ props.item.createdAt | moment }}</td>
                 </template>
-                <template v-slot:footer>
-                </template>
-                 
               </v-data-table>
                <div class="text-xs-center pt-2">
                   <v-pagination 
