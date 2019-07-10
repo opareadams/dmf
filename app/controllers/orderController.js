@@ -369,7 +369,7 @@ exports.packagedOrders = (req, res) =>  {
         "deliveryDate": moment().format('DD-MM-YYYY'),
         "packaged": true,
         "status":{
-            $ne:"cancelled",
+            
             $ne:"cancelledByWoocomerce",
             $ne:"delivered"
         }
