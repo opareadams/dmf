@@ -236,7 +236,7 @@ exports.updateOrder = (req, res) =>  {
     console.log(req.body);
     Order.updateMany(
         {orderId: req.body.id}
-        ,{$set:{status:'cancelled'}}
+        ,{$set:{status:'cancelledByWoocomerce'}}
         ,(err) => {   
             if (err) {
                 console.log(err);
