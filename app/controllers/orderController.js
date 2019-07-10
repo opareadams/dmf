@@ -26,25 +26,27 @@ exports.index = (req, res) => {
             pagingCounter: 'pageCounter'
         }
     };
-
-    Order.aggregatePaginate(Order.aggregate(), options)
-        .then(function(data) {
-            res.json({ 
-                status: true,
-                meta: {
-                },
-                message: 'orders retrieved successfully',
-                data    
-            });     
-        })
-        .catch((err) => { 
-            console.log(err);
-            res.statusCode = 500;
-            res.json({ 
-                status: false,
-                message: `Oops! An error occured. Error: ${err}`
-            }); 
-        });
+    //
+    Order.aggregatePaginate(Order.aggregate([
+        { $match: { "status":{$ne:"cancelledByWoocomerce"} }}
+    ]), options)
+    .then(function(data) {
+        res.json({ 
+            status: true,
+            meta: {
+            },
+            message: 'orders retrieved successfully',
+            data    
+        });     
+    })
+    .catch((err) => { 
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    });
 };
 
 // List top 5 Orders for the day
@@ -119,8 +121,9 @@ exports.findOrder = (req, res) =>  {
 // List all orders without limits
 exports.indexOrdersWithoutLimit = (req, res) =>  {
    
-    Order.find({})
-    
+    Order.find({
+        "status":{$ne:"cancelledByWoocomerce"}
+    })
     .then((data) => {
         if (data.length) {
             console.log(data);
@@ -215,8 +218,7 @@ exports.packagedOrderStatusUpdate = (req, res) =>  {
     Order.findOneAndUpdate(
         {orderId: req.params.orderId,"packaged": false,
         "status":{
-            $ne:"cancelled",$ne:"failed",$ne:"delivered"
-            
+            $ne:"cancelled",$ne:"failed",$ne:"delivered",$ne:"cancelledByWoocomerce"
         }}
         ,{$set:{packaged:true,updatedAt:moment().format('YYYY-MM-DDTHH:mm:ss.SSS')}}
         ,{new:true}
@@ -257,7 +259,8 @@ exports.orderSummary = (req, res) =>  {
                 createdAt: {
                     "$gte": startDate, 
                     "$lt": endDate
-                }
+                },
+                "status":{$ne:"cancelledByWoocomerce"}
             }
         },
         {
@@ -369,12 +372,11 @@ exports.packagedOrders = (req, res) =>  {
         "deliveryDate": moment().format('DD-MM-YYYY'),
         "packaged": true,
         "status":{
-            
             $ne:"cancelledByWoocomerce",
             $ne:"delivered"
         }
     })
-   .sort({updatedAt:-1})
+    .sort({updatedAt:-1})
     .then((data) => {
         if (data.length) {
             res.statusCode = 200;
@@ -408,7 +410,7 @@ exports.packagedOrders = (req, res) =>  {
 //Search for an order
 exports.search = (req, res) =>  {
     Order.find({orderId: req.params.query})
-   .sort({updatedAt:-1})
+    .sort({updatedAt:-1})
     .then((data) => {
         console.log(data);
         if (data.length) {
