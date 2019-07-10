@@ -131,6 +131,7 @@ export default {
     assignRiderToOrder(riderBody,orderId){
       return axios.post(`${DMF_API_BASE_URL}/orders/assign/${orderId}`,riderBody)
     }
+
   /*
     update (id, role) {
       return axios.patch(`${DMF_API_BASE_URL}/roles/${id}`, role)
