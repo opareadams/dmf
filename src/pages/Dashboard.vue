@@ -201,7 +201,7 @@
             >
               <template slot="items" slot-scope="props">
                 <td>
-                    <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white"> </v-chip>
+                    <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white">{{ props.item.status }} </v-chip>
                 </td>
                 <td class="text-xs-right">
                   {{ props.item.orderId }}     
@@ -238,16 +238,6 @@
                   <v-icon v-show="!props.item.packaged" color="rgb(251, 188, 52)">fa fa-clock-o fa-sm</v-icon>
                 <td class="text-xs-right">{{ props.item.total.replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
                 <td class="text-xs-right">{{ props.item.createdAt | moment }}</td>
-              </template>
-              <template v-slot:footer>
-                <td :colspan="headers.length">
-                    <v-chip label small color="red" text-color="white">Failed</v-chip>
-                    <v-chip label small color="green" text-color="white">completed</v-chip>
-                    <v-chip label small color="rgb(251, 188, 52)" text-color="white">processing</v-chip>
-                    <v-chip label small color="rgb(251, 188, 52)" text-color="white">pending</v-chip>
-                    <v-chip label small color="indigo" text-color="white">on-hold</v-chip> 
-                    <v-chip label small color="#e0e0e0" text-color="white">Cancelled</v-chip>
-                </td>
               </template>
             </v-data-table>
           </v-card>
