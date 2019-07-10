@@ -28,17 +28,17 @@
                 :loading="loading"
                 class="elevation-1"
                 item-key="name"
-                select-all
+                
                 v-model="complex.selected"
                 >
                 <template slot="items" slot-scope="props">
-                    <td>
+                    <!-- <td>
                       <v-checkbox
                         primary
                         hide-details
                         v-model="props.selected"
                       ></v-checkbox>
-                    </td>
+                    </td> -->
                     <!-- <td>
                         <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white"> </v-chip>
                     </td> -->
@@ -47,7 +47,7 @@
                     </td>
                     <td class="text-xs-left">
                       <template v-for="(item) in props.item.lineItems">
-                        <v-list-tile-sub-title :key="item.id" >- {{item.name}} (x{{item.quantity}})  </v-list-tile-sub-title>
+                        <v-list-tile-sub-title :key="item.id" >{{item.name}} (x{{item.quantity}})  </v-list-tile-sub-title>
                       </template>                  
                       <v-chip label color="pink" text-color="white" v-show="props.item.customerNote !== '' ">
                         <v-icon left>label</v-icon> NB: {{props.item.customerNote}} 
@@ -141,15 +141,16 @@ export default {
            
           
 
-         // if(response.data.data.packaged == true && response.data.data.deliveryDate )
+        
           
-          this.totalOrders = response.data.data.totalOrders.toString();
-          for(var i =0 ; i < response.data.data.orders.length; i++){
+         // this.totalOrders = response.data.data.totalOrders.toString();
+          for(var i =0 ; i < response.data.data.length; i++){
 
-              if(response.data.data.orders[i].deliveryDate == moment().format('DD-MM-YYYY') 
-                  && response.data.data.orders[i].packaged ==true
-                  && response.data.data.orders[i].status != 'cancelled'){
-                this.complex.orders.push(response.data.data.orders[i]);
+              if(response.data.data[i].deliveryDate == moment().format('DD-MM-YYYY') 
+                  && response.data.data[i].packaged ==true
+                  && response.data.data[i].status != 'cancelled'
+                  && response.data.data[i].status != 'cancelledByWoocomerce'){
+                this.complex.orders.push(response.data.data[i]);
               }else{
                 
               }          

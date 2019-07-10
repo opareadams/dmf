@@ -61,7 +61,7 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.name}} </span><br>
+                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.sku}} </span><br>
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
@@ -146,7 +146,7 @@
 
                                          <!-----------Payment Mode ------------>
                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
-                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Slydepay' " style="border: 1px solid black;" color="green" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
                                                    <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
@@ -299,7 +299,7 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.name}} </span><br>
+                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.sku.substring(1)}} </span><br>
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
@@ -384,7 +384,7 @@
 
                                          <!-----------Payment Mode ------------>
                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
-                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Slydepay' " style="border: 1px solid black;" color="green" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
                                                    <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
@@ -537,7 +537,7 @@
                                               
                                                  <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.name}} </span><br>
+                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.sku}} </span><br>
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
@@ -622,7 +622,7 @@
 
                                          <!-----------Payment Mode ------------>
                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
-                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Slydepay' " style="border: 1px solid black;" color="green" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
                                                    <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
@@ -871,10 +871,12 @@
                      this.priorityOrders = []; //reset priority order queue
                      this.customizedOrders=[];
 
+                     
+
                      //--------process priority orders --------//
 
                      for(var i =0; i < this.orders.length; i++){
-                       if(this.orders[i].total > 1000){//if true(i.e 1000 cedis plus), priority order found
+                       if(this.orders[i].total > 150){//if true(i.e 1000 cedis plus), priority order found
                            this.priorityOrders.push(this.orders[i]);
                           
                           this.orders.splice(i,1);
@@ -885,21 +887,25 @@
                     
                       //-----------------------------------------//
                       //--------process customized orders --------//
-
                       for(var i=0; i <this.orders.length; i++){
-                        for(var j=0; j<this.orders[i].lineItems.length; j++){
-                          if(this.orders[i].lineItems[j].name === 'Custom Shaped Doughnut' || this.orders[i].lineItems[j].name === 'Letter Written on Doughnut' ){
+                       
+                       // for(var j=0; j<this.orders[i].lineItems.length; j++){
+                          
+                          if(this.orders[i].lineItems[0].sku === '1cut-out' || this.orders[i].lineItems[0].sku === '1writing' ){
+                          
                             this.customizedOrders.push(this.orders[i])
-
+                         
                             this.orders.splice(i,1);
                           }
-                        }
+                       // }
                       }
                        //-----------------------------------------//
 
                        this.totalOrders = this.orders.length;
                        this.totalCustomizedOrders = this.customizedOrders.length;
                        this.totalPriorityOrders = this.priorityOrders.length;
+                    
+                     
 
 
                       this.countQueue = this.orders.length - 5; //-----to determine number of orders still in the queue
