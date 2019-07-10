@@ -245,7 +245,8 @@
                     <v-chip label small color="green" text-color="white">completed</v-chip>
                     <v-chip label small color="rgb(251, 188, 52)" text-color="white">processing</v-chip>
                     <v-chip label small color="rgb(251, 188, 52)" text-color="white">pending</v-chip>
-                    <v-chip label small color="indigo" text-color="white">on-hold</v-chip>
+                    <v-chip label small color="indigo" text-color="white">on-hold</v-chip> 
+                    <v-chip label small color="#e0e0e0" text-color="white">Cancelled</v-chip>
                 </td>
               </template>
             </v-data-table>
@@ -366,12 +367,11 @@ export default {
       getSummary(){
         DMFWebService.orders.getDonutSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
           this.totalDonuts = 0; 
-          if (response.data.total) {
-            this.totalDonuts = response.data.total;
+          if (response.data.data[0].total) {
+            this.totalDonuts = response.data.data[0].total;
           }
         });
         DMFWebService.orders.getOrderSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
-          console.log(response.data.data)
           if (response.data.data.length == 0) {
               this.totalOrders = '0';
               this.pendingOrders = '0';

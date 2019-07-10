@@ -130,7 +130,6 @@ export default {
     }
  
 
-
   /*
     update (id, role) {
       return axios.patch(`${DMF_API_BASE_URL}/roles/${id}`, role)
