@@ -60,7 +60,7 @@ router.get('/', (req, res) =>  {
  * MongoDB Connection
  */
 
-mongoose.connect("mongodb://192.64.116.204:27017/dmf", {useCreateIndex: true, useFindAndModify:false, useNewUrlParser: true});
+mongoose.connect("mongodb://192.64.116.204:27017/dmf?keepAlive=true&poolSize=30&autoReconnect=true&socketTimeoutMS=360000&connectTimeoutMS=360000", {useCreateIndex: true, useFindAndModify:false, useNewUrlParser: true});
 const db = mongoose.connection;
 
 db.on("error", (err) => {
