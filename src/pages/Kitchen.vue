@@ -995,7 +995,7 @@
     },
     filters: {
     moment (date) {
-      return moment(date).startOf('hour').fromNow();
+      return moment(date).startOf('second').fromNow();
     },
     timeFormat(date){
       return moment(date).format('DD MMM hh:mm a');

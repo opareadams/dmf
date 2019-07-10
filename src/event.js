@@ -23,6 +23,39 @@ export default [
       //this.$router.push('/users');     
     }
   },
+  {
+    name: 'ORDER_DELIVERED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'Order(s) marked as delivered'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'RIDER_ASSIGNED_SUCCESSFULLY',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'Rider has been assigned!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'RIDER_ASSIGNED_ERROR',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Error assigning a rider'
+      };
+      //this.$router.push('/users');     
+    }
+  },
   
   ///////////////////////////////
   {
