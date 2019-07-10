@@ -52,7 +52,7 @@ exports.indexTopOrders = (req, res) =>  {
     Order.find({
         "deliveryDate": moment().format('DD-MM-YYYY'),
         "packaged": false,
-        "status":{$ne:"cancelled"}
+        "status":{$ne:"cancelled",$ne:"cancelledByWoocomerce"}
     })
     .then((data) => {
         if (data.length) {
