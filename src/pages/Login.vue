@@ -8,7 +8,7 @@
               <v-card-text>
                 <div class="layout column align-center">
                   <img v-bind:src="computeLogo" alt="Vue Material Admin" width="120" height="120">
-                  <h1 class="flex my-4 primary--text">Doughman Foods</h1>
+                  <h1 class="flex my-4 primary--text">Dough Man Foods</h1>
                 </div>                
                 <v-form>
                   <v-text-field prepend-icon="person" name="login" label="Login" type="text" v-model="model.email"></v-text-field>

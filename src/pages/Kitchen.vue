@@ -145,15 +145,15 @@
                                          </v-flex>
 
                                          <!-----------Payment Mode ------------>
-                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
-                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Slydepay' " style="border: 1px solid black;" color="green" class="white--text">
+                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card v-if="item.paymentMethod==='Mobile Money Transfer' || item.paymentMethod==='slydepay' " style="border: 1px solid black;" color="green" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
-                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
+                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethod}}</p>
                                                  </v-flex>
                                               </v-layout>
                                          </v-card>
-                                         <template v-if="item.paymentMethodTitle==='Cash on delivery'">
+                                         <template v-if="item.paymentMethod==='cod'">
                                            <v-card  style="border: 1px solid #F5F5F5;" color="red darken-4" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
@@ -384,14 +384,14 @@
 
                                          <!-----------Payment Mode ------------>
                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
-                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Slydepay' " style="border: 1px solid black;" color="green" class="white--text">
+                                         <v-card v-if="item.paymentMethod==='Mobile Money Transfer' || item.paymentMethod==='slydepay' " style="border: 1px solid black;" color="green" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
-                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
+                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethod}}</p>
                                                  </v-flex>
                                               </v-layout>
                                          </v-card>
-                                         <template v-if="item.paymentMethodTitle==='Cash on delivery'">
+                                         <template v-if="item.paymentMethod==='cod'">
                                            <v-card  style="border: 1px solid #F5F5F5;" color="red darken-4" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
@@ -621,15 +621,15 @@
                                          </v-flex>
 
                                          <!-----------Payment Mode ------------>
-                                         <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
-                                         <v-card v-if="item.paymentMethodTitle==='Mobile Money Transfer' || item.paymentMethodTitle==='Slydepay' " style="border: 1px solid black;" color="green" class="white--text">
+                                          <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                         <v-card v-if="item.paymentMethod==='Mobile Money Transfer' || item.paymentMethod==='slydepay' " style="border: 1px solid black;" color="green" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
-                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethodTitle}}</p>
+                                                   <p style="text-align:center; margin-bottom:0px">Paid via {{item.paymentMethod}}</p>
                                                  </v-flex>
                                               </v-layout>
                                          </v-card>
-                                         <template v-if="item.paymentMethodTitle==='Cash on delivery'">
+                                         <template v-if="item.paymentMethod==='cod'">
                                            <v-card  style="border: 1px solid #F5F5F5;" color="red darken-4" class="white--text">
                                               <v-layout row wrap>
                                                  <v-flex xs12>
