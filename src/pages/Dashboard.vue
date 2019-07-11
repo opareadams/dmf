@@ -470,7 +470,7 @@ export default {
   },
   filters: {
     moment: function (date) {
-      return moment(date).startOf('hour').fromNow();
+      return moment(date).startOf('second').fromNow();
     }
   }
 };
