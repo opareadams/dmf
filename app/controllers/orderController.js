@@ -183,7 +183,9 @@ exports.filterByStatus = (req, res) =>  {
 // Update Order status  
 exports.updateOrderStatus = (req, res) =>  {
     Order.findOneAndUpdate(
-        {orderId: req.params.orderId}
+        {orderId: req.params.orderId,
+        "status":"completed",
+        }     
         ,{$set:{status:req.body.status}}
         ,{new:true}
     )
