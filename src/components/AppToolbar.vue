@@ -96,8 +96,8 @@ export default {
     ],
   }),
   created(){
-      this.getQueueCount();
-      this.timer = setInterval(this.getQueueCount, 1000)
+      // this.getQueueCount();
+      // this.timer = setInterval(this.getQueueCount, 1000)
      
   },
   computed: {
@@ -106,10 +106,10 @@ export default {
     }
   },
   methods: {
-    getQueueCount(){
-      this.countQueue = localStorage.getItem('QUEUED');
+    // getQueueCount(){
+    //   this.countQueue = localStorage.getItem('QUEUED');
 
-    },
+    // },
     handleDrawerToggle () {
       window.getApp.$emit('APP_DRAWER_TOGGLED');
     },

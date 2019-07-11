@@ -902,7 +902,7 @@
                        // }
                       }
                        //-----------------------------------------//
-
+                       
                        this.totalOrders = this.orders.length;
                        this.totalCustomizedOrders = this.customizedOrders.length;
                        this.totalPriorityOrders = this.priorityOrders.length;
@@ -910,12 +910,12 @@
                      
 
 
-                      this.countQueue = this.orders.length - 5; //-----to determine number of orders still in the queue
-                      if(this.countQueue <0){
-                        localStorage.QUEUED = 0;
-                      }else{
-                          localStorage.QUEUED = this.countQueue;
-                      }
+                      // this.countQueue = this.orders.length - 5; //-----to determine number of orders still in the queue
+                      // if(this.countQueue <0){
+                      //   localStorage.QUEUED = 0;
+                      // }else{
+                      //     localStorage.QUEUED = this.countQueue;
+                      // }
                       
                       
                     })
