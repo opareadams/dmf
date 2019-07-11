@@ -217,9 +217,8 @@ exports.updateOrderStatus = (req, res) =>  {
 exports.packagedOrderStatusUpdate = (req, res) =>  {
     Order.findOneAndUpdate(
         {orderId: req.params.orderId,"packaged": false,
-        "status":{
-            $ne:"cancelled",$ne:"failed",$ne:"delivered",$ne:"cancelledByWoocomerce"
-        }}
+        "status":{$nin:["cancelled","cancelledByWoocomerce","delivered","failed"]}
+    }
         ,{$set:{packaged:true,updatedAt:moment().format('YYYY-MM-DDTHH:mm:ss.SSS')}}
         ,{new:true}
     )
