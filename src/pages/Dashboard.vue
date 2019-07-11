@@ -336,6 +336,7 @@ export default {
         processing: 'rgb(251, 188, 52)',
         pending: 'rgb(251, 188, 52)',
         'on-hold': 'indigo',
+        cancelled: 'red',
         failed: 'red',
         completed: 'green',
         true: 'green',
