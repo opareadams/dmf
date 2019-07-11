@@ -8,12 +8,12 @@
               flat
               solo
               prepend-icon="search"
-              placeholder="Search with Order Number"
+              placeholder="Search Order"
               v-model="search"
               single-line
               hide-details
               class="hidden-sm-and-down"
-              v-on:keyup.enter="searchOrder(search)"
+              @keyup.enter="searchOrder(search)"
               ></v-text-field>     
               <v-btn icon>
                 <v-icon>filter_list</v-icon>
@@ -138,6 +138,7 @@ export default {
         pending: 'rgb(251, 188, 52)',
         'on-hold': 'indigo',
         cancelled: 'red',
+        failed: 'red',
         completed: 'green',
         true: 'green',
         false: 'rgb(251, 188, 52)'
@@ -180,15 +181,21 @@ export default {
         console.log(orderId);
         this.loading = true;
         this.complex.orders = [];
+        
+        if(orderId.length === 0){
+          return this.getAllOrders();
+        }
 
         DMFWebService.orders.searchOrder(orderId).then((response) => {
           console.log(response.data.data)          
-          for(var i =0 ; i < response.data.data.orders.length; i++){
-                this.complex.orders.push(response.data.data.orders[i])
+          for(var i =0 ; i < response.data.data.length; i++){
+              
+                this.complex.orders.push(response.data.data[i])
           }
-
           this.loading = false;
         })
+
+        console.log("orders", this.complex.orders)
       },
       moment: function () {
         return moment();
