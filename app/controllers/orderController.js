@@ -180,11 +180,11 @@ exports.filterByStatus = (req, res) =>  {
 };
 
 
-// Update Order status  
+// Update Order status  (cancel order)
 exports.updateOrderStatus = (req, res) =>  {
     Order.findOneAndUpdate(
         {orderId: req.params.orderId,
-        "status":"completed",
+        "status":{$nin:["cancelled","cancelledByWoocomerce","delivered","failed"]}
         }     
         ,{$set:{status:req.body.status}}
         ,{new:true}
