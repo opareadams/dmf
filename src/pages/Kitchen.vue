@@ -61,7 +61,7 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.sku}} </span><br>
+                                                  <span style="margin-left:10px">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
@@ -299,7 +299,8 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.sku.substring(1)}} </span><br>
+                                                     <span style="margin-left:10px">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
+
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
@@ -537,7 +538,8 @@
                                               
                                                  <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">(x{{item2.quantity}}){{item2.sku}} </span><br>
+                                                 <span style="margin-left:10px">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
+
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
@@ -959,6 +961,8 @@
         };
        
         DMFWebService.orders.cancelOrder(body, val).then((response) => {
+
+          console.log(val)
 
           if(response.status === 200){
 
