@@ -86,7 +86,8 @@ exports.riderReport = (req, res) =>  {
                     "$gte": startDate, 
                     "$lt": endDate
                 },
-                "rider.id": req.body.rider_id
+                "rider.id": req.body.rider_id,
+                "status":{$nin:["cancelled","cancelledByWoocomerce"]}
             }
         },
         {
