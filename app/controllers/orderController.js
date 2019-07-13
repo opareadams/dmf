@@ -330,7 +330,11 @@ exports.donutSummary = (req, res) =>  {
 // Assign Rider to order  
 exports.assignRider = (req, res) =>  {
     Order.findOneAndUpdate(
-        {orderId: req.params.orderId}
+        {
+        orderId: req.params.orderId,
+        "status":{$nin:["cancelled","cancelledByWoocomerce"]}
+        
+        }
         ,{$set:{rider:{
             id: req.body.id,
             name: req.body.name,
