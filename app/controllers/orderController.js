@@ -374,12 +374,13 @@ exports.assignRider = (req, res) =>  {
 //Get Packaged Orders for the day
 exports.packagedOrders = (req, res) =>  {
     Order.find({
-        "deliveryDate": moment().format('DD-MM-YYYY'),
+      //  "deliveryDate": moment().format('DD-MM-YYYY'),
         "packaged": true,
-        "status":{
-            $ne:"cancelledByWoocomerce",
-            $ne:"delivered"
-        }
+        "status":{$nin:["cancelled","cancelledByWoocomerce","delivered"]},
+        // "status":{
+        //     $ne:"cancelledByWoocomerce",
+        //     $ne:"delivered"
+        // }
     })
     .sort({updatedAt:-1})
     .then((data) => {
