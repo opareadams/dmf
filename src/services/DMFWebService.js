@@ -146,6 +146,9 @@ export default {
       //=============================================================================
     listRiders(){
       return axios.get(`${DMF_API_BASE_URL}/riders`)
+    },
+    addRider(body){
+      return axios.post(`${DMF_API_BASE_URL}/rider`,body)
     }
   }
 }

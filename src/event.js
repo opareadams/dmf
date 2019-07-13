@@ -46,6 +46,28 @@ export default [
     }
   },
   {
+    name: 'RIDER_ADDED_SUCCESSFULLY',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'Rider has been added!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'RIDER_ADDED_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Adding rider failed!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
     name: 'RIDER_ASSIGNED_ERROR',
     callback: function (e) {
       this.snackbar = {

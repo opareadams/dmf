@@ -115,6 +115,16 @@ export default [
       `@/pages/DispatchOrders.vue`
     )
   },
+  {
+    path: '/addRider',
+    meta: { breadcrumb: true, title: 'Add Rider'},
+    name: 'AddRider',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/AddRider.vue`
+    )
+  },
 
   // {
   //   path: '/calendar',

@@ -2,7 +2,55 @@
   <v-container fluid>
     <v-layout column>       
         <v-flex lg12>
+
+             <!--------------------ADD RIDER DIALOG BOX ------------------------------->    
+            <v-dialog v-model="addRiderDialogBox"  max-width="450px">
+                <v-btn color="primary" dark slot="activator">Add Rider</v-btn>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">Add Rider</span>
+                  </v-card-title>
+                  <v-divider></v-divider>
+                  <v-card-text>
+                    <v-container grid-list-md>
+                      <v-layout wrap>
+                        <!-- <v-flex xs12 sm6 md4>
+                          <v-text-field label="Legal first name" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                          <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                          <v-text-field
+                            label="Legal last name"
+                            hint="example of persistent helper text"
+                            persistent-hint
+                            required
+                          ></v-text-field>
+                        </v-flex> -->
+                        <v-flex xs12>
+                          <v-text-field v-model="addRider.name" prepend-icon="account_circle" label="Name" placeholder="eg. John Smith" required></v-text-field>
+                        </v-flex>
+                        <v-flex xs12>
+                          <v-text-field v-model="addRider.number" prepend-icon="phone_iphone" label="Number" type="number" placeholder="eg. 0244123123(with no spaces and no +233)" required></v-text-field>
+                        </v-flex>
+                       
+                      </v-layout>
+                    </v-container>
+                    
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" flat @click.native="addRiders()">Save</v-btn>
+                    <v-btn color="blue darken-1" flat @click.native="addRiderDialogBox = false">Close</v-btn>
+                    
+                  </v-card-actions>
+                </v-card>
+          </v-dialog>
+
+   <!--------------------END OF ADD RIDER DIALOG BOX ------------------------------->     
           <v-card>
+            
             <v-toolbar card color="white">
               <v-text-field
               flat
@@ -85,9 +133,11 @@
                         <!-- <v-btn color="primary" dark slot="activator">Open Dialog</v-btn> -->
                        
                         <v-card>
+
                           <v-card-title>Select Rider To Assign (Order #{{ props.item.orderId}})</v-card-title>
                           <v-divider></v-divider>
                           <v-card-text>
+                            <v-progress-linear v-show="complex.loadingRiders" indeterminate value="15" color="primary"></v-progress-linear>
 
                             <v-radio-group v-model="riders.selectedId" column>
                               <template v-for="(rider) in riders.listOfRiders">
@@ -101,7 +151,7 @@
                           </v-card-text>
                           <v-divider></v-divider>
                           <v-card-actions>
-                            <v-btn color="blue darken-1" flat @click="assignRider(riders.selectedId, props.item.orderId)" :loading="complex.loading2">Assign</v-btn>
+                            <v-btn color="blue darken-1" flat @click="assignRider(riders.selectedId, props.item.orderId, props.item.billing[0].phone)" :loading="complex.loading2">Assign</v-btn>
                             <v-btn color="blue darken-1" flat @click.native="$set(riders.dialogBox,props.item.orderId, false)">Close</v-btn>
                           </v-card-actions>
                         </v-card>
@@ -357,6 +407,7 @@
                           <v-card-title>Select Rider To Assign (Order #{{ props.item.orderId}})</v-card-title>
                           <v-divider></v-divider>
                           <v-card-text>
+                              <v-progress-linear v-show="complex.loadingRiders" indeterminate value="15" color="primary"></v-progress-linear>
 
                             <v-radio-group v-model="riders.selectedId" column>
                               <template v-for="(rider) in riders.listOfRiders">
@@ -618,6 +669,7 @@ export default {
       complex: {
         loading: false,
         loading2: false,
+        loadingRiders: true,
         selected: [],
         orders:[],
         headers: [
@@ -655,6 +707,10 @@ export default {
         true: 'green',
         false: 'rgb(251, 188, 52)'
     },
+    addRider:{
+      name:'',
+      number:''
+    },
     riders: {
         selectedId: '',
         dialogBox:{},
@@ -663,6 +719,7 @@ export default {
       },
       orderDialog:{},
       deliveredDialogBox:false,
+      addRiderDialogBox:false,
       timer: '',
       selectedDeliveredOrders:[],
       numberOfSelectedOrders:0
@@ -703,7 +760,7 @@ export default {
   },
   created(){
     this.getAllOrders();
-    //this.getRiders();
+    this.getRiders();
     this.timer = setInterval(this.getAllOrders, 20000)
   },
   methods: {
@@ -724,8 +781,37 @@ export default {
       },
       getRiders(){
         DMFWebService.riders.listRiders().then((response) =>{
-           
+
+          if(response.status === 200){
             this.riders.listOfRiders = response.data.data;
+            this.complex.loadingRiders =false;
+          }
+           
+            
+        })
+      },
+      addRiders(){
+
+        let body = {
+          name:'',
+          telephone:''
+        }
+
+        body.name = this.addRider.name;
+        body.telephone = this.addRider.number;
+         
+         console.log(body)
+        DMFWebService.riders.addRider(body).then((response) =>{
+                 if(response.status === 201){
+                    window.getApp.$emit('RIDER_ADDED_SUCCESSFULLY');
+
+                    this.addRiderDialogBox=false;
+
+                    this.addRider.name = '';
+                    this.addRider.number = '';
+                 }else{
+                     window.getApp.$emit('RIDER_ADDED_FAILED');
+                 }
         })
       },
       assignRider(riderId,orderId,customerPhoneNumber){
@@ -797,7 +883,7 @@ export default {
       sendSMS (telephone, orderId, receipientType) {
         var smsBody='';
          var itemsString='';
-
+        console.log('telephone is '+telephone)
         console.log('receipient type is '+receipientType);
         //-------format phone number -------//
         if(telephone.charAt(0) === '0'){
@@ -849,7 +935,7 @@ export default {
                   'Customer: '+ deliveryDetails.custName + '\n'+
                   itemsString + '\n'+
                   'Amount: '+ deliveryDetails.amount + '\n'+
-                  'PaymentMode'+ deliveryDetails.paymentType;        
+                  'PaymentMode: '+ deliveryDetails.paymentType;        
               }
 
              

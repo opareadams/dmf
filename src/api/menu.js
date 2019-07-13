@@ -34,7 +34,13 @@ const Menu =  [
     icon: 'motorcycle',
     name: 'DispatchOrders',
   },
-  /*{
+  {
+    title: 'Add Rider',
+    group: 'apps',
+    icon: 'motorcycle',
+    name: 'AddRider',
+  },
+  {
     title: 'Chat',
     group: 'apps',
     icon: 'chat_bubble',
@@ -150,7 +156,7 @@ const Menu =  [
       { name: '403', title: '403', component: 'AccessDenied' },
       { name: '500', title: '500', component: 'ServerError' },
     ]
-  },*/
+  },
 ];
 // reorder menu
 Menu.forEach((item) => {
