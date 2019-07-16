@@ -92,10 +92,15 @@ exports.riderReport = (req, res) =>  {
         {
             $group:{
                 _id:"$rider",
-                total_orders_assigned:{$sum:1},
                 total_amount: { 
                     $sum: { 
                         "$toDouble": "$total"
+                    }
+                },
+                total_orders_assigned:{$sum:1},
+                total_orders_delivered: {
+                    $sum: {
+                        "$toDouble": { "$cond": [{ "$eq": ["$status", "delivered"] }, 1, 0] }
                     }
                 },
                 total_cash_collected: {
