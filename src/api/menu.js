@@ -41,6 +41,12 @@ const Menu =  [
     name: 'AddRider',
   },
   {
+    title: 'Rider Report',
+    group: 'apps',
+    icon: 'motorcycle',
+    name: 'RiderReport',
+  },
+  {
     title: 'Chat',
     group: 'apps',
     icon: 'chat_bubble',

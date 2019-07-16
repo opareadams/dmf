@@ -149,6 +149,12 @@ export default {
     },
     addRider(body){
       return axios.post(`${DMF_API_BASE_URL}/rider`,body)
+    },
+    ridersReport(startDate, endDate){
+      return axios.post(`${DMF_API_BASE_URL}/rider/report`, {
+        "start_date": startDate,
+        "end_date": endDate
+      });
     }
   }
 }
