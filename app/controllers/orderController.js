@@ -54,7 +54,7 @@ exports.indexTopOrders = (req, res) =>  {
     Order.find({
         "deliveryDate": moment().format('DD-MM-YYYY'),
         "packaged": false,
-        "status":{$ne:"cancelled",$ne:"cancelledByWoocomerce"}
+        "status":{$nin:["cancelled","cancelledByWoocomerce"]}
     })
     .then((data) => {
         if (data.length) {
@@ -180,10 +180,12 @@ exports.filterByStatus = (req, res) =>  {
 };
 
 
-// Update Order status  
+// Update Order status  (cancel order)
 exports.updateOrderStatus = (req, res) =>  {
     Order.findOneAndUpdate(
-        {orderId: req.params.orderId}
+        {orderId: req.params.orderId,
+        "status":{$nin:["cancelled","cancelledByWoocomerce","delivered","failed"]}
+        }     
         ,{$set:{status:req.body.status}}
         ,{new:true}
     )
@@ -217,9 +219,8 @@ exports.updateOrderStatus = (req, res) =>  {
 exports.packagedOrderStatusUpdate = (req, res) =>  {
     Order.findOneAndUpdate(
         {orderId: req.params.orderId,"packaged": false,
-        "status":{
-            $ne:"cancelled",$ne:"failed",$ne:"delivered",$ne:"cancelledByWoocomerce"
-        }}
+        "status":{$nin:["cancelled","cancelledByWoocomerce","delivered","failed"]}
+    }
         ,{$set:{packaged:true,updatedAt:moment().format('YYYY-MM-DDTHH:mm:ss.SSS')}}
         ,{new:true}
     )
@@ -329,7 +330,11 @@ exports.donutSummary = (req, res) =>  {
 // Assign Rider to order  
 exports.assignRider = (req, res) =>  {
     Order.findOneAndUpdate(
-        {orderId: req.params.orderId}
+        {
+        orderId: req.params.orderId,
+        "status":{$nin:["cancelled","cancelledByWoocomerce"]}
+        
+        }
         ,{$set:{rider:{
             id: req.body.id,
             name: req.body.name,
@@ -369,12 +374,13 @@ exports.assignRider = (req, res) =>  {
 //Get Packaged Orders for the day
 exports.packagedOrders = (req, res) =>  {
     Order.find({
-        "deliveryDate": moment().format('DD-MM-YYYY'),
+      //  "deliveryDate": moment().format('DD-MM-YYYY'),
         "packaged": true,
-        "status":{
-            $ne:"cancelledByWoocomerce",
-            $ne:"delivered"
-        }
+        "status":{$nin:["cancelled","cancelledByWoocomerce","delivered"]},
+        // "status":{
+        //     $ne:"cancelledByWoocomerce",
+        //     $ne:"delivered"
+        // }
     })
     .sort({updatedAt:-1})
     .then((data) => {
