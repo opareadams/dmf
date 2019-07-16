@@ -92,7 +92,7 @@ exports.riderReport = (req, res) =>  {
         {
             $group:{
                 _id:"$rider",
-                total_orders_delivered:{$sum:1},
+                total_orders_assigned:{$sum:1},
                 total_amount: { 
                     $sum: { 
                         "$toDouble": "$total"
@@ -100,7 +100,12 @@ exports.riderReport = (req, res) =>  {
                 },
                 total_cash_collected: {
                     $sum: {
-                        "$toDouble": "$cashCollectedFromRider"
+                        "$toDouble": { "$cond": [{ "$eq": ["$paymentMethod", "cod"] }, "$total", 0] }
+                    }
+                },
+                total_slydepay_value: {
+                    $sum: {
+                        "$toDouble": { "$cond": [{ "$eq": ["$paymentMethod", "slydepay"] }, "$total", 0] }
                     }
                 }
             }
