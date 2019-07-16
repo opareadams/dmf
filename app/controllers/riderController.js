@@ -85,17 +85,21 @@ exports.riderReport = (req, res) =>  {
                 createdAt: {
                     "$gte": startDate, 
                     "$lt": endDate
-                },
-                "rider.id": req.body.rider_id
+                }
             }
         },
         {
             $group:{
                 _id:"$rider",
-                count:{$sum:1},
+                total_orders_delivered:{$sum:1},
                 total_amount: { 
                     $sum: { 
                         "$toDouble": "$total"
+                    }
+                },
+                total_cash_collected: {
+                    $sum: {
+                        "$toDouble": "$cashCollectedFromRider"
                     }
                 }
             }
