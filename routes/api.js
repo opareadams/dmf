@@ -68,6 +68,8 @@ router.post('/auth/login', authController.login);
 // POST /api/logout
 // Logout User
 router.post('/auth/logout', protectedRoute, authController.logout);
+router.post('/auth/change_password', protectedRoute, authController.updatePassword);
+
 
 
 

@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
-
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 exports.login = (req, res) =>  {
-    User.findOne({email:req.body.email})
+    User.findOne({email:req.body.email})    
     .select('+password')
     .then((user) => {
         user.validatePassword(req.body.password,(err, isMatch) => {
@@ -38,5 +38,57 @@ exports.login = (req, res) =>  {
 };
 
 exports.logout = (req, res) =>  {
-    res.json({ message: 'hooray! A list of orders with limit' });   
+    res.json({ message: 'hooray! User Loged Out' });   
+};
+
+// Update User Password
+exports.updatePassword = (req, res) => {
+    if (req.user) {
+        User.findOne({email:req.user.email})    
+        .select('+password')
+        .then((user) => {
+            user.validatePassword(req.body.old_password,(err, isMatch) => {
+                console.log(user)
+                if(isMatch){
+                    bcrypt.hash(req.body.new_password,10).then((hashedPassword) => {
+                        user.password = hashedPassword; 
+
+                        user.save((err) => {
+                            if (err) {
+                                console.log(err);
+                                res.statusCode = 500;
+                                res.json({ 
+                                    status: false,
+                                    message: `Oops! An error occured. Error: ${err}`
+                                }); 
+                            }
+                            user.password = '*******';
+                            res.statusCode = 201;
+                            res.json({ 
+                                status: true,
+                                message: 'hooray! User Saved!',
+                                user
+                            });   
+                          }); 
+                    })
+                     
+                } else{
+                    res.status(401)
+                    .json({
+                        status: false,
+                        message:'Old password does not match'
+                    });
+                }
+            })
+        })
+        .catch((err)=>{
+            res.status(401).json({message:'Invalid User'});
+        })
+
+    }
+
+    
+
+    
+    
 };
