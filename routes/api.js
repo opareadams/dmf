@@ -59,7 +59,8 @@ router.post('/register', registerController.register);
 
 // GET /api/users
 //List all Users
-router.get('/users', [protectedRoute,adminRoute], registerController.index);
+//router.get('/users', [protectedRoute,adminRoute], registerController.index);
+router.get('/users', protectedRoute, registerController.index);
 
 // POST /api/login
 // Login User
