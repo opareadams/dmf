@@ -860,7 +860,7 @@
     },
     created(){
         this.getOrders();
-        this.timer = setInterval(this.getOrders, 20000)
+        this.timer = setInterval(this.getOrders, 60000) //60 seconds of refresh
     },
 
     
