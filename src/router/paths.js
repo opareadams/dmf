@@ -116,13 +116,13 @@ export default [
     )
   },
   {
-    path: '/addRider',
-    meta: { breadcrumb: true, title: 'Add Rider'},
-    name: 'AddRider',
+    path: '/users',
+    meta: { breadcrumb: true, title: 'Users'},
+    name: 'Users',
     component: () => import(
       /* webpackChunkName: "routes" */
       /* webpackMode: "lazy-once" */
-      `@/pages/AddRider.vue`
+      `@/pages/Users.vue`
     )
   },
   {

@@ -306,6 +306,7 @@ export default {
     pendingOrdersAmount: "0",
     deliveredOrdersPieChart:"0",
     failedOrdersAmount:"0",
+    cancelledOrdersAmount:"0",
     failedOrdersPieChart:"0",
     color: Material,
     selectedTab: 'tab-1', 
@@ -406,6 +407,18 @@ export default {
           if (failedOrdersSummary != null) {
             this.failedOrdersAmount = failedOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
             this.totalOrders += failedOrdersSummary.count;
+          }
+
+          /**
+           * Get Cancelled Orders Summary
+           */
+          const cancelledOrdersSummary = this.summary.find(function(element) {
+            return element._id.status == "cancelled";
+          });
+
+          if (cancelledOrdersSummary != null) {
+            this.cancelledOrdersAmount = cancelledOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            this.totalOrders += cancelledOrdersSummary.count;
           }
 
           /**

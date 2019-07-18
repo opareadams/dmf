@@ -78,6 +78,28 @@ export default [
       //this.$router.push('/users');     
     }
   },
+  {
+    name: 'USER_CREATED_SUCCESSFULLY',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'User created successfully'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'USER_CREATED_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Error creating user'
+      };
+      //this.$router.push('/users');     
+    }
+  },
   
   ///////////////////////////////
   {
