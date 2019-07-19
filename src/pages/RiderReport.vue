@@ -186,6 +186,8 @@ export default {
 
   },
   created(){
+    this.dateRange.start_date = moment().startOf('year').format('YYYY-MM-DD');
+    this.dateRange.end_date = moment().endOf("year").format('YYYY-MM-DD');
     this.getRiderReport();
   },
   methods: {
