@@ -361,13 +361,13 @@ export default {
   methods: {
       getSummary(){        
         console.log( );
-        DMFWebService.orders.getDonutSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
+        DMFWebService.orders.getDonutSummary(`${this.dateRange.start_date}T23:59:59`, `${this.dateRange.end_date}T23:59:59`).then((response) => {
           this.totalDonuts = 0; 
           if (response.data.data[0].total) {
             this.totalDonuts = response.data.data[0].total;
           }
         });
-        DMFWebService.orders.getOrderSummary(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
+        DMFWebService.orders.getOrderSummary(`${this.dateRange.start_date}T23:59:59`,`${this.dateRange.end_date}T23:59:59`).then((response) => {
           if (response.data.data.length == 0) {
               this.totalOrders = '0';
               this.pendingOrders = '0';
