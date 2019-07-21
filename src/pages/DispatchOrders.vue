@@ -2,7 +2,8 @@
   <v-container fluid>
     <v-layout column>       
         <v-flex lg12>
-
+          <v-spacer></v-spacer>
+                    
              <!--------------------ADD RIDER DIALOG BOX ------------------------------->    
             <v-dialog v-model="addRiderDialogBox"  max-width="450px">
                 <v-btn color="primary" dark slot="activator">Add Rider</v-btn>
@@ -10,6 +11,7 @@
                   <v-card-title>
                     <span class="headline">Add Rider</span>
                   </v-card-title>
+                   
                   <v-divider></v-divider>
                   <v-card-text>
                     <v-container grid-list-md>
@@ -48,8 +50,14 @@
                 </v-card>
           </v-dialog>
 
-   <!--------------------END OF ADD RIDER DIALOG BOX ------------------------------->     
+   <!--------------------END OF ADD RIDER DIALOG BOX ------------------------------->    
+          <v-spacer></v-spacer>
+          <v-btn icon  @click="getAllOrders">
+            <v-icon class="text--secondary">refresh</v-icon>
+          </v-btn>
+                 
           <v-card>
+         
             
             <v-toolbar card color="white">
               <v-text-field
@@ -70,9 +78,11 @@
             <v-card-text class="pa-0">
                
                 <v-dialog v-model="deliveredDialogBox" persistent max-width="350px">
-                  <v-btn icon ripple flat slot="activator">
-                       <v-icon  >done_all</v-icon>  
+                  
+                  <v-btn slot="activator"> 
+                       <v-icon  >done_all</v-icon>  Mark Delivered
                   </v-btn>
+                
                   <v-card>
                     <v-card-title>
                       <span class="headline">Confirmation</span>
@@ -761,7 +771,7 @@ export default {
   created(){
     this.getAllOrders();
     this.getRiders();
-    this.timer = setInterval(this.getAllOrders, 20000)
+   // this.timer = setInterval(this.getAllOrders, 20000)
   },
   methods: {
       getAllOrders(){

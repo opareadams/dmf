@@ -14,6 +14,12 @@ const Menu =  [
     link: '/orders',
     name: 'Orders',
   },
+  {
+    title: 'Users',
+    group: 'apps',
+    icon: 'account_circle',
+    name: 'Users',
+  },
   { header: 'Kitchen Platform' },
   {
     title: 'Kitchen App',
@@ -33,12 +39,6 @@ const Menu =  [
     group: 'apps',
     icon: 'motorcycle',
     name: 'DispatchOrders',
-  },
-  {
-    title: 'Add Rider',
-    group: 'apps',
-    icon: 'motorcycle',
-    name: 'AddRider',
   },
   {
     title: 'Rider Report',
