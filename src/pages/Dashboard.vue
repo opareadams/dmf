@@ -200,11 +200,17 @@
               class="elevation-0 table-striped"
             >
               <template slot="items" slot-scope="props">
-                <td>
-                    <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white">{{ props.item.status }} </v-chip>
-                </td>
-                <td class="text-xs-right">
-                  {{ props.item.orderId }}     
+                <td class="text-xs-center align-center"  style="padding:10px;">
+                   <div>
+                      <v-icon v-show="props.item.packaged" color="green">fa fa-archive </v-icon>
+                      <v-icon v-show="!props.item.packaged" color="rgb(251, 188, 52)">fa fa-clock-o fa-sm</v-icon>
+                    </div>
+                    <div>
+                      {{ props.item.orderId }}
+                    </div>
+                    <div>
+                      <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white">{{ props.item.status }} </v-chip>
+                    </div>
                 </td>
                 <td class="text-xs-left">
                   <template v-for="(item) in props.item.lineItems">
@@ -214,8 +220,14 @@
                     <v-icon left>label</v-icon> NB: {{props.item.customerNote}} 
                   </v-chip>                
                 </td>
-                <td class="text-xs-left">{{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}</td>
-                <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
+                <td class="text-xs-left">
+                  <div>
+                    {{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}
+                  </div>
+                    <div>
+                    {{ props.item.billing[0].phone }}
+                  </div>
+                </td>
                 <td class="text-xs-left">
                   <div v-show="props.item.shipping[0].address_1" >                  
                     {{props.item.shipping[0].address_1}} 
@@ -232,11 +244,9 @@
                     </v-chip>
                   </div>
                 </td>
-                <td class="text-xs-right">{{ props.item.deliveryDate }}</td>
-                <td class="text-xs-right">
-                  <v-icon v-show="props.item.packaged" color="green">fa fa-archive </v-icon>
-                  <v-icon v-show="!props.item.packaged" color="rgb(251, 188, 52)">fa fa-clock-o fa-sm</v-icon>
                 <td class="text-xs-right">{{ props.item.total.replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
+                <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
+                <td class="text-xs-right">{{ props.item.deliveryDate }}</td>
                 <td class="text-xs-right">{{ props.item.createdAt | moment }}</td>
               </template>
             </v-data-table>
@@ -315,23 +325,17 @@ export default {
     endDateMenu: false,
     headers: [
        {
-        text: '',
-        value: 'status'
+        text: 'Order',
+        value: 'status',
+        align: 'center'
        },
-        {
-          text: 'Order #',
-          align: 'right',
-          sortable: true,
-          value: 'orderId'
-        },
         { text: 'Order Details' , value: 'lineItems'},
         { text: 'Customer', value: 'shipping'},
-        { text: 'Payment Method' , value: 'paymentMethodTitle'},
         { text: 'Delivery Address', value: 'shipping' , align: 'left'},
-        { text: 'Delivery Date', value: 'deliveryDate' , align: 'right'},
-        { text: 'Packaged', value: 'packaged', align: 'right'},
         { text: 'Amount (GHS)', value: 'total' , align: 'right'},
-        { text: 'Date/Time' , value: 'createdAt' , align: 'right'}
+        { text: 'Payment Method' , value: 'paymentMethodTitle'},
+        { text: 'Delivery Date', value: 'deliveryDate' , align: 'right'},
+        { text: 'Created' , value: 'createdAt' , align: 'right'}
       ], 
     colors: {
         processing: 'rgb(251, 188, 52)',
