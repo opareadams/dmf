@@ -196,6 +196,7 @@
               :headers="headers"
               :items="orders"
               :loading="loading"
+              :pagination.sync="pagination"
               hide-actions
               class="elevation-0 table-striped"
             >
@@ -306,6 +307,7 @@ export default {
       start_date: '2019-01-01',
       end_date:'2019-12-01'
     },
+    pagination: {},
     totalOrders: 0,
     totalDonuts: 0,
     pendingOrders: "0",
@@ -326,7 +328,7 @@ export default {
     headers: [
        {
         text: 'Order',
-        value: 'status',
+        value: 'createdAt',
         align: 'center'
        },
         { text: 'Order Details' , value: 'lineItems'},
@@ -471,7 +473,8 @@ export default {
           }
           this.loading = false;
         })
-
+        this.pagination.sortBy = 'createdAt';
+        this.pagination.descending = true;
       },
       getColorByStatus (status) {
         return this.colors[status];
