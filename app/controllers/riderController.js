@@ -30,6 +30,42 @@ exports.register = (req, res) =>  {
 };
 
 
+// Update Rider
+exports.update = (req, res) => {
+    Rider.findOneAndUpdate(
+        {_id: req.body.rider_id}
+        ,{$set:{
+            name: req.body.name,
+            telephone: req.body.telephone
+        }}
+        ,{new:true}
+    )
+    .then((data) => {
+        if(data) {
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'Rider updated Successfully!',
+                data
+            }); 
+        } else {
+            res.statusCode = 500;
+            res.json({ 
+                status: false,
+                message: `No such Rider exist`
+            }); 
+        }         
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })
+};
+
 // list all riders
 exports.index = (req, res) => {
     Rider.find({})

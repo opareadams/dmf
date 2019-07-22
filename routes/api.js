@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../app/models/user');
 const orderController = require('../app/controllers/orderController');
 const authController = require('../app/controllers/authController');
-const registerController = require('../app/controllers/registerController');
 const riderController = require('../app/controllers/riderController');
+const userController = require('../app/controllers/userController');
 
 // Middlewares
 // =============================================================================
@@ -55,11 +55,7 @@ const adminRoute = function (req, res, next) {
 
 // POST /api/register
 // Register a User
-router.post('/register', registerController.register);
-
-// GET /api/users
-//List all Users
-router.get('/users', [protectedRoute,adminRoute], registerController.index);
+router.post('/register', userController.register);
 
 // POST /api/login
 // Login User
@@ -69,8 +65,6 @@ router.post('/auth/login', authController.login);
 // Logout User
 router.post('/auth/logout', protectedRoute, authController.logout);
 router.post('/auth/change_password', protectedRoute, authController.updatePassword);
-
-
 
 
 
@@ -136,6 +130,10 @@ router.get('/orders/:page?/:limit?', protectedRoute, orderController.index);
 // Register a Rider
 router.post('/rider', protectedRoute, riderController.register);
 
+// POST /api/rider/update
+// Update a rider
+router.post('/rider/update', [protectedRoute,adminRoute], riderController.update);
+
 // POST /api/rider/delete
 // Delete a Rider
 router.post('/rider/delete', protectedRoute, riderController.delete);
@@ -147,6 +145,23 @@ router.get('/riders', protectedRoute, riderController.index);
 // POST /api/users
 // GET report on Rider
 router.post('/rider/report', protectedRoute, riderController.riderReport);
+
+
+
+// Users  Routes
+// =============================================================================
+// POST /api/user/delete
+// Delete a user
+router.post('/user/delete', [protectedRoute,adminRoute], userController.delete);
+
+// POST /api/user/update
+// Update a user
+router.post('/user/update', [protectedRoute,adminRoute], userController.update);
+
+// GET /api/users
+//List all Users
+router.get('/users', [protectedRoute,adminRoute], userController.index);
+
 
 module.exports = router;
 
