@@ -69,22 +69,22 @@ export default {
     countQueue:null,
      timer: '',
     items: [
-      {
-        icon: 'account_circle',
-        href: '#',
-        title: 'Profile',
-        click: (e) => {
-          console.log(e);
-        }
-      },
-      {
-        icon: 'settings',
-        href: '#',
-        title: 'Settings',
-        click: (e) => {
-          console.log(e);
-        }
-      },
+      // {
+      //   icon: 'account_circle',
+      //   href: '#',
+      //   title: 'Profile',
+      //   click: (e) => {
+      //     console.log(e);
+      //   }
+      // },
+      // {
+      //   icon: 'settings',
+      //   href: '#',
+      //   title: 'Settings',
+      //   click: (e) => {
+      //     console.log(e);
+      //   }
+      // },
       {
         icon: 'fullscreen_exit',
         href: '#',

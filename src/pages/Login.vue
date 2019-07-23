@@ -74,10 +74,15 @@ export default {
                        if( localStorage.ROLE === 'kitchen'){
                           this.$router.push('/kitchen');
                        }
-                       else if(localStorage.ROLE === 'admin')
+                       else if(localStorage.ROLE === 'admin'){
                           this.$router.push('/dashboard');
+                       }
+                       else if(localStorage.ROLE === 'dispatcher'){
+                          this.$router.push('/dispatchOrders');
+                       }
+                          
                       
-                     }, 1000);
+                     }, 10000);
 
       })
 

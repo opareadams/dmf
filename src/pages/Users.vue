@@ -133,6 +133,15 @@ export default {
     mounted () {
     this.$validator.localize('en', this.dictionary);
   },  
+  beforeCreate(){
+     if (localStorage.ROLE_ID || localStorage.TOKEN) {
+     
+        }
+        else{
+          this.$router.replace({ path: '/login' });
+        }
+
+    },
   created(){
     this.getAllUsers();
   },
