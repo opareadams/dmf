@@ -139,7 +139,7 @@ export default {
     delete (id) {
       return axios.delete(`${DMF_API_BASE_URL}/roles/${id}`)
     }
-  }*/
+  */
   },
   riders:{
       //Riders

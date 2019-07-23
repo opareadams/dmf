@@ -186,12 +186,14 @@ export default {
 
   },
   created(){
+    this.dateRange.start_date = moment().startOf('year').format('YYYY-MM-DD');
+    this.dateRange.end_date = moment().endOf("year").format('YYYY-MM-DD');
     this.getRiderReport();
   },
   methods: {
       getRiderReport(){
         this.loading = true;
-        DMFWebService.riders.ridersReport(this.dateRange.start_date, this.dateRange.end_date).then((response) => {
+        DMFWebService.riders.ridersReport(`${this.dateRange.start_date}T23:59:59`,`${this.dateRange.end_date}T23:59:59`).then((response) => {
             this.complex.report = [];
             for(var i =0 ; i < response.data.data.length; i++){
               this.complex.report.push(response.data.data[i])
