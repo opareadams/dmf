@@ -132,11 +132,11 @@ router.post('/rider', protectedRoute, riderController.register);
 
 // POST /api/rider/update
 // Update a rider
-router.post('/rider/update', [protectedRoute,adminRoute], riderController.update);
+router.patch('/rider/update', [protectedRoute,adminRoute], riderController.update);
 
 // POST /api/rider/delete
 // Delete a Rider
-router.post('/rider/delete', protectedRoute, riderController.delete);
+router.delete('/rider/delete', protectedRoute, riderController.delete);
 
 // GET /api/users
 //List all Riders
@@ -152,11 +152,11 @@ router.post('/rider/report', protectedRoute, riderController.riderReport);
 // =============================================================================
 // POST /api/user/delete
 // Delete a user
-router.post('/user/delete', [protectedRoute,adminRoute], userController.delete);
+router.delete('/user/delete', [protectedRoute,adminRoute], userController.delete);
 
 // POST /api/user/update
 // Update a user
-router.post('/user/update', [protectedRoute,adminRoute], userController.update);
+router.patch('/user/update', [protectedRoute,adminRoute], userController.update);
 
 // GET /api/users
 //List all Users
