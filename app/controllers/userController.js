@@ -7,7 +7,7 @@ exports.register = (req, res) =>  {
         email: req.body.email,
         password: req.body.password,
         role:   req.body.role,
-        roleId: req.body.role_id,
+        roleId: req.body.roleId,
     });
 
     newUser.save((err) => {
