@@ -136,7 +136,7 @@ router.patch('/rider/update', [protectedRoute,adminRoute], riderController.updat
 
 // POST /api/rider/delete
 // Delete a Rider
-router.delete('/rider/delete', protectedRoute, riderController.delete);
+router.post('/rider/delete', protectedRoute, riderController.delete);
 
 // GET /api/users
 //List all Riders
@@ -152,7 +152,7 @@ router.post('/rider/report', protectedRoute, riderController.riderReport);
 // =============================================================================
 // POST /api/user/delete
 // Delete a user
-router.delete('/user/delete', [protectedRoute,adminRoute], userController.delete);
+router.post('/user/delete', [protectedRoute,adminRoute], userController.delete);
 
 // POST /api/user/update
 // Update a user
