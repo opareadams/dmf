@@ -56,7 +56,8 @@ exports.update = (req, res) => {
         ,{$set:{
             username: req.body.username,
             email: req.body.email,
-            role:   req.body.role
+            role:   req.body.role,
+            roleId:   req.body.roleId
         }}
         ,{new:true}
     )
