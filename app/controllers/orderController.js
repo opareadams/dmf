@@ -2,6 +2,18 @@
 
 const Order = require('../models/order');
 const moment = require("moment");
+const Pusher = require('pusher');
+
+/*
+ * Initialise Pusher
+ */
+var pusher = new Pusher({
+    appId: '830779',
+    key: 'b32078a965eb82d51eb4',
+    secret: '94edf47636a2be79fec4',
+    cluster: 'eu',
+    encrypted: true
+  });
 
 // Order Controller Methods
 // =============================================================================
@@ -74,7 +86,12 @@ exports.indexTopOrders = (req, res) =>  {
                 message: `No orders available for today`
             }); 
         }
-        
+
+        /********** PUSHER ***********/
+        channels_client.trigger('my-channel', 'my-event', {
+            "message": "hello world"
+          });
+         /****************************/
     })
     .catch((err) => {
         console.log(err);
