@@ -89,7 +89,7 @@ exports.indexTopOrders = (req, res) =>  {
 
         /********** PUSHER ***********/
         pusher.trigger('my-channel', 'my-event', {
-            "message": "hello world"
+            "message": "hello world Opare!"
           });
          /****************************/
     })
