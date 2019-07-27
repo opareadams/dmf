@@ -68,7 +68,7 @@
           <!-- <event-form></event-form> -->
           <v-card class="mb-4">
             <v-toolbar color="primary" dark flat dense cad>
-              <v-toolbar-title class="subheading">List of Users</v-toolbar-title>
+              <v-toolbar-title class="subheading">List of Users ({{numberOfUsers}})</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-divider></v-divider>
@@ -79,14 +79,101 @@
                     <v-icon class="grey lighten-1 white--text">account_box</v-icon>
                   </v-list-tile-avatar>
                   <v-list-tile-content>
-                    <v-list-tile-title>{{ item.username }}</v-list-tile-title>
-                    <v-list-tile-sub-title>{{ item.role }}</v-list-tile-sub-title>
+                    <v-list-tile-title>{{ item.username }} ({{item.email}})</v-list-tile-title>
+                    <v-list-tile-sub-title>Role: {{ item.role }}</v-list-tile-sub-title>
+                      <!-- <v-list-tile-sub-title>({{item.email}})</v-list-tile-sub-title> -->
                   </v-list-tile-content>
-                  <v-list-tile-action>
-                    <v-btn icon ripple>
-                      <v-icon color="grey lighten-1">info</v-icon>
+                 
+                              <!----------EDIT USER ------------>
+                  <v-btn icon ripple @click="$set(editUserDialogBox, item._id, true)">
+                      <v-icon color="grey lighten-1">edit</v-icon>
                     </v-btn>
-                  </v-list-tile-action>
+                        <v-dialog v-model="editUserDialogBox[item._id]"  max-width="450px">
+                                
+                                <v-card>
+                                  <v-card-title>
+                                    <span class="headline">Edit User</span>
+                                  </v-card-title>
+                                  
+                                  <v-divider></v-divider>
+                                  <v-card-text>
+                                    <v-container grid-list-md>
+                                      <v-layout wrap>
+                                         <v-flex xs12>
+                                          <v-text-field
+                                            label="User Name"
+                                            name="username"
+                                            placeholder="John Smith"
+                                            v-model="item.username"
+                                            v-validate="'required'"
+                                            data-vv-name="fullname"     
+                                            :error-messages="errors.collect('fullname')"  
+                                            required
+                                          ></v-text-field>
+                                         </v-flex>
+                                          <v-flex xs12>    
+                                              <v-text-field
+                                                label="Email"
+                                                placeholder="john.smith@gmail.com"
+                                                name="email"
+                                                v-validate="'required|email'"
+                                                data-vv-name="email"     
+                                                :error-messages="errors.collect('email')"        
+                                                v-model="item.email"
+                                                required
+                                              ></v-text-field> 
+                                          </v-flex>   
+                                         <v-flex xs12>
+                                            <v-select
+                                              :items="roles"
+                                              v-validate="'required'"
+                                              data-vv-name="role"     
+                                              :error-messages="errors.collect('role')"           
+                                              v-model="item.roleId"
+                                              label="Role"
+                                              auto
+                                              required
+                                              item-text="name"
+                                              item-value="id"
+                                            ></v-select> 
+                                         </v-flex>
+                                      
+                                      </v-layout>
+                                    </v-container>
+                                    
+                                  </v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" flat @click.native="editUser(item._id,item.username,item.email,item.roleId)">Update</v-btn>
+                                    <v-btn color="blue darken-1" flat @click.native="close(item._id)">Close</v-btn>
+                                    
+                                  </v-card-actions>
+                                </v-card>
+                        </v-dialog>
+                 <!---------END EDIT USER ------>
+
+                 <!-----------DELETE USER -------------->
+                  <v-btn icon ripple @click="$set(deleteUserDialogBox, item._id, true)">
+                      <v-icon color="grey lighten-1">delete</v-icon>
+                  </v-btn>
+                  <v-dialog v-model="deleteUserDialogBox[item._id]"  max-width="350px">
+                      <v-card>
+                        <v-card-title>
+                          <span class="headline">Confirmation</span>
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                          Are you sure you want to cancel this user?
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="blue darken-1" flat @click="deleteUser(item._id)">Yes</v-btn>
+                          <v-btn color="blue darken-1" flat @click.native="$set(deleteUserDialogBox,item._id, false)">No</v-btn>        
+                        </v-card-actions>
+                      </v-card>
+                  </v-dialog>   
+
+                  <!----------END DELETE USER -------------> 
               </v-list-tile>
             </v-card-text>
             </v-card>
@@ -115,6 +202,9 @@ export default {
     EventForm
   },
    data: () => ({
+      numberOfUsers:0,
+      editUserDialogBox:{},
+      deleteUserDialogBox:{},
     formModel: {
       name:null,
       email:null,
@@ -170,6 +260,8 @@ export default {
          if(response.status === 201){
            console.log('user created successfully!');
            window.getApp.$emit('USER_CREATED_SUCCESSFULLY');
+
+           this.getAllUsers();
          }
          else{
            window.getApp.$emit('USER_CREATED_FAILED');
@@ -182,22 +274,73 @@ export default {
     getAllUsers(){
 
       DMFWebService.auth.listAllUsers().then((response) => {
-          console.log(response)
+          
           if(response.status === 200){
             this.loading = false;
             this.users = response.data.data;
+
+            this.numberOfUsers = this.users.length;
           }
           
 
       })
 
     },
-    // submit () {
-    //   this.$validator.validateAll();
-    // },
+    editUser(id,username,email,roleId){
+
+      var roleName='';
+
+      for(var i=0; i< this.roles.length; i++){
+        if(roleId === this.roles[i].id){
+          roleName = this.roles[i].name;
+        }
+      }
+
+      let body = {
+        user_id: id,
+        username: username,
+        email: email,
+        role: roleName,
+        roleId: roleId
+      }
+
+       DMFWebService.auth.editUser(body).then((response) => {
+            if(response.status === 200){
+               window.getApp.$emit('USER_UPDATED_SUCCESSFULLY');
+               this.getAllUsers();
+                 this.editUserDialogBox[id]= false;
+            }else{
+              window.getApp.$emit('USER_UPDATED_FAILED');
+               this.editUserDialogBox[id]= false;
+            }
+       })
+    },
+    deleteUser(receivedId){
+      let body = {
+        user_id:receivedId
+      }
+     
+      console.log(body);
+       DMFWebService.auth.deleteUser(body).then((response) => {
+            if(response.status === 200){
+              console.log(response);
+               window.getApp.$emit('USER_DELETED_SUCCESSFULLY');
+               
+                 this.deleteUserDialogBox[receivedId]= false;
+                 this.getAllUsers();
+            }else{
+              window.getApp.$emit('USER_DELETED_FAILED');
+              this.deleteUserDialogBox[receivedId]= false;
+            }
+       })
+    },
     clear () {
       this.formModel = {};
       this.$validator.reset();
+    },
+    close(id){
+      this.getAllUsers();
+      this.editUserDialogBox[id]= false;
     },
     handleClick (e) {
       return false;

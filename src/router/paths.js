@@ -135,6 +135,16 @@ export default [
       `@/pages/RiderReport.vue`
     )
   },
+  {
+    path: '/riders',
+    meta: { breadcrumb: true, title: 'Riders'},
+    name: 'Riders',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/Riders.vue`
+    )
+  },
 
   // {
   //   path: '/calendar',

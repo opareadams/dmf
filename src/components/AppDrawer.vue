@@ -105,6 +105,9 @@ export default {
       return this.$vuetify.options.extra.sideNav;
     }    
   },
+  beforeCreate(){
+    //console.log(localStorage.ROLE);
+  },
   created () {
     window.getApp.$on('APP_DRAWER_TOGGLED', () => {
       this.drawer = (!this.drawer);

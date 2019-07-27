@@ -100,6 +100,94 @@ export default [
       //this.$router.push('/users');     
     }
   },
+  {
+    name: 'RIDER_UPDATED_SUCCESSFULLY',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'Rider has been updated!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'RIDER_UPDATED_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Rider update failed!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'RIDER_DELETED_SUCCESSFULLY',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'Rider has been deleted!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'RIDER_DELETED_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Rider deletion failed!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'USER_UPDATED_SUCCESSFULLY',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'User has been updated!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'USER_UPDATED_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'User update failed!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'USER_DELETED_SUCCESSFULLY',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
+        text: 'Rider has been deleted!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'USER_DELETED_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Rider deletion failed!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
   
   ///////////////////////////////
   {

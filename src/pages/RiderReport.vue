@@ -107,6 +107,7 @@
                     <td class="text-xs-center">{{ props.item.total_cash_collected }}</td>
                     <td class="text-xs-center">{{ props.item.total_slydepay_value }}</td>
                     <td class="text-xs-center">{{ props.item.total_amount }}</td>
+                    
                 </template>
               </v-data-table>
             </v-card-text>
@@ -143,6 +144,11 @@ export default {
       start_date: '2019-01-01',
       end_date:'2019-12-01'
     },
+    addRider:{
+      name:'',
+      number:''
+    },
+   
     loading: false,
     startDateMenu:false,
     endDateMenu: false,

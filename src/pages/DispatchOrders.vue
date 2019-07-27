@@ -4,53 +4,7 @@
         <v-flex lg12>
           <v-spacer></v-spacer>
                     
-             <!--------------------ADD RIDER DIALOG BOX ------------------------------->    
-            <v-dialog v-model="addRiderDialogBox"  max-width="450px">
-                <v-btn color="primary" dark slot="activator">Add Rider</v-btn>
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">Add Rider</span>
-                  </v-card-title>
-                   
-                  <v-divider></v-divider>
-                  <v-card-text>
-                    <v-container grid-list-md>
-                      <v-layout wrap>
-                        <!-- <v-flex xs12 sm6 md4>
-                          <v-text-field label="Legal first name" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6 md4>
-                          <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6 md4>
-                          <v-text-field
-                            label="Legal last name"
-                            hint="example of persistent helper text"
-                            persistent-hint
-                            required
-                          ></v-text-field>
-                        </v-flex> -->
-                        <v-flex xs12>
-                          <v-text-field v-model="addRider.name" prepend-icon="account_circle" label="Name" placeholder="eg. John Smith" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                          <v-text-field v-model="addRider.number" prepend-icon="phone_iphone" label="Number" type="number" placeholder="eg. 0244123123(with no spaces and no +233)" required></v-text-field>
-                        </v-flex>
-                       
-                      </v-layout>
-                    </v-container>
-                    
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click.native="addRiders()">Save</v-btn>
-                    <v-btn color="blue darken-1" flat @click.native="addRiderDialogBox = false">Close</v-btn>
-                    
-                  </v-card-actions>
-                </v-card>
-          </v-dialog>
-
-   <!--------------------END OF ADD RIDER DIALOG BOX ------------------------------->    
+              
           <v-spacer></v-spacer>
           <v-btn icon  @click="getAllOrders">
             <v-icon class="text--secondary">refresh</v-icon>
@@ -717,10 +671,7 @@ export default {
         true: 'green',
         false: 'rgb(251, 188, 52)'
     },
-    addRider:{
-      name:'',
-      number:''
-    },
+   
     riders: {
         selectedId: '',
         dialogBox:{},
@@ -729,7 +680,7 @@ export default {
       },
       orderDialog:{},
       deliveredDialogBox:false,
-      addRiderDialogBox:false,
+     
       timer: '',
       selectedDeliveredOrders:[],
       numberOfSelectedOrders:0
@@ -800,30 +751,7 @@ export default {
             
         })
       },
-      addRiders(){
-
-        let body = {
-          name:'',
-          telephone:''
-        }
-
-        body.name = this.addRider.name;
-        body.telephone = this.addRider.number;
-         
-         console.log(body)
-        DMFWebService.riders.addRider(body).then((response) =>{
-                 if(response.status === 201){
-                    window.getApp.$emit('RIDER_ADDED_SUCCESSFULLY');
-
-                    this.addRiderDialogBox=false;
-
-                    this.addRider.name = '';
-                    this.addRider.number = '';
-                 }else{
-                     window.getApp.$emit('RIDER_ADDED_FAILED');
-                 }
-        })
-      },
+     
       assignRider(riderId,orderId,customerPhoneNumber){
         //get the details of the rider to build rider object
         let body = {

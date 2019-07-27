@@ -81,7 +81,16 @@ export default {
     },
     registerUser (user) {
       return axios.post(`${DMF_API_BASE_URL}/register`, user)
+    },
+    editUser(body){
+      return axios.patch(`${DMF_API_BASE_URL}/user/update `,body)
+    },
+    deleteUser(body){
+      return axios.post(`${DMF_API_BASE_URL}/user/delete `,body)
     }
+
+
+
     //orders
 //=============================================================================
   },
@@ -155,6 +164,14 @@ export default {
         "start_date": startDate,
         "end_date": endDate
       });
+    },
+    updateRider(body){
+      return axios.patch(`${DMF_API_BASE_URL}/rider/update`,body)
+
+    },
+    deleteRider(body){
+      
+      return axios.post(`${DMF_API_BASE_URL}/rider/delete`,body)
     }
   }
 }
