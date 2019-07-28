@@ -90,7 +90,7 @@ exports.indexTopOrders = (req, res) =>  {
         /********** PUSHER ***********/
         pusher.trigger('my-channel', 'my-event', {
             "message": "Fetch orders",
-            "code":01
+            "code":"01"
           });
          /****************************/
     })
