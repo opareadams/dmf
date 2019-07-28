@@ -1,18 +1,18 @@
 "use strict";
 
 const Order = require('../models/order');
-//const Pusher = require('pusher');
+const Pusher = require('pusher');
 
 /*
  * Initialise Pusher
  */
-// var pusher = new Pusher({
-//     appId: '830779',
-//     key: 'b32078a965eb82d51eb4',
-//     secret: '94edf47636a2be79fec4',
-//     cluster: 'eu',
-//     encrypted: true
-//   });
+var pusher = new Pusher({
+    appId: '830779',
+    key: 'b32078a965eb82d51eb4',
+    secret: '94edf47636a2be79fec4',
+    cluster: 'eu',
+    encrypted: true
+  });
 
 function getDeilveryDate (metaData) {
     let date = null;
@@ -239,10 +239,12 @@ exports.createOrder = (req, res) => {
         console.log('Document is successfully saved.');
 
         /********** PUSHER ***********/
-        // pusher.trigger('my-channel', 'my-event', {
-        //     "message": "hello world"
-        //   });
+        pusher.trigger('my-channel', 'my-event', {
+            "message": "Fetch orders",
+            "code":01
+          });
           /*********************/
+          
 
         res.json({ message: 'hooray! Order Saved!' });   
       });
@@ -316,6 +318,14 @@ exports.updateOrder = (req, res) =>  {
 
                 res.statusCode = 201;
                 console.log('Document is successfully saved.');
+
+                /********** PUSHER ***********/
+                    pusher.trigger('my-channel', 'my-event', {
+                        "message": "Fetch orders",
+                        "code":01
+                    });
+                  /*********************/
+
                 res.json({ message: 'Order Updated!' });   
             });
             
