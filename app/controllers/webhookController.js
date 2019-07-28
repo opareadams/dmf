@@ -241,7 +241,7 @@ exports.createOrder = (req, res) => {
         /********** PUSHER ***********/
         pusher.trigger('my-channel', 'my-event', {
             "message": "Fetch orders",
-            "code":01
+            "code":"01"
           });
           /*********************/
           
@@ -322,7 +322,7 @@ exports.updateOrder = (req, res) =>  {
                 /********** PUSHER ***********/
                     pusher.trigger('my-channel', 'my-event', {
                         "message": "Fetch orders",
-                        "code":01
+                        "code":"01"
                     });
                   /*********************/
 
