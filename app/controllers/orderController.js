@@ -7,13 +7,13 @@ const Pusher = require('pusher');
 /*
  * Initialise Pusher
  */
-var pusher = new Pusher({
-    appId: '830779',
-    key: 'b32078a965eb82d51eb4',
-    secret: '94edf47636a2be79fec4',
-    cluster: 'eu',
-    encrypted: true
-  });
+// var pusher = new Pusher({
+//     appId: '830779',
+//     key: 'b32078a965eb82d51eb4',
+//     secret: '94edf47636a2be79fec4',
+//     cluster: 'eu',
+//     encrypted: true
+//   });
 
 // Order Controller Methods
 // =============================================================================
@@ -86,13 +86,6 @@ exports.indexTopOrders = (req, res) =>  {
                 message: `No orders available for today`
             }); 
         }
-
-        /********** PUSHER ***********/
-        pusher.trigger('my-channel', 'my-event', {
-            "message": "Fetch orders",
-            "code":"01"
-          });
-         /****************************/
     })
     .catch((err) => {
         console.log(err);
