@@ -207,11 +207,18 @@ export default {
       getRiderReport(){
         this.loading = true;
         this.loading2 = true;
-        DMFWebService.riders.ridersReport(`${this.dateRange.start_date}T23:59:59`,`${this.dateRange.end_date}T23:59:59`).then((response) => {
+        DMFWebService.riders.ridersReport(`${this.dateRange.start_date}T00:00:00`,`${this.dateRange.end_date}T23:59:59`).then((response) => {
             this.complex.report = [];
             for(var i =0 ; i < response.data.data.length; i++){
-              this.complex.report.push(response.data.data[i])
+              if(response.data.data[i]._id.length ===0){
+
+              }else{
+                  this.complex.report.push(response.data.data[i]);
+              }
+              
             }
+
+            console.log(this.complex.report);
         });
         this.loading = false;
         this.loading2 = false;
