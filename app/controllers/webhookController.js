@@ -237,14 +237,14 @@ exports.createOrder = (req, res) => {
         }
         res.statusCode = 201;
         console.log('Document is successfully saved.');
-        console.log('Pusher alert being sent');
+        console.log('Pusher alert being sent -Create Order');
         /********** PUSHER ***********/
         pusher.trigger('my-channel', 'my-event', {
             "message": "Fetch orders",
             "code":"01"
           });
           /*********************/
-          console.log('Pusher alert gone!!');
+          console.log('Pusher alert gone!! -Create Order');
           
 
         res.json({ message: 'hooray! Order Saved!' });   
@@ -319,13 +319,14 @@ exports.updateOrder = (req, res) =>  {
 
                 res.statusCode = 201;
                 console.log('Document is successfully saved.');
-
+                console.log('Pusher alert being sent - Update Order');
                 /********** PUSHER ***********/
                     pusher.trigger('my-channel', 'my-event', {
                         "message": "Fetch orders",
                         "code":"01"
                     });
                   /*********************/
+                console.log('Pusher alert sent! -Update Order')
 
                 res.json({ message: 'Order Updated!' });   
             });
