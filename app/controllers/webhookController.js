@@ -237,13 +237,14 @@ exports.createOrder = (req, res) => {
         }
         res.statusCode = 201;
         console.log('Document is successfully saved.');
-
+        console.log('Pusher alert being sent');
         /********** PUSHER ***********/
         pusher.trigger('my-channel', 'my-event', {
             "message": "Fetch orders",
             "code":"01"
           });
           /*********************/
+          console.log('Pusher alert gone!!');
           
 
         res.json({ message: 'hooray! Order Saved!' });   
