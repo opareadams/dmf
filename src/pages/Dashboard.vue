@@ -51,9 +51,18 @@
             <v-date-picker v-model="dateRange.end_date" no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="endDateMenu = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="regenerateSummaryReport(dateRange.end_date)">OK</v-btn>
+              <v-btn flat color="primary" @click="updateEndDate(dateRange.end_date)">OK</v-btn>
             </v-date-picker>
+
+             
           </v-menu>
+          
+        </v-flex>
+        <v-flex xs11 sm2>
+           <v-btn outline color="primary" @click="getSummary()">Pull Records</v-btn>
+        </v-flex>
+        <v-flex xs11 sm2>
+          <v-progress-circular v-show="loading2" indeterminate :width="3" color="red"></v-progress-circular>
         </v-flex>
       </v-layout>
 
@@ -323,6 +332,7 @@ export default {
     color: Material,
     selectedTab: 'tab-1', 
     loading: false,
+    loading2:false,
     startDateMenu:false,
     endDateMenu: false,
     headers: [
@@ -367,14 +377,19 @@ export default {
   },
   methods: {
       getSummary(){        
-        console.log( );
-        DMFWebService.orders.getDonutSummary(`${this.dateRange.start_date}T23:59:59`, `${this.dateRange.end_date}T23:59:59`).then((response) => {
+        this.loading2 = true;
+        DMFWebService.orders.getDonutSummary(`${this.dateRange.start_date}T00:00:00`, `${this.dateRange.end_date}T23:59:59`).then((response) => {
           this.totalDonuts = 0; 
           if (response.data.data[0].total) {
             this.totalDonuts = response.data.data[0].total;
+
+            this.loading2 = false;
           }
+         
+
+           
         });
-        DMFWebService.orders.getOrderSummary(`${this.dateRange.start_date}T23:59:59`,`${this.dateRange.end_date}T23:59:59`).then((response) => {
+        DMFWebService.orders.getOrderSummary(`${this.dateRange.start_date}T00:00:00`,`${this.dateRange.end_date}T23:59:59`).then((response) => {
           if (response.data.data.length == 0) {
               this.totalOrders = '0';
               this.pendingOrders = '0';
@@ -386,6 +401,8 @@ export default {
               this.pendingOrdersPieChart = 0.00;
               this.deliveredOrdersPieChart = 0.00;
               this.failedOrdersPieChart = 0.00;
+
+               this.loading2 = false;
               return;
           }               
           
@@ -463,7 +480,11 @@ export default {
           this.deliveredOrdersPieChart = (( parseInt(this.deliveredOrders) / this.totalOrders)*100).toFixed(2);
           this.failedOrdersPieChart = (( failedOrdersSummary.count / this.totalOrders)*100).toFixed(2);
           this.totalOrders = this.totalOrders.toString();
+
+          
         })
+
+       
       },
       getRecentOrders(){
         this.loading = true;
@@ -483,10 +504,10 @@ export default {
         this.dateRange.start_date = newStartDate; 
         this.startDateMenu = false;       
       },
-      regenerateSummaryReport (newEndDate) {
+      updateEndDate (newEndDate) {
         this.dateRange.end_date = newEndDate;
         this.endDateMenu = false;  
-        this.getSummary();
+        //this.getSummary();
       },
       moment: function () {
         return moment();

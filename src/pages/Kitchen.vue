@@ -730,6 +730,7 @@
  import VWidget from '@/components/VWidget';
  import DMFWebService from '@/services/DMFWebService';
  import moment from 'moment';
+ import Pusher from 'pusher-js' // import Pusher
 
  export default {
    components: {
@@ -860,11 +861,39 @@
     },
     created(){
         this.getOrders();
-        this.timer = setInterval(this.getOrders, 60000) //60 seconds of refresh
+        this.subscribe();
+       // this.timer = setInterval(this.getOrders, 60000) //60 seconds of refresh
     },
 
     
     methods: {
+
+      subscribe () {
+       
+        var pusherBoolean = false;
+
+          let pusher = new Pusher('b32078a965eb82d51eb4', {
+              cluster: 'eu',
+              forceTLS: true
+          });
+          pusher.subscribe('my-channel')
+          pusher.bind('my-event', data => {
+
+            console.log(JSON.stringify(data))
+             var receivedData = JSON.stringify(data);
+             var jsonObject = JSON.parse(receivedData);
+             
+             if(jsonObject.code === '01'){
+               console.log('true, query get orders method');
+               pusherBoolean = true;
+
+                 this.getOrders();
+             }
+             else{
+               console.log('false');
+             }
+          })
+      },
       
       getOrders(){
               this.loading = true;

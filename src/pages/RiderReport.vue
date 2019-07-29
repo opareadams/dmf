@@ -51,9 +51,15 @@
             <v-date-picker v-model="dateRange.end_date" no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="endDateMenu = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="regenerateRiderReport(dateRange.end_date)">OK</v-btn>
+              <v-btn flat color="primary" @click="updateEndDate(dateRange.end_date)">OK</v-btn>
             </v-date-picker>
           </v-menu>
+        </v-flex>
+        <v-flex xs11 sm2>
+           <v-btn outline color="primary" @click="getRiderReport()">Pull Records</v-btn>
+        </v-flex>
+        <v-flex xs11 sm2>
+          <v-progress-circular v-show="loading2" indeterminate :width="3" color="red"></v-progress-circular>
         </v-flex>
       </v-layout>
 
@@ -150,6 +156,7 @@ export default {
     },
    
     loading: false,
+    loading2:false,
     startDateMenu:false,
     endDateMenu: false,
     search: '',
@@ -199,6 +206,7 @@ export default {
   methods: {
       getRiderReport(){
         this.loading = true;
+        this.loading2 = true;
         DMFWebService.riders.ridersReport(`${this.dateRange.start_date}T23:59:59`,`${this.dateRange.end_date}T23:59:59`).then((response) => {
             this.complex.report = [];
             for(var i =0 ; i < response.data.data.length; i++){
@@ -206,15 +214,16 @@ export default {
             }
         });
         this.loading = false;
+        this.loading2 = false;
       },
       updateStartDate (newStartDate) {
         this.dateRange.start_date = newStartDate; 
         this.startDateMenu = false;       
       },
-      regenerateRiderReport (newEndDate) {
+      updateEndDate (newEndDate) {
         this.dateRange.end_date = newEndDate;
         this.endDateMenu = false;  
-        this.getRiderReport();
+       // this.getRiderReport();
       },
       moment: function () {
         return moment();
