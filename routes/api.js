@@ -121,7 +121,7 @@ router.get('/orders/:page?/:limit?', protectedRoute, orderController.index);
 
 //POST /api/orders/range
 //List orders by date range
-router.post('/orders/range',protectedRoute,orderController.filterByDate);
+router.post('/orders/filter/ByDate',protectedRoute,orderController.filterByDate);
 
 
 

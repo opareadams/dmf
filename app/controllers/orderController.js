@@ -168,6 +168,8 @@ exports.filterByDate = (req, res) =>  {
     const startDate = moment(req.body.start_date).toDate();
     const endDate = moment(req.body.end_date).toDate();
 
+    console.log(startDate);
+    console.log(endDate);
     Order.find({
         "createdAt": {
           "$gte": startDate, 
@@ -179,13 +181,14 @@ exports.filterByDate = (req, res) =>  {
           ]
         }
       })
+
     .then((data) => {
         if (data.length) {
             console.log(data);
             res.statusCode = 200;
             res.json({ 
                 status: true,
-                message: 'orders retrieved successfully',
+                message: 'range orders retrieved successfully',
                 data
             });   
         } else {
