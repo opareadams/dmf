@@ -119,6 +119,10 @@ router.post('/orders/:orderId/packaged',protectedRoute, orderController.packaged
 // list all orders
 router.get('/orders/:page?/:limit?', protectedRoute, orderController.index); 
 
+//POST /api/orders/range
+//List orders by date range
+router.post('/orders/range',protectedRoute,orderController.filterByDate);
+
 
 
 

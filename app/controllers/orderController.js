@@ -163,6 +163,50 @@ exports.indexOrdersWithoutLimit = (req, res) =>  {
     })         
 };
 
+// List all orders between dates
+exports.filterByDate = (req, res) =>  {
+    const startDate = moment(req.body.start_date).toDate();
+    const endDate = moment(req.body.end_date).toDate();
+
+    Order.find({
+        'createdAt': {
+          '$gte': startDate, 
+          '$lt': endDate
+        }, 
+        'status': {
+          '$nin': [
+            'cancelledByWoocomerce'
+          ]
+        }
+      })
+    .then((data) => {
+        if (data.length) {
+            console.log(data);
+            res.statusCode = 200;
+            res.json({ 
+                status: true,
+                message: 'orders retrieved successfully',
+                data
+            });   
+        } else {
+            res.statusCode = 404;
+            res.json({ 
+                status: false,
+                message: `No orders available `
+            }); 
+        }
+       
+    })
+    .catch((err) => {
+        console.log(err);
+        res.statusCode = 500;
+        res.json({ 
+            status: false,
+            message: `Oops! An error occured. Error: ${err}`
+        }); 
+    })         
+};
+
 
 // Filter Orders by Satus
 exports.filterByStatus = (req, res) =>  {
