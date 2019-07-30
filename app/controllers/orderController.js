@@ -169,13 +169,13 @@ exports.filterByDate = (req, res) =>  {
     const endDate = moment(req.body.end_date).toDate();
 
     Order.find({
-        'createdAt': {
-          '$gte': startDate, 
-          '$lt': endDate
+        "createdAt": {
+          "$gte": startDate, 
+          "$lt": endDate
         }, 
-        'status': {
-          '$nin': [
-            'cancelledByWoocomerce'
+        "status": {
+          $nin: [
+            "cancelledByWoocomerce"
           ]
         }
       })
