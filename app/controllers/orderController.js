@@ -189,6 +189,7 @@ exports.filterByDate = (req, res) =>  {
             res.json({ 
                 status: true,
                 message: 'range orders retrieved successfully',
+                total_orders:data.length,
                 data
             });   
         } else {
