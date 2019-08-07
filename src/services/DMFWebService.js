@@ -125,6 +125,12 @@ export default {
         "end_date": endDate
       });
     },
+    listOrdersFilterByDate(startDate, endDate){
+      return axios.post(`${DMF_API_BASE_URL}/orders/filter/ByDate`, {
+        "start_date": startDate,
+        "end_date": endDate
+      });
+    },
     searchOrder(orderId){
       return axios.get(`${DMF_API_BASE_URL}/orders/search/${orderId}`)
     },
@@ -140,6 +146,7 @@ export default {
     assignRiderToOrder(riderBody,orderId){
       return axios.post(`${DMF_API_BASE_URL}/orders/assign/${orderId}`,riderBody)
     }
+
 
   /*
     update (id, role) {

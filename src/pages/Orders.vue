@@ -8,7 +8,7 @@
               flat
               solo
               prepend-icon="search"
-              placeholder="Search Order"
+              placeholder="Search Order By Id"
               v-model="search"
               single-line
               hide-details
@@ -28,7 +28,7 @@
                 :rows-per-page-items="[10,25,50,{text:'All','value':-1}]"
                 class="elevation-1"
                 item-key="orderId"
-                select-all
+               
                 v-model="complex.selected"
                 :loading="loading"
                 :pagination.sync="complex.pagination"
@@ -36,30 +36,42 @@
                 hide-actions
                 >
                 <template slot="items" slot-scope="props">
-                    <td>
+                    <!-- <td>
                       <v-checkbox
                         primary
                         hide-details
                         v-model="props.selected"
                       ></v-checkbox>
-                    </td>
+                    </td> -->
                     <td>
+                      <v-list-tile-sub-title ><v-icon>receipt</v-icon> {{ props.item.orderId }}</v-list-tile-sub-title>
+                      <v-list-tile-sub-title ><v-icon>access_time</v-icon> {{ props.item.createdAt | timeFormat }} </v-list-tile-sub-title>
+                     <v-list-tile-sub-title >({{ props.item.createdAt | moment }})</v-list-tile-sub-title>
                       <v-chip label small :color="getColorByStatus(props.item.status)" text-color="white">{{ props.item.status }} </v-chip>
                     </td>
-                    <td class="text-xs-right">
-                      {{ props.item.orderId }}     
-                    </td>
+                   
+                     <td class="text-xs-left">
+                        <template v-for="(item) in props.item.lineItems">
+                            <v-list-tile-sub-title :key="item.id+Math.random()" > {{item.sku}} (x{{item.quantity}})  </v-list-tile-sub-title>
+                              <v-icon :key="item.id+Math.random()" v-show="props.item.packaged" color="green">fa fa-archive </v-icon>
+                               <v-icon :key="item.id+Math.random()" v-show="!props.item.packaged" color="rgb(251, 188, 52)">fa fa-clock-o fa-sm</v-icon>
+                          
+                        </template>  
+                              
+                      </td>
                     <td class="text-xs-left">
-                      <template v-for="(item) in props.item.lineItems">
-                        <v-list-tile-sub-title :key="item.id" >- {{item.name}} (x{{item.quantity}})  </v-list-tile-sub-title>
-                      </template>                  
-                      <v-chip label color="pink" text-color="white" v-show="props.item.customerNote !== '' ">
-                        <v-icon left>label</v-icon> NB: {{props.item.customerNote}} 
-                      </v-chip>  
-                    </td>
-                    <td class="text-xs-left">{{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}</td>
-                    <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
-                    <td class="text-xs-left">
+                      <v-list-tile-sub-title><v-icon style="font-size: 15px;">account_box</v-icon>{{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}</v-list-tile-sub-title>
+                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">phone_iphone</v-icon>{{ props.item.billing[0].phone}}</v-list-tile-sub-title>
+                        <!-- <v-list-tile-sub-title><v-icon style="font-size: 15px;">my_location</v-icon>{{ props.item.shipping[0].address_1}}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>{{ props.item.shipping[0].address_2 + ' ' + props.item.shipping[0].city}} </v-list-tile-sub-title>-->
+                         <v-list-tile-sub-title><v-icon style="font-size: 15px;">location_on</v-icon>{{ props.item.zone}}</v-list-tile-sub-title> 
+
+                   </td>                    
+                  <td class="text-xs-left">
+                     <v-list-tile-sub-title>{{ props.item.paymentMethodTitle }}</v-list-tile-sub-title>
+
+                     </td>
+                    <!-- <td class="text-xs-left">
                       <div v-show="props.item.shipping[0].address_1" >                  
                         {{props.item.shipping[0].address_1}} 
                       </div>
@@ -74,12 +86,14 @@
                           <v-icon left>location_on</v-icon> {{props.item.zone}}
                         </v-chip>
                       </div>
+                    </td> -->
                     <td class="text-xs-right">{{ props.item.deliveryDate }}</td>
-                    <td class="text-xs-right">
+                    <!-- <td class="text-xs-right">
                       <v-icon v-show="props.item.packaged" color="green">fa fa-archive </v-icon>
                       <v-icon v-show="!props.item.packaged" color="rgb(251, 188, 52)">fa fa-clock-o fa-sm</v-icon>
+                    </td> -->
                     <td class="text-xs-right">{{ props.item.total.replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
-                    <td class="text-xs-right">{{ props.item.createdAt | moment }}</td>
+                    <!-- <td class="text-xs-right">{{ props.item.createdAt | moment }}</td> -->
                 </template>
               </v-data-table>
                <div class="text-xs-center pt-2">
@@ -114,34 +128,35 @@ export default {
         pagination: {},
         headers: [
           {
-            text: '',
+            text: 'Order',
             value: 'status'
           },
-          {
-            text: 'Order #',
-            align: 'right',
-            sortable: true,
-            value: 'orderId'
-          },
+          // {
+          //   text: 'Order #',
+          //   align: 'right',
+          //   sortable: true,
+          //   value: 'orderId'
+          // },
           { text: 'Order Details' , value: 'lineItems'},
           { text: 'Customer', value: 'shipping.first_name'},
           { text: 'Payment Method' , value: 'paymentMethodTitle'},
-          { text: 'Delivery Address', value: 'shipping' , align: 'left'},
+        //  { text: 'Delivery Address', value: 'shipping' , align: 'left'},
           { text: 'Delivery Date', value: 'deliveryDate' , align: 'right'},
-          { text: 'Packaged', value: 'packaged', align: 'right'},
+        //  { text: 'Packaged', value: 'packaged', align: 'right'},
           { text: 'Amount (GHS)', value: 'total' , align: 'right'},
-          { text: 'Date/Time' , value: 'createdAt' , align: 'right'}
+        //  { text: 'Date/Time' , value: 'createdAt' , align: 'right'}
       ],
       },
       colors: {
         processing: 'rgb(251, 188, 52)',
-        pending: 'rgb(251, 188, 52)',
+        pending: 'yellow darken-3',
         'on-hold': 'indigo',
         cancelled: 'red',
         failed: 'red',
         completed: 'green',
         true: 'green',
-        false: 'rgb(251, 188, 52)'
+        false: 'rgb(251, 188, 52)',
+        delivered: 'green darken-4'
     }
     };
   },
@@ -210,6 +225,9 @@ export default {
   filters: {
     moment: function (date) {
       return moment(date).startOf('second').fromNow();
+    },
+     timeFormat(date){
+      return moment(date).format('DD MMM hh:mm a');
     }
   }
 };
