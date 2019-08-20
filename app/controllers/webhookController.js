@@ -31,10 +31,13 @@ function getDeilveryDate (metaData) {
     return date; 
 }
 
-function modifyStatus(status){
+function modifyStatus(status,paymentStatus){
     let newStatus = null;
-    if(status === 'processing' || status === 'completed'){
+    if((status === 'processing' || status === 'completed') && paymentStatus !== 'cod'){
         newStatus = 'completed';
+    }
+    if((status === 'processing' || status === 'completed') && paymentStatus === 'cod'){
+        newStatus = 'pending';
     }
     else{
         newStatus = status;
@@ -202,7 +205,7 @@ exports.createOrder = (req, res) => {
         orderKey: req.body.order_key,
         createdVia: req.body.created_via,
         version: req.body.version,
-        status: modifyStatus(req.body.status),
+        status: modifyStatus(req.body.status,req.body.payment_method),
         currency: req.body.currency,
         discountTotal: req.body.discount_total,
         discountTax: req.body.discount_tax,
@@ -283,7 +286,7 @@ exports.updateOrder = (req, res) =>  {
                 orderKey: req.body.order_key,
                 createdVia: req.body.created_via,
                 version: req.body.version,
-                status: modifyStatus(req.body.status),
+                status: modifyStatus(req.body.status,req.body.payment_method),
                 currency: req.body.currency,
                 discountTotal: req.body.discount_total,
                 discountTax: req.body.discount_tax,
