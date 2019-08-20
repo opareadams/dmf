@@ -236,7 +236,8 @@
                 </td>
                 <td class="text-xs-left">
                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">account_box</v-icon>{{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}</v-list-tile-sub-title>
-                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">phone_iphone</v-icon>{{ props.item.billing[0].phone}}</v-list-tile-sub-title>
+                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">phone_iphone</v-icon>{{ props.item.shipping[0].address_2}}(receiver)</v-list-tile-sub-title>
+                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">phone_iphone</v-icon>{{ props.item.billing[0].phone}}(sender)</v-list-tile-sub-title>
                         <!-- <v-list-tile-sub-title><v-icon style="font-size: 15px;">my_location</v-icon>{{ props.item.shipping[0].address_1}}</v-list-tile-sub-title> -->
                         <!-- <v-list-tile-sub-title>{{ props.item.shipping[0].address_2 + ' ' + props.item.shipping[0].city}} </v-list-tile-sub-title> -->
                          <v-list-tile-sub-title><v-icon style="font-size: 15px;">location_on</v-icon>{{ props.item.zone}}</v-list-tile-sub-title>

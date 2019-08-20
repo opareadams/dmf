@@ -38,7 +38,9 @@
                                                 <v-flex xs6>
                                                  
                                                     <span><v-icon style="font-size: 15px;">person</v-icon>{{item.shipping[0].first_name}} {{item.shipping[0].last_name}}</span><br>
-                                                    <span><v-icon  style="font-size: 15px;">phone</v-icon>{{item.billing[0].phone}}</span><br>
+                                                    <span><v-icon  style="font-size: 15px;">phone</v-icon>{{item.billing[0].phone}} (<v-icon  style="font-size: 15px;">credit_card</v-icon> )</span><br>
+                                                    <span><v-icon  style="font-size: 15px;">phone</v-icon>{{item.shipping[0].address_2}} (<v-icon  style="font-size: 15px;">local_shipping</v-icon> ) </span><br>
+
                                                     <span> <v-icon  style="font-size: 15px;">location_on</v-icon>{{item.zone}}</span>
                                                  
                                                 </v-flex>

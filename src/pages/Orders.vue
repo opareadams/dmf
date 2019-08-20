@@ -61,7 +61,8 @@
                       </td>
                     <td class="text-xs-left">
                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">account_box</v-icon>{{ props.item.shipping[0].first_name + ' ' +props.item.shipping[0].last_name }}</v-list-tile-sub-title>
-                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">phone_iphone</v-icon>{{ props.item.billing[0].phone}}</v-list-tile-sub-title>
+                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">phone_iphone</v-icon>{{ props.item.shipping[0].address_2}}(receiver)</v-list-tile-sub-title>
+                       <v-list-tile-sub-title><v-icon style="font-size: 15px;">phone_iphone</v-icon>{{ props.item.billing[0].phone}}(sender)</v-list-tile-sub-title>
                         <!-- <v-list-tile-sub-title><v-icon style="font-size: 15px;">my_location</v-icon>{{ props.item.shipping[0].address_1}}</v-list-tile-sub-title>
                         <v-list-tile-sub-title>{{ props.item.shipping[0].address_2 + ' ' + props.item.shipping[0].city}} </v-list-tile-sub-title>-->
                          <v-list-tile-sub-title><v-icon style="font-size: 15px;">location_on</v-icon>{{ props.item.zone}}</v-list-tile-sub-title> 
@@ -94,6 +95,185 @@
                     </td> -->
                     <td class="text-xs-right">{{ props.item.total.replace(/\d(?=(\d{3})+\.)/g, '$&,') }}</td>
                     <!-- <td class="text-xs-right">{{ props.item.createdAt | moment }}</td> -->
+                    <td>
+                      <v-btn depressed outline icon fab dark color="primary" small @click="$set(orderDialog, props.item.orderId, true)">
+                            <v-icon>fa fa-eye</v-icon>
+                      </v-btn>
+                      <v-dialog v-model="orderDialog[props.item.orderId]" scrollable  max-width="500px">
+                        <v-card>
+                          <v-card-title>
+                            <span class="headline">Order Details</span>
+                          </v-card-title>
+                          <v-divider></v-divider>
+                          <v-card-text>
+                            <!-- <v-container grid-list-md> -->
+                                <v-layout wrap>
+                                    <v-flex  xs12 style="padding-bottom: 20px"> 
+                                      <v-card style="border: 1px solid grey;" color=""  > 
+                                      
+                                          <v-layout row wrap  
+                                          >
+                                            <!----------Customer details ----->
+                                            <v-flex xs12 style="padding-bottom: 0px">
+                                              <v-card style="border: 1px solid #F5F5F5;">
+                                                <v-layout row wrap>
+                                                      <v-flex xs6>
+                                                      
+                                                          <span><v-icon style="font-size: 15px;">person</v-icon>{{props.item.shipping[0].first_name}} {{props.item.shipping[0].last_name}}</span><br>
+                                                          <span><v-icon  style="font-size: 15px;">phone</v-icon>{{props.item.billing[0].phone}}(sender)</span><br>
+                                                            <span><v-icon  style="font-size: 15px;">phone</v-icon>{{props.item.shipping[0].address_2}}(receiver)</span><br>
+
+                                                          <span> <v-icon  style="font-size: 15px;">location_on</v-icon>{{props.item.zone}}</span>
+                                                      
+                                                      </v-flex>
+                                                      <v-flex xs6>
+                                                      
+                                                        <span><v-icon  style="font-size: 15px;">assignment</v-icon><strong> #{{props.item.orderId}}</strong></span><br>
+                                                        <span><v-icon  style="font-size: 15px;">timelapse</v-icon>{{props.item.createdAt | timeFormat}} <br> ({{props.item.createdAt | moment}})</span>
+                    
+                                                        
+                                                      </v-flex>
+                                                </v-layout>
+                                              </v-card>
+                                            </v-flex>
+
+                                              <!----------Order details -------->
+                                              <template v-for="(item2) in props.item.lineItems">
+                                                <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;" :key="item2.id+Math.random()">
+                                                  <v-card style="border: 1px solid #F5F5F5;">
+                                                    <v-layout row wrap>
+                                                    
+                                                      <v-flex xs8>
+                                                    
+                                                        <span style="margin-left:10px">(x{{item2.quantity}}){{item2.name}} </span><br>
+                                                        
+                                                      </v-flex>
+                                                      <v-flex xs4>
+                                                          <span style="margin-left:0px">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
+                                                      </v-flex>
+                                                      
+                                                    </v-layout>
+                                                  </v-card>
+                                                </v-flex>
+                                              </template>
+
+                                              <!----------Order Note Heading -------->
+                                              <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                              <v-card style="border: 1px solid #F5F5F5;">
+                                                    <v-layout row wrap>
+                                                      <v-flex xs8>
+                                                        <span style="margin-left:10px"><u>Order Note</u></span>
+                                                      </v-flex>
+                                                    </v-layout>
+                                              </v-card>
+                                              </v-flex>
+
+                                              <!----------Order Note Content-------->
+                                              <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                              <v-card style="border: 1px solid #F5F5F5;" color="grey lighten-1">
+                                                    <v-layout row wrap>
+                                                      <v-flex xs8>
+                                                        <span style="margin-left:10px">{{props.item.customerNote}}</span>
+                                                      </v-flex>
+                                                    </v-layout>
+                                              </v-card>
+                                              </v-flex>
+
+                                              <!----------Price details-------->
+                                              <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                              <v-card style="border: 1px solid #F5F5F5;">
+                                                    <v-layout row wrap>
+                                                      <v-flex xs3 style="padding-right:0px">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px">Shipping</p>
+                                                        </v-card>
+                                                      </v-flex>
+                                                      <v-flex xs3 style="padding-right:0px">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px">Subtotal</p>
+                                                        </v-card>
+                                                      </v-flex>
+                                                        <v-flex xs3 style="padding-right:0px; padding-left:0px ">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px">Discount</p>
+                                                        </v-card>
+                                                      </v-flex>
+                                                        <v-flex xs3 style=" padding-left:0px ">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px">Total</p>
+                                                        </v-card>
+                                                      </v-flex>
+                                                    </v-layout>
+                                              </v-card>
+                                              </v-flex>
+
+                                                <!----------Price Values-------->
+                                              <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                              <v-card style="border: 1px solid #F5F5F5;">
+                                                    <v-layout row wrap>
+                                                       <v-flex xs3 style="padding-right:0px">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px">GHS{{(parseFloat(props.item.shippingTotal)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                        </v-card>
+                                                      </v-flex>
+                                                      <v-flex xs3 style="padding-right:0px">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px">GHS{{(parseFloat(props.item.total)+parseFloat(props.item.discountTotal)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                        </v-card>
+                                                      </v-flex>
+                                                      <v-flex xs3 style="padding-right:0px; padding-left:0px ">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px" v-if="props.item.couponLines.length !== 0">{{props.item.couponLines[0].code}}</p>
+                                                        <template v-else>
+                                                          <p style="text-align:center; margin-bottom:0px">No Discount</p>
+                                                          </template>
+                                                        </v-card>
+                                                      </v-flex>
+                                                        <v-flex xs3 style=" padding-left:0px ">
+                                                        <v-card style="border: 1px solid #F5F5F5;">
+                                                        <p style="text-align:center; margin-bottom:0px">GHS{{parseFloat(props.item.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</p>
+                                                        </v-card>
+                                                      </v-flex>
+                                                    </v-layout>
+                                              </v-card>
+                                              </v-flex>
+
+                                              <!-----------Payment Mode ------------>
+                                              <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
+                                              <v-card v-if="props.item.paymentMethodTitle==='Mobile Money Transfer' || props.item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                                    <v-layout row wrap>
+                                                      <v-flex xs12>
+                                                        <p style="text-align:center; margin-bottom:0px">Paid via {{props.item.paymentMethodTitle}}</p>
+                                                      </v-flex>
+                                                    </v-layout>
+                                              </v-card>
+                                              <template v-if="props.item.paymentMethodTitle==='Cash on delivery'">
+                                                <v-card  style="border: 1px solid #F5F5F5;" color="red darken-4" class="white--text">
+                                                    <v-layout row wrap>
+                                                      <v-flex xs12>
+                                                        <p style="text-align:center; margin-bottom:0px">Not Paid({{props.item.paymentMethodTitle}})</p>
+                                                      </v-flex>
+                                                    </v-layout>
+                                              </v-card>
+                                              </template>
+                                              </v-flex>
+
+                                              
+                                        </v-layout>                      
+                                      </v-card>
+                                    </v-flex>
+                                </v-layout>
+                            <!-- </v-container> -->
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" flat @click.native="$set(orderDialog,props.item.orderId, false)">Close</v-btn>
+                            
+                          </v-card-actions>
+                        </v-card>
+                        
+                      </v-dialog>
+                    </td>
                 </template>
               </v-data-table>
                <div class="text-xs-center pt-2">
@@ -120,6 +300,7 @@ export default {
   data () {
     return {
       search: '',
+       orderDialog:{},
       complex: {
         loading: false,
         selected: [],
@@ -144,6 +325,7 @@ export default {
           { text: 'Delivery Date', value: 'deliveryDate' , align: 'right'},
         //  { text: 'Packaged', value: 'packaged', align: 'right'},
           { text: 'Amount (GHS)', value: 'total' , align: 'right'},
+          {text: 'Action',value:'action'}
         //  { text: 'Date/Time' , value: 'createdAt' , align: 'right'}
       ],
       },
