@@ -387,7 +387,7 @@
                           </v-card-text>
                           <v-divider></v-divider>
                           <v-card-actions>
-                            <v-btn color="blue darken-1" flat @click="assignRider(riders.selectedId, props.item.orderId, props.item.billing[0].phone)" :loading="complex.loading2">Assign</v-btn>
+                            <v-btn color="blue darken-1" flat @click="assignRider(riders.selectedId, props.item.orderId, props.item.shipping[0].address_2)" :loading="complex.loading2">Assign</v-btn>
                             <v-btn color="blue darken-1" flat @click.native="$set(riders.dialogBox,props.item.orderId, false)">Close</v-btn>
                           </v-card-actions>
                         </v-card>
@@ -823,6 +823,7 @@ export default {
       },
 
       sendSMS (telephone, orderId, receipientType) {
+        //NOTE: THE TELEPJONE IS BEING REFERENCED FROM ADDRESS 2
         var smsBody='';
          var itemsString='';
         console.log('telephone is '+telephone)
@@ -853,7 +854,7 @@ export default {
 
             deliveryDetails.custOrderId=orderId;
             deliveryDetails.custName= this.complex.orders[i].shipping[0].first_name + ' ' + this.complex.orders[i].shipping[0].last_name;
-            deliveryDetails.custPhone= this.complex.orders[i].billing[0].phone;
+            deliveryDetails.custPhone= this.complex.orders[i].shipping[0].address_2;
             deliveryDetails.custZone=this.complex.orders[i].zone;
             deliveryDetails.items = this.complex.orders[i].lineItems;
             deliveryDetails.amount = this.complex.orders[i].total;
