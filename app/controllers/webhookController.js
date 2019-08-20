@@ -16,11 +16,18 @@ var pusher = new Pusher({
 
 function getDeilveryDate (metaData) {
     let date = null;
-    if (metaData.length > 2) {
-        date = metaData[3].value ; //for orders created from website
-    } else {
-        date = metaData[0].value; //for orders created in wordpress backend
+
+    for(var i=0; i <metaData.length; i++){
+        if(metaData[i].key === 'delivery_date'){
+            date = metaData[i].value;
+        }
     }
+
+    // if (metaData.length > 2) {
+    //     date = metaData[3].value ; //for orders created from website
+    // } else {
+    //     date = metaData[0].value; //for orders created in wordpress backend
+    // }
     return date; 
 }
 
