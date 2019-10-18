@@ -2,6 +2,7 @@
 
 const Order = require('../models/order');
 const Pusher = require('pusher');
+const moment = require("moment");
 
 /*
  * Initialise Pusher
@@ -17,11 +18,18 @@ var pusher = new Pusher({
 function getDeilveryDate (metaData) {
     let date = null;
 
-    for(var i=0; i <metaData.length; i++){
-        if(metaData[i].key === 'delivery_date'){
-            date = metaData[i].value;
+        for(var i=0; i <metaData.length; i++){
+            if(metaData[i].key === 'delivery_date'){
+                date = metaData[i].value;
+            }
         }
-    }
+        if(date == null){
+            date = moment().format("YYYY-MM-DD");
+        }
+    
+    
+
+    
 
     // if (metaData.length > 2) {
     //     date = metaData[3].value ; //for orders created from website
