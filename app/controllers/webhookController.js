@@ -24,7 +24,7 @@ function getDeilveryDate (metaData) {
             }
         }
         if(date == null){
-            date = moment().format("YYYY-MM-DD");
+            date = moment().format("DD-MM-YYYY");
         }
     
     
