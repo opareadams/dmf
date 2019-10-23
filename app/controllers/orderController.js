@@ -359,7 +359,8 @@ exports.donutSummary = (req, res) =>  {
                     "$gte": startDate, 
                     "$lt": endDate
                 },
-                "status":"completed"
+               // "status":"completed"
+               "status":{$in:["completed","delivered"]}
             }
         },
         {
