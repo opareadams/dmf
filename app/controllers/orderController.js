@@ -320,7 +320,8 @@ exports.orderSummary = (req, res) =>  {
                     "$gte": startDate, 
                     "$lt": endDate
                 },
-                "status":{$ne:"cancelledByWoocomerce"}
+            //    "status":{$ne:"cancelledByWoocomerce"}
+                "status":{$in:["cancelledByWoocomerce"]}
             }
         },
         {
