@@ -57,7 +57,7 @@
                       ></v-select>
                     
                     <div class="form-btn">
-                      <v-btn outline @click="createUser" color="primary">Create User</v-btn>
+                      <v-btn outline :disabled="disableButton" @click="createUser" color="primary">Create User</v-btn>
                       <v-btn outline @click="clear">Clear</v-btn>
                     </div>
                 </v-form>     
@@ -176,6 +176,10 @@
                   <!----------END DELETE USER -------------> 
               </v-list-tile>
             </v-card-text>
+              
+            <v-card-text class="">
+              <v-chip :value="showChip"  close color="red" text-color="white">Unauthorized (Sign in as an Administrator!)</v-chip>
+            </v-card-text>
             </v-card>
 
 
@@ -219,6 +223,8 @@ export default {
       users:[],  
     valid: true,
     loading: true,
+    disableButton:false,
+    showChip:false,
   }),
     mounted () {
     this.$validator.localize('en', this.dictionary);
@@ -234,6 +240,11 @@ export default {
     },
   created(){
     this.getAllUsers();
+
+    if(localStorage.ROLE != 'admin'){
+      this.disableButton = true;
+      this.showChip = true;
+    }
   },
   methods: {
     createUser(){
@@ -274,16 +285,18 @@ export default {
     getAllUsers(){
 
       DMFWebService.auth.listAllUsers().then((response) => {
-          
+            console.log(response);
           if(response.status === 200){
             this.loading = false;
             this.users = response.data.data;
 
             this.numberOfUsers = this.users.length;
           }
-          
-
       })
+       .catch((err) => {
+        console.log(err);
+        this.loading = false;
+    })
 
     },
     editUser(id,username,email,roleId){

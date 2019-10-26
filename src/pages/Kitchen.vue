@@ -747,9 +747,9 @@
         searchText3:'', //For priority orders search
         searchBarVisible3:false,
         loading: true,
-        loading2: false,
-        loading3: false,
-        loading4: false,
+        loading2: false, //normal orders loading
+        loading3: false, //ustomized orders loading
+        loading4: false, //priority orders loading
         loadingButton:false,
         checkPackaged:{},
         cancelPackage:{},
@@ -769,6 +769,7 @@
       totalOrders:'',
       totalCustomizedOrders:'',
       totalPriorityOrders:'',
+      disableButton:false,
       }
     },
     computed:{
@@ -881,18 +882,18 @@
           pusher.subscribe('my-channel')
           pusher.bind('my-event', data => {
 
-            console.log(JSON.stringify(data))
+           // console.log(JSON.stringify(data))
              var receivedData = JSON.stringify(data);
              var jsonObject = JSON.parse(receivedData);
              
              if(jsonObject.code === '01'){
-               console.log('true, query get orders method');
+             //  console.log('true, query get orders method');
                pusherBoolean = true;
 
                  this.getOrders();
              }
              else{
-               console.log('false');
+            //   console.log('false');
              }
           })
       },
@@ -952,10 +953,18 @@
                     })
       },
       packageOrder(val){
-         
+        //initialize button loading
+         this.loading2 = true;
+         this.loading3 = true;
+         this.loading4 = true;
+
          DMFWebService.orders.packageOrder(val).then((response) => {
            
             if(response.status === 200){
+              //de-initialize button loading
+              this.loading2 = false;
+              this.loading3 = false;
+              this.loading4 = false;
               
               //remove from main order queue
               for(var i =0; i < this.orders.length; i++){
@@ -981,6 +990,12 @@
                 }
              }
 
+            }else{
+              this.loading2 = false;
+              this.loading3 = false;
+              this.loading4 = false;
+
+               window.getApp.$emit('ORDER_PACKAGED_FAILED');
             }
 
          })          
@@ -990,12 +1005,19 @@
         let body={
           status:'cancelled'
         };
-       
+        //initialize button loading
+         this.loading2 = true;
+         this.loading3 = true;
+         this.loading4 = true;
         DMFWebService.orders.cancelOrder(body, val).then((response) => {
-
-          console.log(val)
+          
+         // console.log(val)
 
           if(response.status === 200){
+            //de-initialize button loading
+              this.loading2 = false;
+              this.loading3 = false;
+              this.loading4 = false;
 
             for(var i =0; i < this.orders.length; i++){
                 if(this.orders[i].orderId === val){
@@ -1020,6 +1042,13 @@
                 //  window.getApp.$emit('ORDER_PACKAGED');
                 }
              }
+
+          }else{
+            //de-initialize button loading
+              this.loading2 = false;
+              this.loading3 = false;
+              this.loading4 = false;
+              window.getApp.$emit('ORDER_CANCELLED_FAILED');
 
           }
         })     

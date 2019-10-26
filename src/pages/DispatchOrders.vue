@@ -135,7 +135,9 @@
                         <v-list-tile-sub-title><v-icon style="font-size: 15px;">my_location</v-icon>{{ props.item.shipping[0].address_1}}</v-list-tile-sub-title>
                          <v-list-tile-sub-title><v-icon style="font-size: 15px;">location_on</v-icon>{{ props.item.zone}}</v-list-tile-sub-title>
 
-                    </td>
+                    </td>                   
+                      <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
+                    
                     <td>
                         <v-btn depressed outline icon fab dark color="white" small @click="$set(orderDialog, props.item.orderId, true)">
                             <v-icon>fa fa-eye</v-icon>
@@ -411,6 +413,7 @@
                          <v-list-tile-sub-title><v-icon style="font-size: 15px;">location_on</v-icon>{{ props.item.zone}}</v-list-tile-sub-title>
 
                     </td>
+                     <td class="text-xs-left">{{ props.item.paymentMethodTitle }}</td>
                     <td>
                       <v-btn depressed outline icon fab dark color="primary" small @click="$set(orderDialog, props.item.orderId, true)">
                             <v-icon>fa fa-eye</v-icon>
@@ -651,6 +654,7 @@ export default {
            {text: 'Rider',value:'rider'},
           { text: 'Details' , value: 'lineItems'},
           { text: 'Customer', value: 'shipping'},
+          { text: 'Payment Method', value: 'paymentMethod'},
           { text: 'Action', value: 'action'},
          /* { text: 'Payment Method' , value: 'paymentMethodTitle'},
           { text: 'Delivery Address', value: 'shipping' , align: 'left'},
@@ -854,14 +858,17 @@ export default {
 
             deliveryDetails.custOrderId=orderId;
             deliveryDetails.custName= this.complex.orders[i].shipping[0].first_name + ' ' + this.complex.orders[i].shipping[0].last_name;
+            deliveryDetails.location = this.complex.orders[i].shipping[0].address_1;
             deliveryDetails.custPhone= this.complex.orders[i].shipping[0].address_2;
+            deliveryDetails.billingTelephone = this.complex.orders[i].billing[0].phone;
             deliveryDetails.custZone=this.complex.orders[i].zone;
             deliveryDetails.items = this.complex.orders[i].lineItems;
             deliveryDetails.amount = this.complex.orders[i].total;
             deliveryDetails.paymentType = this.complex.orders[i].paymentMethodTitle;
 
             for(var j=0; j<deliveryDetails.items.length; j++){
-              itemsString+='Item'+parseInt(j+1) +':' + deliveryDetails.items[j].sku + '\n'+''
+              //itemsString+='Item'+parseInt(j+1) +':' + deliveryDetails.items[j].sku + '\n'+''
+              itemsString+= deliveryDetails.items[j].sku + '\n'+''
             }
 
             if(receipientType === 'customer'){ //-------for customer ------//
@@ -871,14 +878,20 @@ export default {
               }
               else{//-------for rider ------//
                    smsBody = 
-                  // 'Order Id: '+ deliveryDetails.custOrderId + '\n'+''+ 
+                 
                   // 'Name: '+ deliveryDetails.custName + '\n'+ 
                   // 'Phone: '+ deliveryDetails.custPhone + '\n'+
                   // 'Zone: '+ deliveryDetails.custZone + '\n'+
-                  'Customer: '+ deliveryDetails.custName + '\n'+
-                  itemsString + '\n'+
-                  'Amount: '+ deliveryDetails.amount + '\n'+
-                  'PaymentMode: '+ deliveryDetails.paymentType;        
+                  'Order Id: '+ deliveryDetails.custOrderId + '\n'+''+ 
+                  itemsString + '\n'+ 
+                  'Cust:'+ deliveryDetails.custName + '\n'+
+                  'Receiver Tel:'+ deliveryDetails.custPhone + '\n'+
+                  'Billing Tel:'+deliveryDetails.billingTelephone+ '\n'+
+                  'Amt: Ghc'+ deliveryDetails.amount + '\n'+
+                  'Mode: '+deliveryDetails.paymentType + '\n'+
+                  'Location: '+ deliveryDetails.custZone + '\n'+
+                  deliveryDetails.location;
+                         
               }
 
              

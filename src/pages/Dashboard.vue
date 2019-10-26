@@ -123,7 +123,7 @@
                   :value="pendingOrdersPieChart"
                   color="orange"
                 >
-                  {{ pendingOrders}}
+                  {{ pendingOrdersPieChart}}%
                 </v-progress-circular>
               </div>
             </v-card-text>
@@ -151,7 +151,7 @@
                   :value="failedOrdersPieChart"
                   color="red"
                 >
-                  {{ failedOrdersPieChart }}
+                  {{ failedOrdersPieChart }}%
                 </v-progress-circular>
               </div>
             </v-card-text>
@@ -179,7 +179,7 @@
                   :value="deliveredOrdersPieChart"
                   color="success"
                 >
-                  {{ deliveredOrdersPieChart }}
+                  {{ deliveredOrdersPieChart }}%
                 </v-progress-circular>
               </div>
             </v-card-text>
@@ -361,12 +361,41 @@ export default {
 
   },
   created(){
-    this.dateRange.start_date = moment().startOf('year').format('YYYY-MM-DD');
+    //this.dateRange.start_date = moment().startOf('year').format('YYYY-MM-DD');
+     this.dateRange.start_date = moment().format("YYYY-MM-DD");
     this.dateRange.end_date = moment().endOf("year").format('YYYY-MM-DD');
     this.getSummary();
+    this.subscribe();
    // this.getOrders();
   },
   methods: {
+     subscribe () {
+       
+        var pusherBoolean = false;
+
+          let pusher = new Pusher('b32078a965eb82d51eb4', {
+              cluster: 'eu',
+              forceTLS: true
+          });
+          pusher.subscribe('my-channel')
+          pusher.bind('my-event', data => {
+
+           // console.log(JSON.stringify(data))
+             var receivedData = JSON.stringify(data);
+             var jsonObject = JSON.parse(receivedData);
+             
+             if(jsonObject.code === '01'){
+             //  console.log('true, query get orders method');
+               pusherBoolean = true;
+
+                 this.getSummary();
+             }
+             else{
+            //   console.log('false');
+             }
+          })
+      },
+
       getSummary(){        
         this.loading2 = true;
         DMFWebService.orders.getDonutSummary(`${this.dateRange.start_date}T00:00:00`, `${this.dateRange.end_date}T23:59:59`).then((response) => {
@@ -411,6 +440,8 @@ export default {
             this.pendingOrders = pendingOrdersSummary.count.toString();
             this.pendingOrdersAmount = pendingOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
             this.totalOrders += pendingOrdersSummary.count;
+
+           
           }
 
 
@@ -425,6 +456,7 @@ export default {
             this.failedOrdersAmount = failedOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
             this.totalOrders += failedOrdersSummary.count;
           }
+        
 
           /**
            * Get Cancelled Orders Summary
@@ -437,31 +469,39 @@ export default {
             this.cancelledOrdersAmount = cancelledOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
             this.totalOrders += cancelledOrdersSummary.count;
           }
-
+  
           /**
            * Get Completed Orders Summary
            */
+          var completedAmount=0;
           const completedOrdersSummary = this.summary.find(function(element) {
             return element._id.status == "completed";
           });
           
           if (completedOrdersSummary != null) {
             this.totalOrders += completedOrdersSummary.count;
+            completedAmount = completedOrdersSummary.total_amount;         
           }
-
+         
           /**
            * Get Delivered Orders Summary
            */
+          var deliveredAmount =0;
           const deliveredOrdersSummary = this.summary.find(function(element) {
             return element._id.status == "delivered";
-          });
 
+          });
+           
+           if(deliveredOrdersSummary != null){
+               this.totalOrders += deliveredOrdersSummary.count;
+               deliveredAmount = deliveredOrdersSummary.total_amount;
+           }
 
           if (deliveredOrdersSummary != null) {
             this.deliveredOrders = deliveredOrdersSummary.count.toString();
             this.deliveredOrdersAmount = deliveredOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.revenue = (deliveredOrdersSummary.total_amount + completedOrdersSummary.total_amount).toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
-            this.totalOrders += deliveredOrdersSummary.count;
+            this.revenue = (deliveredAmount + completedAmount).toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');
+           // this.totalOrders += deliveredOrdersSummary.count;
           } else {
             this.deliveredOrders = 0;
             this.revenue = completedOrdersSummary.total_amount.toFixed(2).toString().replace(/\d(?=(\d{3})+\.)/g, '$&,');

@@ -199,7 +199,8 @@ export default {
 
   },
   created(){
-    this.dateRange.start_date = moment().startOf('year').format('YYYY-MM-DD');
+    //this.dateRange.start_date = moment().startOf('year').format('YYYY-MM-DD');
+    this.dateRange.start_date = moment().format("YYYY-MM-DD");
     this.dateRange.end_date = moment().endOf("year").format('YYYY-MM-DD');
     this.getRiderReport();
   },
@@ -218,7 +219,7 @@ export default {
               
             }
 
-            console.log(this.complex.report);
+            //console.log(this.complex.report);
         });
         this.loading = false;
         this.loading2 = false;

@@ -240,7 +240,7 @@
 
                                               <!-----------Payment Mode ------------>
                                               <v-flex xs12 style="padding-top: 0px; padding-bottom: 0px;">
-                                              <v-card v-if="props.item.paymentMethodTitle==='Mobile Money Transfer' || props.item.paymentMethodTitle==='Visa' " style="border: 1px solid black;" color="green" class="white--text">
+                                              <v-card v-if="props.item.paymentMethod==='slydepay'" style="border: 1px solid black;" color="green" class="white--text">
                                                     <v-layout row wrap>
                                                       <v-flex xs12>
                                                         <p style="text-align:center; margin-bottom:0px">Paid via {{props.item.paymentMethodTitle}}</p>

@@ -13,12 +13,34 @@ export default [
     }
   },
   {
-    name: 'ORDER_CANCELLED',
+    name: 'ORDER_PACKAGED_FAILED',
     callback: function (e) {
       this.snackbar = {
         show: true,
         color: 'red',
+        text: 'Order could not be packaged!'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'ORDER_CANCELLED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'green',
         text: 'Order has been cancelled'
+      };
+      //this.$router.push('/users');     
+    }
+  },
+  {
+    name: 'ORDER_CANCELLED_FAILED',
+    callback: function (e) {
+      this.snackbar = {
+        show: true,
+        color: 'red',
+        text: 'Order could not be cancelled!'
       };
       //this.$router.push('/users');     
     }
