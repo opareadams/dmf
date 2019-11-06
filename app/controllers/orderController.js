@@ -63,10 +63,22 @@ exports.index = (req, res) => {
 
 // List top 5 Orders for the day
 exports.indexTopOrders = (req, res) =>  {
+    // Order.find({
+    //     "deliveryDate": moment().format('DD-MM-YYYY'),
+    //     "packaged": false,
+    //     "status":{$nin:["cancelled","cancelledByWoocomerce"]}
+    // })
     Order.find({
-        "deliveryDate": moment().format('DD-MM-YYYY'),
-        "packaged": false,
-        "status":{$nin:["cancelled","cancelledByWoocomerce"]}
+        $or: [
+            { deliveryDate:  moment().format('DD-MM-YYYY'), 
+        packaged: false, 
+        status: { $nin: [ 'cancelled', 'cancelledByWoocomerce', 'pending' ] }, 
+        paymentMethod: 'slydepay'},
+
+            { deliveryDate:  moment().format('DD-MM-YYYY'), 
+        packaged: false, 
+        status: { $nin: [ 'cancelled', 'cancelledByWoocomerce' ] }, 
+        paymentMethod: 'cod'}]
     })
     .then((data) => {
         if (data.length) {
