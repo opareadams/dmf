@@ -281,6 +281,7 @@ import CircleStatistic from '@/components/widgets/statistic/CircleStatistic';
 import LinearStatistic from '@/components/widgets/statistic/LinearStatistic';
 import DMFWebService from '@/services/DMFWebService';
 import moment from 'moment';
+import Pusher from 'pusher-js';
 
 export default {
   components: {

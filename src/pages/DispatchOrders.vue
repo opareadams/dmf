@@ -884,13 +884,13 @@ export default {
                   // 'Zone: '+ deliveryDetails.custZone + '\n'+
                   'Order Id: '+ deliveryDetails.custOrderId + '\n'+''+ 
                   itemsString + '\n'+ 
-                  'Cust:'+ deliveryDetails.custName + '\n'+
-                  'Receiver Tel:'+ deliveryDetails.custPhone + '\n'+
-                  'Billing Tel:'+deliveryDetails.billingTelephone+ '\n'+
-                  'Amt: Ghc'+ deliveryDetails.amount + '\n'+
-                  'Mode: '+deliveryDetails.paymentType + '\n'+
+                   deliveryDetails.custName + '\n'+
+                   deliveryDetails.custPhone + '\n'+
                   'Location: '+ deliveryDetails.custZone + '\n'+
-                  deliveryDetails.location;
+                   deliveryDetails.location + '\n'+
+                  
+                  'Amt: Ghc'+ deliveryDetails.amount +'('+deliveryDetails.paymentType+')'+ '\n'+
+                  'Sender:'+deliveryDetails.billingTelephone;
                          
               }
 
