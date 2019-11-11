@@ -341,7 +341,7 @@ export default {
        
       ], 
     colors: {
-        processing: 'rgb(251, 188, 52)',
+        processing: 'green',
         pending: 'yellow darken-3',
         'on-hold': 'indigo',
         cancelled: 'red',
@@ -404,9 +404,9 @@ export default {
           if (response.data.data[0].total) {
             this.totalDonuts = response.data.data[0].total;
 
-            this.loading2 = false;
+           
           }
-         
+          this.loading2 = false;
 
            
         });
@@ -426,7 +426,8 @@ export default {
                this.loading2 = false;
               return;
           }               
-          
+          this.loading2 = false;
+
           this.totalOrders = 0;
           this.summary = response.data.data;
 
@@ -515,7 +516,7 @@ export default {
 
           
         })
-
+        //
        //Call getOrders as well
         this.getOrders();
       },

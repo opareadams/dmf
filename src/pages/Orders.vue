@@ -330,7 +330,7 @@ export default {
       ],
       },
       colors: {
-        processing: 'rgb(251, 188, 52)',
+        processing: 'green',
         pending: 'yellow darken-3',
         'on-hold': 'indigo',
         cancelled: 'red',

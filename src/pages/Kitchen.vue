@@ -3,10 +3,16 @@
     <v-container grid-list-lg fluid>
       <!-- <v-layout row wrap> -->
        
-
+<v-btn outline fab color="indigo" @click="getOrders()">
+   <v-icon>refresh</v-icon>
+</v-btn>
         <v-layout row wrap>
+          <!-- <vuetify-audio :file="file" :ended="audioFinish"></vuetify-audio> -->
+           
                      <v-flex lg4 sm12  >
+                      
                           <v-card  >
+                            
                             <v-toolbar color="brown lighten-2" dark>
                               <v-toolbar-title >Normal ({{totalOrders}})</v-toolbar-title>
                               <v-spacer></v-spacer>
@@ -63,11 +69,11 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                  <span style="margin-left:10px">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
+                                                  <span style="margin-left:10px ; font-size: 18px ; font-weight:bold">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
-                                                    <span style="margin-left:0px">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
+                                                    <span style="margin-left:0px ; font-size: 18px ; font-weight:bold">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
                                                 </v-flex>
                                                 
                                               </v-layout>
@@ -301,12 +307,12 @@
                                               
                                                 <v-flex xs8>
                                                
-                                                     <span style="margin-left:10px">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
+                                                     <span style="margin-left:10px ; font-size: 18px ; font-weight:bold">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
 
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
-                                                    <span style="margin-left:0px">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
+                                                    <span style="margin-left:0px ; font-size: 18px ; font-weight:bold">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
                                                 </v-flex>
                                                 
                                               </v-layout>
@@ -540,12 +546,12 @@
                                               
                                                  <v-flex xs8>
                                                
-                                                 <span style="margin-left:10px">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
+                                                 <span style="margin-left:10px; font-size: 18px ; font-weight:bold">{{item2.sku.charAt(0).toUpperCase()+item2.sku.slice(1)}} (x{{item2.quantity}})</span><br>
 
                                                   
                                                 </v-flex>
                                                 <v-flex xs4>
-                                                    <span style="margin-left:0px">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
+                                                    <span style="margin-left:0px font-size: 18px ; font-weight:bold">GHS{{parseFloat(item2.total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}} </span><br>
                                                 </v-flex>
                                                 
                                               </v-layout>
@@ -732,6 +738,7 @@
  import VWidget from '@/components/VWidget';
  import DMFWebService from '@/services/DMFWebService';
  import moment from 'moment';
+ import VuetifyAudio from 'vuetify-audio';
  import Pusher from 'pusher-js' // import Pusher
 
  export default {
@@ -770,8 +777,12 @@
       totalCustomizedOrders:'',
       totalPriorityOrders:'',
       disableButton:false,
+      file: 'https://www.soundjay.com/button/beep-04.mp3'
       }
     },
+    // components: {
+    //     'vuetify-audio': VuetifyAudio
+    // },
     computed:{
       filteredOrders(){
         return this.orders.filter(order =>{
@@ -870,7 +881,12 @@
 
     
     methods: {
+      playSound(){
+        var mySound = new Audio('static/cha_ching_sound.wav');
 
+        mySound.play();
+       // console.log('method has run')
+      },
       subscribe () {
        
         var pusherBoolean = false;
@@ -891,6 +907,7 @@
                pusherBoolean = true;
 
                  this.getOrders();
+                 this.playSound();
              }
              else{
             //   console.log('false');
