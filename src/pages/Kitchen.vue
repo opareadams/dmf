@@ -753,7 +753,7 @@
         searchBarVisible2:false,
         searchText3:'', //For priority orders search
         searchBarVisible3:false,
-        loading: true,
+        loading: false,
         loading2: false, //normal orders loading
         loading3: false, //ustomized orders loading
         loading4: false, //priority orders loading
@@ -787,6 +787,7 @@
       filteredOrders(){
         return this.orders.filter(order =>{
          
+
           if(order.shipping[0].first_name.toLowerCase().match(this.searchText.toLowerCase())){
             return order.shipping[0].first_name.toLowerCase().match(this.searchText.toLowerCase());
            
@@ -803,7 +804,6 @@
               return order.zone.toLowerCase().match(this.searchText.toLowerCase());
              
           }
-          
       
         });
       },
@@ -918,6 +918,7 @@
       getOrders(){
               this.loading = true;
               DMFWebService.orders.listOrdersForToday().then((response) => {
+                
                      this.orders = response.data.data;
                      this.priorityOrders = []; //reset priority order queue
                      this.customizedOrders=[];
@@ -967,6 +968,11 @@
                       // }
                       
                       
+                    })
+                    .catch((err) => {
+                      this.loading = false;
+                      //  console.log('there was an error');
+                      //  console.log(this.loading);
                     })
       },
       packageOrder(val){
@@ -1039,6 +1045,7 @@
             for(var i =0; i < this.orders.length; i++){
                 if(this.orders[i].orderId === val){
                   this.orders.splice(i,1);
+                  this.totalOrders = this.totalOrders -1;
                   window.getApp.$emit('ORDER_CANCELLED');
                 }
 
@@ -1048,6 +1055,7 @@
               for(var i =0; i < this.priorityOrders.length; i++){
                 if(this.priorityOrders[i].orderId === val){
                   this.priorityOrders.splice(i,1);
+                  this.totalCustomizedOrders = this.totalCustomizedOrders -1;
                  // window.getApp.$emit('ORDER_PACKAGED');
                 }
              }
@@ -1056,6 +1064,7 @@
               for(var i =0; i < this.customizedOrders.length; i++){
                 if(this.customizedOrders[i].orderId === val){
                   this.customizedOrders.splice(i,1);
+                  this.priorityOrders = this.priorityOrders -1;
                 //  window.getApp.$emit('ORDER_PACKAGED');
                 }
              }
