@@ -192,7 +192,7 @@ function getTownName (townCode) {
       town = towns.find(town => town.code == townCode).name;
 
       if(town === null){
-          return " ";
+          return "Not available";
       }
       else{
         return town;
