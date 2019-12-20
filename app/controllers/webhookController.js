@@ -187,17 +187,13 @@ function getTownName (townCode) {
         { name: "West Legon", code: "XX128" },
         { name: "Zongo Junction", code: "XX129" }
       ];
-      const town = null;
 
-      town = towns.find(town => town.code == townCode).name;
-
-      if(town === null){
-          return "Not available";
+      if(townCode === "" || townCode === null){
+          return "N/A";
       }
       else{
-        return town;
+        return towns.find(town => town.code == townCode).name;
       }
-
     
   };
 
