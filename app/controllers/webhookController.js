@@ -192,7 +192,8 @@ function getTownName (townCode) {
           return "N/A";
       }
       else{
-        return towns.find(town => town.code == townCode).name;
+        //return towns.find(town => town.code == townCode).name;
+        return townCode;
       }
     
   };
@@ -249,6 +250,7 @@ exports.createOrder = (req, res) => {
         refunds: req.body.refunds,
         deliveryDate: getDeilveryDate(req.body.meta_data) ,
         zone: getTownName(req.body.shipping.state)
+      // zone: req.body.shipping.state
     });
 
     newOrder.save((err) => {
