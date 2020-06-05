@@ -992,8 +992,14 @@
               //remove from main order queue
               for(var i =0; i < this.orders.length; i++){
                 if(this.orders[i].orderId === val){
+
+                  //Send SMS
+                  sendSMS(this.orders[i].billing[0].phone);
+                  //Remove order from the queue
                   this.orders.splice(i,1);
                   window.getApp.$emit('ORDER_PACKAGED');
+
+                  
                 }
              }
 
@@ -1012,6 +1018,11 @@
                 //  window.getApp.$emit('ORDER_PACKAGED');
                 }
              }
+
+             //Send SMS to Customer
+             
+
+            
 
             }else{
               this.loading2 = false;
@@ -1079,6 +1090,39 @@
           }
         })     
       },
+       sendSMS (telephone){
+
+            if(telephone.charAt(0) === '0'){
+                telephone = '+233'+telephone.slice(1);
+                //console.log("the new tel is "+telephone)
+            }
+
+         smsBody = 'Thank you for shopping with us.'+'\n'+ 
+        'Your order has been received and is being processed. Our dispatch rider will call the recipient shortly when it’s done, to deliver the package.'+ '\n'+
+         'Enjoy your day!';
+
+          var baseUrl = 'https://api.hubtel.com/v1/messages/send?';
+    
+                var request = require("request");
+
+                      var options = { method: 'GET',
+                        url: baseUrl,
+                        qs:
+                        { From: 'DMF',
+                          To: telephone,
+                          Content: smsBody,
+                          ClientID: 'lnthjkei',
+                          ClientSecret: 'mudbzgld' } };
+
+                      request(options, function (error, response, body) {
+                        //if (error) throw new Error(error);
+                     //   console.log(response);
+                    //console.log(body);
+                    });
+      },
+
+
+
       //  moment() {
       //   return moment();
       // },
